@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ahmed Atef | Hardware Engineer & Developer</title>
+  <meta name="description" content="Portfolio of Ahmed Atef — Hardware Design Engineer, PCB Designer, 2D/3D Designer, and Software Developer. Download my Windows tools and apps." />
+  <meta property="og:title" content="Ahmed Atef | Hardware Engineer & Developer" />
+  <meta property="og:description" content="Portfolio of Ahmed Atef — Hardware Design Engineer, PCB Designer, and Software Developer." />
+  <meta property="og:url" content="https://ahmed-atef-tech.github.io" />
+  <meta name="theme-color" content="#0d1117" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    /* ===== RESET & ROOT ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-base:      #0d1117;
+      --bg-card:      #161b22;
+      --bg-card-hover:#1c2430;
+      --border:       rgba(255,255,255,0.07);
+      --border-glow:  rgba(0,212,255,0.3);
+      --accent-blue:  #00d4ff;
+      --accent-purple:#a855f7;
+      --accent-green: #3fb950;
+      --text-primary: #e6edf3;
+      --text-muted:   #8b949e;
+      --text-dim:     #484f58;
+      --glow-blue:    0 0 30px rgba(0,212,255,0.15);
+      --glow-purple:  0 0 30px rgba(168,85,247,0.15);
+      --radius:       16px;
+      --radius-sm:    10px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg-base);
+      color: var(--text-primary);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ===== NOISE TEXTURE OVERLAY ===== */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.4;
+    }
+
+    /* ===== ANIMATED GRID BACKGROUND ===== */
+    .grid-bg {
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ===== FLOATING ORBS ===== */
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+      z-index: 0;
+      animation: float 8s ease-in-out infinite;
+    }
+    .orb-1 {
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(0,212,255,0.08), transparent 70%);
+      top: -150px; left: -150px;
+      animation-delay: 0s;
+    }
+    .orb-2 {
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(168,85,247,0.07), transparent 70%);
+      bottom: -200px; right: -200px;
+      animation-delay: 4s;
+    }
+    .orb-3 {
+      width: 300px; height: 300px;
+      background: radial-gradient(circle, rgba(63,185,80,0.05), transparent 70%);
+      top: 40%; left: 50%;
+      animation-delay: 2s;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-30px) scale(1.05); }
+    }
+
+    /* ===== WRAPPER ===== */
+    .wrapper {
+      position: relative;
+      z-index: 1;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ===== NAV ===== */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(13,17,23,0.8);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 0;
+      transition: all 0.3s ease;
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+    .nav-avatar {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      border: 2px solid rgba(0,212,255,0.4);
+      background: linear-gradient(135deg, #1c2430, #0d1117);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800;
+      font-size: 13px;
+      color: var(--accent-blue);
+      letter-spacing: -1px;
+    }
+    .nav-name {
+      font-weight: 700;
+      font-size: 15px;
+      color: var(--text-primary);
+    }
+    .nav-links {
+      display: flex;
+      gap: 8px;
+      list-style: none;
+    }
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 14px;
+      padding: 6px 14px;
+      border-radius: 8px;
+      transition: all 0.2s ease;
+      font-weight: 500;
+    }
+    .nav-links a:hover {
+      color: var(--text-primary);
+      background: rgba(255,255,255,0.06);
+    }
+
+    /* ===== HERO ===== */
+    .hero {
+      padding: 160px 0 100px;
+      text-align: center;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0,212,255,0.08);
+      border: 1px solid rgba(0,212,255,0.2);
+      border-radius: 100px;
+      padding: 6px 16px;
+      font-size: 12px;
+      color: var(--accent-blue);
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-bottom: 32px;
+      animation: fadeInUp 0.6s ease both;
+    }
+    .hero-badge::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--accent-blue);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.8); }
+    }
+
+    .hero-avatar {
+      width: 120px; height: 120px;
+      border-radius: 50%;
+      margin: 0 auto 32px;
+      position: relative;
+      animation: fadeInUp 0.6s 0.1s ease both;
+    }
+    .hero-avatar img {
+      width: 100%; height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid rgba(0,212,255,0.3);
+    }
+    .hero-avatar::after {
+      content: '';
+      position: absolute;
+      inset: -6px;
+      border-radius: 50%;
+      border: 2px solid transparent;
+      background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple)) border-box;
+      -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: destination-out;
+      mask-composite: exclude;
+      animation: spin 6s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .hero h1 {
+      font-size: clamp(40px, 6vw, 72px);
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: -2px;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, #e6edf3 0%, #8b949e 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: fadeInUp 0.6s 0.2s ease both;
+    }
+    .hero h1 span {
+      background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-subtitle {
+      font-size: 18px;
+      color: var(--text-muted);
+      margin-bottom: 40px;
+      font-weight: 400;
+      animation: fadeInUp 0.6s 0.3s ease both;
+    }
+    .hero-subtitle strong {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    .hero-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 48px;
+      animation: fadeInUp 0.6s 0.4s ease both;
+    }
+    .tag {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 6px 14px;
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+    .tag:hover {
+      border-color: rgba(0,212,255,0.3);
+      color: var(--text-primary);
+      background: rgba(0,212,255,0.06);
+    }
+    .tag-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+      animation: fadeInUp 0.6s 0.5s ease both;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      border: 1px solid transparent;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent-blue), #0090b5);
+      color: #0d1117;
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,212,255,0.3);
+    }
+    .btn-secondary {
+      background: rgba(255,255,255,0.05);
+      border-color: var(--border);
+      color: var(--text-primary);
+    }
+    .btn-secondary:hover {
+      background: rgba(255,255,255,0.09);
+      border-color: rgba(255,255,255,0.15);
+      transform: translateY(-2px);
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ===== STATS BAR ===== */
+    .stats {
+      padding: 32px 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 100px;
+    }
+    .stats-inner {
+      display: flex;
+      justify-content: center;
+      gap: 80px;
+      flex-wrap: wrap;
+    }
+    .stat-item {
+      text-align: center;
+    }
+    .stat-num {
+      font-size: 36px;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 6px;
+      font-weight: 500;
+    }
+
+    /* ===== SECTION ===== */
+    section {
+      padding: 80px 0;
+    }
+    .section-header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+    .section-eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--accent-blue);
+      font-weight: 500;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-size: clamp(28px, 4vw, 42px);
+      font-weight: 800;
+      letter-spacing: -1px;
+      line-height: 1.15;
+    }
+    .section-subtitle {
+      font-size: 16px;
+      color: var(--text-muted);
+      margin-top: 12px;
+      font-weight: 400;
+    }
+
+    /* ===== APP CARDS GALLERY ===== */
+    .apps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(480px, 1fr));
+      gap: 24px;
+    }
+    @media (max-width: 768px) {
+      .apps-grid { grid-template-columns: 1fr; }
+    }
+
+    .app-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: all 0.3s ease;
+      cursor: default;
+      position: relative;
+    }
+    .app-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: var(--radius);
+      background: linear-gradient(135deg, transparent, rgba(0,212,255,0.03));
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+    .app-card:hover {
+      border-color: rgba(0,212,255,0.2);
+      transform: translateY(-6px);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4), var(--glow-blue);
+    }
+    .app-card:hover::before { opacity: 1; }
+
+    .app-card.purple:hover {
+      border-color: rgba(168,85,247,0.3);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4), var(--glow-purple);
+    }
+    .app-card.purple::before {
+      background: linear-gradient(135deg, transparent, rgba(168,85,247,0.04));
+    }
+
+    /* App Screenshot */
+    .app-screenshot {
+      width: 100%;
+      height: 220px;
+      overflow: hidden;
+      position: relative;
+      background: #0d1117;
+    }
+    .app-screenshot img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top;
+      transition: transform 0.5s ease;
+    }
+    .app-card:hover .app-screenshot img {
+      transform: scale(1.04);
+    }
+    .app-screenshot-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, transparent 50%, var(--bg-card) 100%);
+    }
+
+    /* Platform badge */
+    .platform-badge {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      background: rgba(13,17,23,0.85);
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .app-body {
+      padding: 24px;
+    }
+    .app-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .app-icon {
+      width: 48px; height: 48px;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+    .app-icon.blue { background: linear-gradient(135deg, rgba(0,212,255,0.15), rgba(0,144,181,0.1)); }
+    .app-icon.purple { background: linear-gradient(135deg, rgba(168,85,247,0.15), rgba(120,50,200,0.1)); }
+
+    .app-version {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--text-dim);
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 3px 8px;
+    }
+
+    .app-name {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+      letter-spacing: -0.3px;
+    }
+    .app-desc {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .app-features {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+    .feature-chip {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+    .feature-chip svg { width: 12px; height: 12px; }
+
+    .app-footer {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .btn-download {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 11px 20px;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      border: none;
+      cursor: pointer;
+    }
+    .btn-download.blue {
+      background: linear-gradient(135deg, rgba(0,212,255,0.15), rgba(0,144,181,0.1));
+      border: 1px solid rgba(0,212,255,0.25);
+      color: var(--accent-blue);
+    }
+    .btn-download.blue:hover {
+      background: linear-gradient(135deg, rgba(0,212,255,0.25), rgba(0,144,181,0.2));
+      box-shadow: 0 4px 20px rgba(0,212,255,0.2);
+      transform: translateY(-1px);
+    }
+    .btn-download.purple {
+      background: linear-gradient(135deg, rgba(168,85,247,0.15), rgba(120,50,200,0.1));
+      border: 1px solid rgba(168,85,247,0.25);
+      color: var(--accent-purple);
+    }
+    .btn-download.purple:hover {
+      background: linear-gradient(135deg, rgba(168,85,247,0.25), rgba(120,50,200,0.2));
+      box-shadow: 0 4px 20px rgba(168,85,247,0.2);
+      transform: translateY(-1px);
+    }
+    .btn-repo {
+      width: 42px; height: 42px;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+    .btn-repo:hover {
+      background: rgba(255,255,255,0.08);
+      color: var(--text-primary);
+      transform: translateY(-1px);
+    }
+
+    /* ===== ABOUT SECTION ===== */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    @media (max-width: 700px) {
+      .about-grid { grid-template-columns: 1fr; }
+    }
+    .about-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      transition: all 0.3s ease;
+    }
+    .about-card:hover {
+      border-color: rgba(0,212,255,0.15);
+      transform: translateY(-3px);
+    }
+    .about-card-icon {
+      font-size: 28px;
+      margin-bottom: 16px;
+    }
+    .about-card h3 {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: var(--text-primary);
+    }
+    .about-card p {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.65;
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      padding: 60px 0 40px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+    .footer-links {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      margin-bottom: 24px;
+    }
+    .footer-link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      transition: all 0.2s ease;
+    }
+    .footer-link:hover {
+      color: var(--text-primary);
+      border-color: rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.04);
+    }
+    .footer-copy {
+      font-size: 13px;
+      color: var(--text-dim);
+    }
+    .footer-copy span {
+      color: var(--accent-blue);
+    }
+
+    /* ===== SCROLL REVEAL ===== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.6s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background Effects -->
+  <div class="grid-bg"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <!-- Navigation -->
+  <nav>
+    <div class="nav-inner">
+      <a href="#" class="nav-logo">
+        <div class="nav-avatar">AT</div>
+        <span class="nav-name">Ahmed Atef</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="#apps">Apps</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="https://github.com/Ahmed-Atef-Tech" target="_blank">GitHub</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="wrapper">
+      <div class="hero-badge">Available for new projects</div>
+
+      <div class="hero-avatar">
+        <img
+          src="https://avatars.githubusercontent.com/u/181205625?v=4"
+          alt="Ahmed Atef"
+          onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\'width:100%;height:100%;border-radius:50%;background:linear-gradient(135deg,#1c2430,#0d1117);display:flex;align-items:center;justify-content:center;font-size:40px;font-weight:900;color:#00d4ff;border:3px solid rgba(0,212,255,0.3);\'>AT</div>';"
+        />
+      </div>
+
+      <h1>Ahmed <span>Atef</span></h1>
+      <p class="hero-subtitle">
+        <strong>Hardware Engineer</strong> · PCB Designer · 2D/3D Designer · AHK Developer
+      </p>
+
+      <div class="hero-tags">
+        <span class="tag"><span class="tag-dot" style="background:#00d4ff"></span>Hardware Design</span>
+        <span class="tag"><span class="tag-dot" style="background:#a855f7"></span>PCB Design</span>
+        <span class="tag"><span class="tag-dot" style="background:#3fb950"></span>3D Modeling</span>
+        <span class="tag"><span class="tag-dot" style="background:#f78166"></span>AutoHotKey</span>
+        <span class="tag"><span class="tag-dot" style="background:#ffa657"></span>Electron Apps</span>
+      </div>
+
+      <div class="hero-cta">
+        <a href="#apps" class="btn btn-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
+          View My Apps
+        </a>
+        <a href="https://github.com/Ahmed-Atef-Tech" target="_blank" class="btn btn-secondary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.604-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836a9.59 9.59 0 012.504.337c1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.579.688.481C19.138 20.161 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg>
+          GitHub Profile
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <div class="stats">
+    <div class="wrapper">
+      <div class="stats-inner">
+        <div class="stat-item">
+          <div class="stat-num">2+</div>
+          <div class="stat-label">Windows Apps</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">8</div>
+          <div class="stat-label">GitHub Repos</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">100%</div>
+          <div class="stat-label">Free to Use</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Apps Gallery -->
+  <section id="apps">
+    <div class="wrapper">
+      <div class="section-header reveal">
+        <p class="section-eyebrow">// my_projects</p>
+        <h2 class="section-title">Apps & Tools</h2>
+        <p class="section-subtitle">Download ready-to-use Windows apps, built with care</p>
+      </div>
+
+      <div class="apps-grid">
+
+        <!-- Shutdown Timer -->
+        <div class="app-card reveal">
+          <div class="app-screenshot">
+            <img src="assets/shutdown-timer-preview.png" alt="Shutdown Timer Screenshot"
+              onerror="this.style.background='linear-gradient(135deg,#0d1117,#1a1a2e)';this.style.display='block';this.src='';" />
+            <div class="app-screenshot-overlay"></div>
+            <div class="platform-badge">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M11.5 2v9.5H2C2 6.257 6.257 2 11.5 2zm1 0C17.743 2 22 6.257 22 11.5h-9.5V2zM2 12.5h9.5V22C6.257 22 2 17.743 2 12.5zm10.5 9.5v-9.5H22C22 17.743 17.743 22 12.5 22z"/></svg>
+              Windows
+            </div>
+          </div>
+          <div class="app-body">
+            <div class="app-header">
+              <div class="app-icon blue">⏻</div>
+              <span class="app-version">v1.0.0</span>
+            </div>
+            <div class="app-name">Shutdown Timer</div>
+            <p class="app-desc">
+              A beautiful desktop app to schedule automatic Windows shutdown.
+              Set hours, minutes, or seconds — then minimize to system tray. Clean, zero-bloat, always-on-top UI.
+            </p>
+            <div class="app-features">
+              <span class="feature-chip">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
+                Tray Icon
+              </span>
+              <span class="feature-chip">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 1C5.925 1 1 5.925 1 12s4.925 11 11 11 11-4.925 11-11S18.075 1 12 1zm0 19.5c-4.687 0-8.5-3.813-8.5-8.5S7.313 3.5 12 3.5s8.5 3.813 8.5 8.5-3.813 8.5-8.5 8.5zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7.5z"/></svg>
+                Countdown
+              </span>
+              <span class="feature-chip">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 3H4v10c0 2.21 1.79 4 4 4h6c2.21 0 4-1.79 4-4v-3h2c1.11 0 2-.89 2-2V5c0-1.11-.89-2-2-2zm0 5h-2V5h2v3zM4 19h16v2H4z"/></svg>
+                No Install
+              </span>
+              <span class="feature-chip">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14l-4-4 1.41-1.41L10 13.17l6.59-6.59L18 8l-8 8z"/></svg>
+                Cancel Anytime
+              </span>
+            </div>
+            <div class="app-footer">
+              <a href="https://github.com/Ahmed-Atef-Tech/shutdown-timer/releases/latest/download/ShutdownTimer.exe"
+                 class="btn-download blue" id="download-shutdown">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zm-8 2V5h2v6h1.17L12 13.17 9.83 11H11zm-6 7h14v2H5z"/></svg>
+                Download .exe
+              </a>
+              <a href="https://github.com/Ahmed-Atef-Tech/shutdown-timer" target="_blank" class="btn-repo" title="View Source">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.604-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836a9.59 9.59 0 012.504.337c1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.579.688.481C19.138 20.161 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Multi Researcher -->
+        <div class="app-card purple reveal">
+          <div class="app-screenshot">
+            <img src="assets/multi-researcher-preview.png" alt="Multi Researcher Screenshot"
+              onerror="this.style.background='linear-gradient(135deg,#0d1117,#1a0830)';this.style.display='block';this.src='';" />
+            <div class="app-screenshot-overlay"></div>
+            <div class="platform-badge">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M11.5 2v9.5H2C2 6.257 6.257 2 11.5 2zm1 0C17.743 2 22 6.257 22 11.5h-9.5V2zM2 12.5h9.5V22C6.257 22 2 17.743 2 12.5zm10.5 9.5v-9.5H22C22 17.743 17.743 22 12.5 22z"/></svg>
+              Windows
+            </div>
+          </div>
+          <div class="app-body">
+            <div class="app-header">
+              <div class="app-icon purple">🔍</div>
+              <span class="app-version">v1.0.0</span>
+            </div>
+            <div class="app-name">Multi Researcher</div>
+            <p class="app-desc">
+              A powerful desktop research tool that lets you search and collect information from multiple sources simultaneously.
+              Designed to speed up your research workflow with a clean, organized interface.
+            </p>
+            <div class="app-features">
+              <span class="feature-chip">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                Multi-Search
+              </span>
+              <span class="feature-chip">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg>
+                Results Panel
+              </span>
+              <span class="feature-chip">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg>
+                Fast & Light
+              </span>
+              <span class="feature-chip">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zm-8 2V5h2v6h1.17L12 13.17 9.83 11H11zm-6 7h14v2H5z"/></svg>
+                Portable
+              </span>
+            </div>
+            <div class="app-footer">
+              <a href="https://github.com/Ahmed-Atef-Tech/multi-researcher/releases/latest/download/MultiResearcher.exe"
+                 class="btn-download purple" id="download-researcher">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zm-8 2V5h2v6h1.17L12 13.17 9.83 11H11zm-6 7h14v2H5z"/></svg>
+                Download .exe
+              </a>
+              <a href="https://github.com/Ahmed-Atef-Tech/multi-researcher" target="_blank" class="btn-repo" title="View Source">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.604-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836a9.59 9.59 0 012.504.337c1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.579.688.481C19.138 20.161 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /apps-grid -->
+    </div>
+  </section>
+
+  <!-- About -->
+  <section id="about">
+    <div class="wrapper">
+      <div class="section-header reveal">
+        <p class="section-eyebrow">// about_me</p>
+        <h2 class="section-title">Who I Am</h2>
+        <p class="section-subtitle">Engineer by day, developer by passion</p>
+      </div>
+
+      <div class="about-grid">
+        <div class="about-card reveal">
+          <div class="about-card-icon">⚡</div>
+          <h3>Hardware Design</h3>
+          <p>I design electronic hardware and PCB circuits. From schematic to layout, I handle the full design cycle for embedded and industrial systems.</p>
+        </div>
+        <div class="about-card reveal">
+          <div class="about-card-icon">🎨</div>
+          <h3>2D / 3D Design</h3>
+          <p>Creating mechanical enclosures and visual designs to complement hardware projects. Bridging the gap between electronics and physical form.</p>
+        </div>
+        <div class="about-card reveal">
+          <div class="about-card-icon">🤖</div>
+          <h3>Automation Scripts</h3>
+          <p>I write AutoHotKey scripts to automate repetitive Windows tasks, boosting productivity with smart keyboard shortcuts and macros.</p>
+        </div>
+        <div class="about-card reveal">
+          <div class="about-card-icon">💻</div>
+          <h3>Desktop Apps</h3>
+          <p>Building lightweight Windows tools with Electron.js — clean interfaces, portable executables, and zero installation required.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="wrapper">
+      <div class="footer-links">
+        <a href="https://github.com/Ahmed-Atef-Tech" target="_blank" class="footer-link">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.604-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836a9.59 9.59 0 012.504.337c1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.579.688.481C19.138 20.161 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg>
+          GitHub
+        </a>
+      </div>
+      <p class="footer-copy">
+        Built with ❤️ by <span>Ahmed Atef</span> · Hosted on GitHub Pages
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    // Scroll reveal animation
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => {
+            entry.target.classList.add('visible');
+          }, i * 80);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    reveals.forEach(el => observer.observe(el));
+
+    // Nav scroll effect
+    const nav = document.querySelector('nav');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 50) {
+        nav.style.background = 'rgba(13,17,23,0.95)';
+      } else {
+        nav.style.background = 'rgba(13,17,23,0.8)';
+      }
+    });
+  </script>
+</body>
+</html>
