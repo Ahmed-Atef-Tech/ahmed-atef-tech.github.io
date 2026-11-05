@@ -39,6 +39,8 @@ p { margin: 0; }
 :focus-visible { outline: 2px solid var(--cu-hi); outline-offset: 3px; border-radius: 4px; }
 .wrap { max-width: 1160px; margin: 0 auto; padding-left: max(var(--gutter), env(safe-area-inset-left, 0px)); padding-right: max(var(--gutter), env(safe-area-inset-right, 0px)); }
 
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
 /* reveal on scroll: hidden only when JS is running */
 .js [data-reveal] { opacity: 0; transform: translateY(26px); transition: opacity 900ms var(--ease), transform 900ms var(--ease); transition-delay: var(--d, 0ms); }
 .js [data-reveal].in { opacity: 1; transform: none; }
@@ -79,29 +81,27 @@ p { margin: 0; }
 .hero .sub { font-size: clamp(1.08rem, 1.6vw, 1.25rem); color: var(--dim); max-width: 40ch; margin-bottom: 34px; }
 .ctas { display: flex; flex-wrap: wrap; gap: 12px; }
 
-.stage { perspective: 1400px; display: grid; place-items: center; min-height: 360px; }
-.board3d { position: relative; width: min(100%, 470px); aspect-ratio: 460 / 320; transform-style: preserve-3d; transform: rotateX(var(--rx, 52deg)) rotateZ(var(--rz, -32deg)); transition: transform 900ms var(--ease); }
-.float { animation: float 7s ease-in-out infinite; transform-style: preserve-3d; width: 100%; height: 100%; }
-@keyframes float { 50% { transform: translateZ(18px); } }
-.layer { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
-.l-shadow { transform: translateZ(-40px); filter: blur(18px); opacity: .55; }
-.l-parts { transform: translateZ(10px); }
-.board-base { fill: var(--mask); stroke: var(--mask-hi); stroke-width: 2; }
-.edge { fill: #12251F; }
-.tr { fill: none; stroke: var(--cu); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 0; opacity: .9; }
-.js .tr { stroke-dashoffset: 1; }
-.js .hero.ready .tr { stroke-dashoffset: 0; transition: stroke-dashoffset 1600ms var(--ease); transition-delay: calc(500ms + var(--i) * 70ms); }
-.via { fill: var(--mask); stroke: var(--gold); stroke-width: 2.4; }
-.hole { fill: var(--bg); stroke: var(--gold); stroke-width: 3; }
-.pad { fill: var(--gold); }
-.chip { fill: #14191B; stroke: #2C3639; stroke-width: 1.5; }
-.silk { fill: none; stroke: rgba(236,239,238,.55); stroke-width: 1.3; }
-.silk-t { fill: rgba(236,239,238,.7); font: 600 11px var(--font); letter-spacing: .04em; }
-.led-on { fill: var(--led); animation: blinkled 2.6s ease-in-out infinite; }
-@keyframes blinkled { 0%, 60%, 100% { opacity: 1; } 75% { opacity: .25; } }
-.pulse { fill: #FFF3D9; filter: drop-shadow(0 0 6px var(--gold)); }
-.hero-glow { position: absolute; width: 620px; height: 620px; right: -120px; top: 60px; border-radius: 50%; background: radial-gradient(circle, rgba(216,139,74,.13), rgba(216,139,74,0) 65%); pointer-events: none; }
-@media (max-width: 900px) { .hero .wrap { grid-template-columns: 1fr; } .stage { min-height: 280px; order: -1; margin-bottom: 8px; } .board3d { width: min(88%, 420px); } }
+/* intro: logo draws on black, then the page appears */
+#intro { position: fixed; inset: 0; z-index: 100; background: #0A0C0D; display: none; place-items: center; transition: opacity 700ms var(--ease), visibility 700ms; }
+html.intro-on #intro, #intro.out { display: grid; }
+#intro.out { opacity: 0; visibility: hidden; }
+#intro svg { width: 112px; height: 112px; overflow: visible; transition: transform 700ms var(--ease); }
+#intro.out svg { transform: scale(.86); }
+#intro .ln { fill: none; stroke: var(--cu-hi); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 1; animation: drawln 1100ms var(--ease) forwards; animation-delay: var(--d, 0ms); }
+#intro .ln.g { stroke: var(--gold); stroke-width: 2.4; }
+@keyframes drawln { to { stroke-dashoffset: 0; } }
+html.intro-on, html.intro-on body { overflow: hidden; }
+
+.hero { background: #0A0C0D; }
+.portrait { position: relative; width: 100%; max-width: 560px; justify-self: end; aspect-ratio: 108 / 100; }
+#portrait { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: pan-y; }
+.sig { position: absolute; inset: -6% -4%; width: 108%; height: 112%; pointer-events: none; overflow: visible; }
+.sig path { fill: none; stroke: var(--cu-hi); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 1; opacity: .85; }
+.sig circle { fill: #0A0C0D; stroke: var(--gold); stroke-width: 2.4; opacity: 0; transition: opacity 400ms; }
+.sig.go path { stroke-dashoffset: 0; transition: stroke-dashoffset 1800ms var(--ease); }
+.sig.go circle { opacity: 1; transition-delay: 1500ms; }
+.hero-glow { position: absolute; width: 640px; height: 640px; right: -80px; top: 40px; border-radius: 50%; background: radial-gradient(circle, rgba(216,139,74,.12), rgba(216,139,74,0) 65%); pointer-events: none; }
+@media (max-width: 900px) { .hero .wrap { grid-template-columns: 1fr; } .portrait { order: -1; justify-self: center; max-width: 420px; margin-bottom: 8px; } }
 
 /* ---------- marquee ---------- */
 .strip { border-block: 1px solid var(--line); padding-block: 22px; overflow: hidden; }
@@ -243,9 +243,16 @@ footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; g
   .marquee ul { flex-wrap: wrap; justify-content: center; row-gap: 10px; }
 }
 </style>
-<script>document.documentElement.classList.add("js");</script>
+<script>document.documentElement.classList.add("js");try{if(!sessionStorage.getItem("aa-intro")&&!matchMedia("(prefers-reduced-motion: reduce)").matches)document.documentElement.classList.add("intro-on")}catch(e){}</script>
 </head>
 <body>
+<div id="intro" aria-hidden="true">
+  <svg viewBox="0 0 112 112">
+    <rect class="ln" pathLength="1" x="26" y="26" width="60" height="60" rx="8"/>
+    <path class="ln g" pathLength="1" style="--d:350ms" d="M40 26V8M56 26V8M72 26V8M40 86v18M56 86v18M72 86v18M26 40H8M26 56H8M26 72H8M86 40h18M86 56h18M86 72h18"/>
+    <path class="ln" pathLength="1" style="--d:650ms" d="M42 72 L56 40 L70 72 M47 62 H65"/>
+  </svg>
+</div>
 
 <header class="nav" id="nav">
   <div class="wrap">
@@ -270,7 +277,7 @@ footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; g
     <span class="hero-glow" aria-hidden="true"></span>
     <div class="wrap">
       <div>
-        <p class="where"><i aria-hidden="true"></i>Hardware design engineer in Cairo, Egypt</p>
+        <p class="where"><i aria-hidden="true"></i>Ahmed Atef, hardware design engineer in Cairo</p>
         <h1 aria-label="I design circuit boards, and the machines they power.">
           <span class="w" aria-hidden="true"><span style="--d:0ms">I</span></span>
           <span class="w" aria-hidden="true"><span style="--d:70ms">design</span></span>
@@ -289,51 +296,10 @@ footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; g
         </div>
       </div>
 
-      <div class="stage" id="stage" aria-hidden="true">
-        <div class="board3d" id="board3d">
-          <div class="float">
-            <svg class="layer l-shadow" viewBox="0 0 460 320"><rect x="10" y="10" width="440" height="300" rx="16" fill="#000"/></svg>
-            <svg class="layer" viewBox="0 0 460 320" id="pcb">
-              <rect class="edge" x="0" y="6" width="460" height="320" rx="16"/>
-              <rect class="board-base" x="0" y="0" width="460" height="314" rx="16"/>
-              <g>
-                <path class="tr" style="--i:0" pathLength="1" d="M34 150 H88 L103 135 H140"/>
-                <path class="tr" style="--i:1" pathLength="1" d="M34 170 H88 L103 185 H140"/>
-                <path class="tr" style="--i:2" pathLength="1" d="M190 100 V82 L204 68 H288"/>
-                <path class="tr" style="--i:3" pathLength="1" d="M160 100 V90 H134"/>
-                <path class="tr" style="--i:4" pathLength="1" d="M260 145 H298 L313 130 H330"/>
-                <path class="tr" style="--i:5" pathLength="1" d="M260 160 H330"/>
-                <path class="tr" style="--i:6" pathLength="1" d="M260 175 H298 L313 190 H330"/>
-                <path class="tr" style="--i:7" pathLength="1" d="M175 220 V246 L201 272 H300"/>
-                <path class="tr" style="--i:8" pathLength="1" d="M200 220 V240 L216 256 H330 V266"/>
-                <path class="tr" style="--i:9" pathLength="1" d="M225 220 V234 L230 239 H360 V266"/>
-                <path class="tr" style="--i:10" pathLength="1" d="M140 195 H124 V228"/>
-                <path class="tr" style="--i:11" pathLength="1" d="M390 120 V74 L402 62"/>
-              </g>
-              <circle class="via" cx="124" cy="234" r="5"/><circle class="via" cx="134" cy="90" r="5"/>
-              <circle class="hole" cx="22" cy="22" r="9"/><circle class="hole" cx="438" cy="22" r="9"/><circle class="hole" cx="22" cy="292" r="9"/><circle class="hole" cx="438" cy="292" r="9"/>
-              <circle class="pulse" id="pulse" r="0"/>
-            </svg>
-            <svg class="layer l-parts" viewBox="0 0 460 320">
-              <rect class="chip" x="0" y="138" width="34" height="44" rx="4"/>
-              <text class="silk-t" x="44" y="132">USB</text>
-              <g id="mcu-pads"></g>
-              <rect class="chip" x="150" y="110" width="100" height="100" rx="5"/>
-              <circle cx="164" cy="124" r="3.5" fill="rgba(236,239,238,.6)"/>
-              <text class="silk-t" x="200" y="164" text-anchor="middle">MCU</text>
-              <rect class="chip" x="288" y="58" width="40" height="20" rx="8"/>
-              <text class="silk-t" x="308" y="96" text-anchor="middle">Y1</text>
-              <rect class="chip" x="330" y="118" width="96" height="84" rx="5"/>
-              <text class="silk-t" x="378" y="165" text-anchor="middle">POWER</text>
-              <g fill="#C7B28A"><rect x="118" y="82" width="10" height="16" rx="2"/><rect x="118" y="226" width="10" height="16" rx="2"/><rect x="268" y="228" width="16" height="10" rx="2"/></g>
-              <rect class="silk" x="290" y="262" width="130" height="28" rx="3"/>
-              <g class="pad"><circle cx="300" cy="276" r="6"/><circle cx="330" cy="276" r="6"/><circle cx="360" cy="276" r="6"/><circle cx="390" cy="276" r="6"/></g>
-              <rect x="294" y="270" width="12" height="12" fill="none" stroke="#14191B" stroke-width="2"/>
-              <circle class="led-on" cx="404" cy="58" r="7"/>
-              <text class="silk-t" x="404" y="38" text-anchor="middle">PWR</text>
-            </svg>
-          </div>
-        </div>
+      <div class="portrait" id="portrait-box">
+        <canvas id="portrait" aria-hidden="true"></canvas>
+        <svg class="sig" id="sig" viewBox="0 0 600 600" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M6 250 H80 L130 200 V90 L180 40 H420 L470 90 V260 L520 310 H594"/><circle cx="6" cy="250" r="6"/><circle cx="594" cy="310" r="6"/></svg>
+        <span class="sr-only">Portrait of Ahmed Atef built from copper pads</span>
       </div>
     </div>
   </section>
@@ -491,50 +457,83 @@ footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; g
   "use strict";
   var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  /* hero entrance */
-  var hero = document.getElementById("hero");
-  requestAnimationFrame(function () { requestAnimationFrame(function () { hero.classList.add("ready"); }); });
+  var GRID = {"cols": 108, "rows": 112, "g": "                                                   QQ]SKC\n                                              EA>@?BEWMAB;:C\n                                            HAA@>@>:;>A=>4;@NLSZ\n                                           QKC@?@@@?=?:7B8;<97ATL\n                                          WPIGDA?=A==?95@;:9:6648C\n                                        X[SMIFEFB@ED=D@?B@;9;65225?H\n                                       P`XSRMIFFDCCA@LKBGC>E?;<42515;\n                                       a_ROQIEEAA@DFIKE?@<DF??<;:458E;\n                                      bi\\RNJDEEHICDKPF@B>CA97539;935DL\n                                     WfZVSNFKRUWRTTPJEEGLLCBHJE>:8418DI\n                                     `]VSRMV_bgggif[VY^^]\\\\VY`^OE>;87;>\n                                    ^_ZTSNVgjnrtvvvoihefhilnhehaTPG>45;\n                                   VgYUPPTfmquvuvwyxvupnsrsvsnhkc[XO>2==\n                                   ScXPKSfnoqsutwwyyvvwvwvwxvuolnpli]<7F\n                                   M\\[KMarsprtttvvvwwwvwxwzxwspmosv{y[6;J\n                                  FIWZIWjrrqrqrqqqrqorstuwyzxvqnpsw||zM4?\n                                  DGRSRdqsooponmnqstsrrsuwwxwuupnqt{||f=9K\n                                 ACMMG\\jqsooppooorstvuttuvwwuttrnosx||oK6@\n                                 ?FKFDboqqoqpqqqopsuvutuvxwvttsspnsx||nP89\n                                 @IE@Geoqomoppprrow{zzxxx{{yxvutqmpw|{lO57\n                                 CFA<Peoronoppqrtou{{{z{z{{zxwvvsoptz|nM84;\n                                =C?>9Viqrnonopprrsvz|{{|{||{wwvusprrvzqO;6=\n                                A?899Zjqsrsrrrrtuw{|zzxz{{{{xxwusqrrtxqK=54\n                                A946A^ltvxwvvwuvvwyzyzzzz{zyxxxwvtwvvusP<72\n                                =401I`pwpnmoosvuuuxzyzyy{zzyz{z{zyz|{uv^59<\n                                92,1RdubLILQPV_ehlswxxxvzxvvwsonlnik|zxd24NO\n                                50*4Yf\\?A=93/05AMUdmpustqmfb]MCACJPI]{{k75WT\n                                2/'9^OBFDAE>?=<;CKWfnqqn_YF74217::@BAXtr@4PR\n                                0.&A\\JMPRY\\]]ZTRTTVblomcYQGEGKQUVVQLMNcuDE\\F\n                                5*'K]WWYVTVWTMJLNQX_ltpb\\WVVUW^a``_[VUbwH\\t\n                                ?(+Wa[VMIIA?=AFGKGNarywiUKKHFFHPQQOV[]dwL;R\n                                D)4dbVK=2@I.5@ZILDCgz||qJGNIR<32;?BDP[dwP<\n                                I(@laSIB9@K;?GMFB?Rq|||wZGJERD94P;/;IWcy\\C\n                                J+MpdYVSJCCLSNJMM\\p{|||zxcTQLTRKHFFR^`hyfQ\n                                M/VqollbUNJINY^bls{||||{|zpkcPGJKNTaotu{mY\n                                O7]ouvurlgfgkqsutx|||||{|zyyvoc]^fnqty{|o\n                                 A]msvwxxwwwxyyvvzy{||||yyw||{{vwz||{zzyn\n                                 O_ipuyz{{{|||zxvux|||||{uv{|||||||||||wg\n                                 [cemrwyy{|||{wnox|||||||zpt|||||||{{zwsd\n                                 `bahmswxz{||yrfx|||||||||{jx||||||{zurpb\n                                 ]b^ejruvy{|zynm|||||||||||qsz||||{yyupl^\n                                  V`agnsuwy{ywmdgiq{||||ysnnttyy||zxvsni[\n                                   \\aejpttuyywpWTV[jvxwl^TUuyqtwzzyxvojf\n                                   Wbbgmqruxxym[YWWYcgaVQN]||urvwvwurig`\n                                   Qb_flopsvwymcaSKSYZVQNTn||yqpqprrndcY\n                                    ^_dhkmptuwo^UE;GZ^MED[gz{zslklnmga`U\n                                    V[`fjkjgfmjSBC<<RUEBSTN]fpqhhihd`]\\\n                                    RY]bgg]NRPRSb[PR[Ylmoj^VNPY\\afd_ZVT\n                                    IWY_c\\KAF?T_lgaemuuokmmn`J?KUed\\RXL357;;;C@\n                                     OUYb[F<>JYPLPZ][Z]_WQMNNIFDLedVPU>,48997BIC  @?DI\n                                    -BPS]\\TJE;5=AAHLKHJLFB?89ENGNhbRPG78:;;759AC@===?@BF\n                                  ,+&/JLT_[][XOWgdbhjgpmlf_`ikcR`hVLM=9628:53459:975746=ACF\n                              7/,*(&&#:IJX[chljbdpwy|{||qfhpuskacXJK>97.2964/478565654:78?DDG\n                         AC@;5.)('&&&$(BIPX`gllha\\cjomic^foprphdYKF=260/7753/2555457379688;=ACE\n                      25<?<85,'('&&&&&%0BIR]bgigb[YVYZ[Y^impnkg]PC;-3/.25542.2334454/242246579>DF\n                    235984310,(('&&&&((%7FQ[_`de\\UKC69FKSgkiijcVF82(//113442.2322450-2211343677:@DF\n                  234664421./.*'(((('*(%,7IR_bcefd_VLP[aglliih^M94;'/00/2440-332255,.31/0122455688CF\n                342443221/1111-)*)(()+(#37;K[ehferrsvrxwwspplfS<2E:(111/1440.421263+110000112244648?BD\n               8201222211123331+**))**'$2J.9L`gmottvvuuyxtsni^A1CH7(111./44//422250+20//////112341795=D\n              76111122222234442*))(**)'&,JD)?SZbhdhfhqnjrtk_VC,>KF2(112.,43.131215-,1/////////011/7604=BC\n            :732112122223444331*)))*+('&)EN@.=GGPT\\NWg_X_`WD<,=JID-*112.,43.230004,.0/.//....//0.141.597?C\n           98223212222223333221**))*+'''(@KNC-3<9@IGHI@KI?;0,ALJI?*,112/-220411/02*.0..//....///,130/5767@A\n          862222111212221122111****+*'&'&;IJMF/*2/4<8787,.+1FLKJG8)-122..3114/0.14)./../...././-,10/155548<=\n         7511222111112110121121*()*,(&''&3FHJLI7/('&&((((1<FKKKID/(-112..3/12-0-02(-...........+.0-//342/589\n         5111112111111200221112+()*+(&'(&+BFIJJJGC=9;;79@FHIKLKG<(*,1/2--2/20-0*10(,.-........-+/.,--11/-575\n        4100//020/1001111211001*(*+)'&''(':EFHIGGGGEEEFFFFGJLMIE.',,102,+212/.0)0.(,---.-.....,*.,*,-//-,11+\n       51..//0010.//01111100000*(*+(&'&'('1BDEGFEEEFFFEEFGJLMJG;#,*,1/1,'/11///)0.(+,,,,--....*).+,+-/-,-+*.\n      32//..///1/././///01/0000,(+*'''&(('-<CBDDDCCDEDDEGJLLJHD*%.),1/0-%*11//-(0.(*++,,---..-(*,,-,..,.+,.0\n      3...-..../......-./0//00/,),)'''''('*9?AACCCBACBCGIJJIHH5#).(,1//-&(.0/.,(/-)**+,,-,,-.,(,,-.--+,+,../\n     20--.,-..-./...-,,,.//////.++(&((''(('9>@ABBACCCCDGGIKIG?$(,.(+0/.-&&*//.+(/,)**,,,,,,-,*),,.,,-,++--./\n    11-,,,-...-,...-,,,,,--.//./.+'&''(('(%6A@@@A@@AABCDEGIFB.#,,.(,0../(&),..*(.,(*+,,,,--,,(*,-,*,-+,-,-//\n    1-,+++,-..,+,,..,,,,,+,-.../0)'&''()&(%/DB@@?@@@AAABCEED5#),,.(+/..0*&'+..+'.,(**++,,,,-*),-,,,,+,,+,,,,\n   10++,**-,-.,+,,---,,+**,-.../0)&&'''(''''7BCBAABCCCBAADD<&&-,,-'+//./-&&*..+(--)**++++,,,)*,,+,,+*****(*,\n   /-+*+**,,(,-,+,,-.,+***,,-../0*&&&''(''(&)5?CDDDDEECCCD@.$*-*-,'+//.-.'&)-.*&+,)**++++,+**,+++,+*)*)))*,-\n  /1,+*****+(),**+,--,+)*+,,-,.00*%&'''('&'(&'/8?CDEFEDBA?3$(,*).,'*//.,-*&(,-)&*-))*****+***,**,,***)(*+,,,\n  0.+*****)*((+**,,,,-,**+,,,,-/.*&''''('&'((&$)28;>??=;80&&**)*-,'*/..-,-((+-*&)-)()***)))(*+(*,*****,+,,,,\n ./,****)()))(*+**+,,-,+*,,,,,-/-*'''''('&''('&%'+/5774/(#&*()(,-*'+//.,++'(*-*&&+*())**)(('+)(,*)*)*,,,,,++\n .,,*)())()*(')+*(*,,,+*+,,,,,..,,)&&''((&'''()(&%&&(&%##'*((+*,.+&*///-,,('(,*&&)+((()))(((*'*+(*)*+,+*++*)\n..+,*)(((((*(((+*()*++**,,,,,,/.,,,'&''((&&&'(((''&&%%&&'*('*,*--,&)/.--,,*'(,*'&()('(((((((((+())**+++*****\n.,++*(*((((((((+)()***)*+++,,,0-+,,(&&'(('&&'(((('''&&&'(*(**,).,+')..-,,,*'(+*'&&((''''&('''))'()*+**+****,\n-+**)()((((((('*)(()**)***+++,/+*,++'&'(('&&&'(((((''&'(*((+,,).,+').-,-,,+((**(&&((''''&'&(&('((()*)***)***\n,**))(((((((((&))(()*))*****+-.+,,*,*(&((&&&&'((((((('(**'*+,+*.+*&*.,,,,,,('+*(&&''''&&&&&'&''(((())**))*)(\n+**)()((('((((&()(')*((*****+-,*,,*,,*&(('&&&'((((''((**)&*,,**.**&),,,,-,+)'**(&&&'('&&&&&&&&((((()('((**((\n**)(()('(''('(%&)''))(()**)*,-**+,*+,+((('&&&&'((('&&(**((+,,*,/*+&(,,,,,,+*))*'&&&&'&&&&%%%&&('''''&'(())))\n**('(((&('&&&(&&(''))((())(),,*+++*,+***)'&&&&'(('''(**(&(+,,),.**%',+++,,+)*)*(&&&''&&&&&%$%&(&&&%&&))((***\n)))(('((&&&&&'&%(&(*(())))(*,+*++******+,'&&&&&'''(()**'')*++(.-*)$(,++,,++()**('&&'&&$&&&$#$&'&%$&'((()****\n***)''()&&('%&&%(&')(())()),-*****)*)**+,)&&&&&'''(***(&(***+(--**&(,+,,,+*((*)('&&&&&$$%%%#$%&%%&'''((*****\n**)(('(('&&(&%&$('')'())()*,+)***+*****+,+&&%&&&'(***)&&(**+,)-,*)&(,+++**+)(*)(&&&&&%##$$$#$%$$%&&&&(()*)**\n*)((''''('&&'%&#''')'())***,*))********++,*&&%%&(***)('&()*+,*-+))%(,+++***)(*)('&&&%%#######$$$$%&&''(())**\n))('((''((&&&&%$&'(('()**+++))**********++,)&%&'(**(((''(****+,*(*&(++*****)()(('&&&&&#######$$$$$&&'''(()**\n((((((''((&&&&%$&&((()))*)*+*)***))*())*,+,,*'&'((((('''(*++*,,*)*&(**)))**)(((('&&&&%###########$%&&&''((((\n'''((''&&((&&&%%&&(()*))*)**)()**(()())*+*+,,*((''(((&&'()*++-,*(*&(*)*)****(((('&&&&&$###########$%%&&&'(((\n('''''''&'(&&&&%&&((((())(**((()*)((())*,**+,*(''((''&&'()*++-,+&)()*)()()**(((''&&&&%#########$###$%&&&''''\n(('&&&&&'&&'&&&%&&()('((((()('()((((())*+**+++*('(('&&&'((***,++%'()))(())**(((''&&&%%########  ####$$%&&&&(\n''''&&&&&&&&&&&%&&'(('(((())''()('((())****+***('('&&&&'((**+,**&%(()((()))((''''&&%%$#######    ####$%&&&&&\n'&&'&&&&&&&&&&$#&&((''(''()(&'()((((()()**(****)(('&&%&&(***+***&#&(((((()(((&&'&&%%$########     ###$$$$%%&\n'&%%%&&&%%%%%%$#%&''''(('()(&&(*('((((()*)(****)(&&&&%&')*+***))&#%((((((((((''&&&&%########      #######%&'\n&&%%%$%&%$$$$$##$&''''(((((&&'(*('''((()*))****)('&&&&&(******))'##&(((((((((''&&&&%########       ######%&'\n%%%%$#%##$#######&&'&'((''&&&')((''((((**())****((&&%&(***))**))($#&(((''((&&''&%&%$########       ######$%&\n&%%$$$$##########%&&&&'&&&&&&()(('(('((**(()***))('&&(****))*)()'$#%'(''((('''&&&&%$#######         ######%%\n%$###############%$&&&&&&&&&'()(''((('(**((())))*)('(*+**)()**)((&#$&''(((((('&&&&%$#######          #####$%\n#################%#$%&&&&&&&'()'''('''()))(())))*)((**+**((())(('&##&'&'''('''&&&%%%#######            #####\n################ ###$%&&&&%&'*)'&'('&'())(((((())((())***((((((('&$$&&&&'((''&&&%%%%######              ####\n##&'),.212321,*   ###$%&%%%&(*('&&''''(()(((((())(('()**)((((((('&&$%&&&'''''&&&%%$%$#####               ###\n<?CA??A?=<;;975+  ###$%&%%&&((('&'''&&(()((((((())(&&(()))(''((('&&#$&&&&'''&%&&%%$$$#####               ###\nEDDB@AA?><;9874,$  ##$$%%%&'(((&&'''&''((((((((()(('&&((((''''(('&&$#$%&&&''&%%%%$#$$#####               ###\nCABCBCBA?==;:731&  ###$$%$&())''&&&''''(((''(((((('(&$&&&'''''''&&%%##%&&&&&%%%$#$######$#              ####\nAADEBCC@>?>?<841+( *##$$$$&())''&&&&'''(((''(((((('(&&%&&'''''''&%%$$#%%%&&&%%%$$$######$               ####\nACEBCCABAA=>=;83-,/&###$$%&((('&&&&&&''(('''(((((((''&&%&'''''''&$%$$#$%%%%%%%$$#$#######              #####\n@ACCCBACB@??><96/,&#%###%%&')(&&&&&&&''((('((('(('''&&&&&&'&'''&&%$$$##%%%%%%$#$$########              #####\n=?ACACA@BAA@><:72,*0)###%&'('''&&&&&'''(''''((''''''&&&&%&&&'''&&%$$###%%%%&%$#$$########             ######\n;<@@@B@@@A@@==<85,6,###$&&'''&&&&&&&'&'('''&'''&&&&&&&&&&&'''''&&$#$$##$%%%%%$############            ######"};
 
-  /* MCU pads */
-  (function () {
-    var g = document.getElementById("mcu-pads"), NS = "http://www.w3.org/2000/svg";
-    for (var i = 0; i < 8; i++) {
-      var o = 125 + i * 10;
-      [[140, o - 2, 10, 4], [250, o - 2, 10, 4], [o + 25 - 2, 100, 4, 10], [o + 25 - 2, 210, 4, 10]].forEach(function (r) {
-        var e = document.createElementNS(NS, "rect"); e.setAttribute("x", r[0]); e.setAttribute("y", r[1]); e.setAttribute("width", r[2]); e.setAttribute("height", r[3]); e.setAttribute("class", "pad"); g.appendChild(e);
-      });
-    }
-  })();
+  /* intro, then hero entrance */
+  var hero = document.getElementById("hero"), root = document.documentElement, intro = document.getElementById("intro");
+  function startHero() {
+    hero.classList.add("ready");
+    portrait.start();
+  }
+  if (root.classList.contains("intro-on")) {
+    try { sessionStorage.setItem("aa-intro", "1"); } catch (e) {}
+    var done = false;
+    function finish() { if (done) return; done = true; intro.classList.add("out"); root.classList.remove("intro-on"); setTimeout(startHero, 250); }
+    setTimeout(finish, 2300);
+    intro.addEventListener("click", finish);
+  } else {
+    requestAnimationFrame(function () { requestAnimationFrame(startHero); });
+  }
 
-  /* gentle signal travelling along the traces */
-  (function () {
-    if (RM) return;
-    var traces = Array.prototype.slice.call(document.querySelectorAll("#pcb .tr")), dot = document.getElementById("pulse");
-    var cur = null, start = 0, dur = 1600;
-    function pick(now) { cur = traces[(Math.random() * traces.length) | 0]; start = now + 900 + Math.random() * 900; }
-    function frame(now) {
-      if (!cur) pick(now);
-      var t = (now - start) / dur;
-      if (t < 0) { dot.setAttribute("r", 0); }
-      else if (t > 1) { dot.setAttribute("r", 0); pick(now); }
-      else {
-        var e = t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2, L = cur.getTotalLength(), p = cur.getPointAtLength(e * L);
-        dot.setAttribute("cx", p.x); dot.setAttribute("cy", p.y); dot.setAttribute("r", 4);
+  /* portrait made of copper pads */
+  var portrait = (function () {
+    var cv = document.getElementById("portrait"), box = document.getElementById("portrait-box"), sig = document.getElementById("sig");
+    var ctx = cv.getContext("2d"), W = 0, H = 0, cell = 0, ox = 0, oy = 0, P = [], started = false, t0 = 0, mouse = { x: -1e4, y: -1e4 };
+    var rows = GRID.g.split("\n"), RMAX = Math.round(GRID.rows * .9);
+    var ramp = [[0, [42, 26, 18]], [.35, [140, 79, 36]], [.6, [201, 129, 63]], [.82, [225, 189, 104]], [1, [255, 241, 214]]];
+    function col(v, a) {
+      for (var i = 1; i < ramp.length; i++) if (v <= ramp[i][0]) {
+        var t = (v - ramp[i - 1][0]) / (ramp[i][0] - ramp[i - 1][0]), A = ramp[i - 1][1], B = ramp[i][1];
+        return "rgba(" + Math.round(A[0] + (B[0] - A[0]) * t) + "," + Math.round(A[1] + (B[1] - A[1]) * t) + "," + Math.round(A[2] + (B[2] - A[2]) * t) + "," + a + ")";
       }
+      return "rgba(255,241,214," + a + ")";
+    }
+    function build() {
+      var r = cv.getBoundingClientRect(), d = Math.min(window.devicePixelRatio || 1, 2);
+      W = r.width; H = r.height; cv.width = Math.round(W * d); cv.height = Math.round(H * d); ctx.setTransform(d, 0, 0, d, 0, 0);
+      cell = Math.min(W / GRID.cols, H / RMAX); ox = (W - cell * GRID.cols) / 2; oy = (H - cell * RMAX) / 2;
+      var old = P; P = [];
+      for (var y = 0; y < RMAX; y++) {
+        var line = rows[y] || "", fade = y > RMAX * .78 ? 1 - (y - RMAX * .78) / (RMAX * .22) : 1;
+        for (var x = 0; x < line.length; x++) {
+          var ch = line.charCodeAt(x); if (ch === 32) continue;
+          var v = (ch - 35) / 89, k = P.length, o = old[k];
+          P.push({ tx: ox + x * cell + cell / 2, ty: oy + y * cell + cell / 2, v: v, s: cell * (.3 + .62 * v), c: col(v, Math.max(.15, fade).toFixed(2)),
+            sx: o ? o.sx : (Math.random() * 1.6 - .3) * W, sy: o ? o.sy : (Math.random() * 1.6 - .3) * H,
+            dl: o ? o.dl : Math.random() * 700 + (y / RMAX) * 600, dx: 0, dy: 0, tw: Math.random() * 6.283 });
+        }
+      }
+    }
+    function ease(t) { return 1 - Math.pow(1 - t, 3); }
+    function frame(now) {
+      if (!t0) t0 = now;
+      var el = now - t0, R = Math.max(50, cell * 9), R2 = R * R;
+      ctx.clearRect(0, 0, W, H);
+      for (var i = 0; i < P.length; i++) {
+        var p = P[i], t = Math.max(0, Math.min(1, (el - 500 - p.dl) / 1700)), e = ease(t);
+        var mx = p.tx + p.dx - mouse.x, my = p.ty + p.dy - mouse.y, d2 = mx * mx + my * my;
+        if (d2 < R2 && t >= 1) { var f = (1 - d2 / R2) * 2.2, dd = Math.sqrt(d2) || 1; p.dx += mx / dd * f; p.dy += my / dd * f; }
+        p.dx *= .9; p.dy *= .9;
+        var x = p.sx + (p.tx - p.sx) * e + p.dx, y = p.sy + (p.ty - p.sy) * e + p.dy;
+        var s = t < 1 ? 1.2 + (p.s - 1.2) * e : p.s;
+        if (t < 1) ctx.fillStyle = t === 0 ? "rgba(236,239,238," + (.25 + .35 * Math.abs(Math.sin(p.tw + el / 600))) + ")" : p.c;
+        else ctx.fillStyle = p.c;
+        ctx.fillRect(x - s / 2, y - s / 2, s, s);
+      }
+      if (el > 2400 && !sig.classList.contains("go")) sig.classList.add("go");
       requestAnimationFrame(frame);
     }
-    setTimeout(function () { requestAnimationFrame(frame); }, 2400);
-  })();
-
-  /* board follows the pointer a little */
-  (function () {
-    if (RM) return;
-    var b = document.getElementById("board3d"), stage = document.getElementById("stage");
-    window.addEventListener("pointermove", function (e) {
-      var x = e.clientX / window.innerWidth - .5, y = e.clientY / window.innerHeight - .5;
-      b.style.setProperty("--rx", (52 - y * 10).toFixed(1) + "deg");
-      b.style.setProperty("--rz", (-32 + x * 12).toFixed(1) + "deg");
-    }, { passive: true });
+    function still() {
+      ctx.clearRect(0, 0, W, H);
+      P.forEach(function (p) { ctx.fillStyle = p.c; ctx.fillRect(p.tx - p.s / 2, p.ty - p.s / 2, p.s, p.s); });
+      sig.classList.add("go");
+    }
+    build();
+    var rt; window.addEventListener("resize", function () { clearTimeout(rt); rt = setTimeout(function () { build(); if (RM) still(); }, 150); });
+    box.addEventListener("pointermove", function (e) { var r = cv.getBoundingClientRect(); mouse.x = e.clientX - r.left; mouse.y = e.clientY - r.top; });
+    box.addEventListener("pointerleave", function () { mouse.x = mouse.y = -1e4; });
+    if (!RM) { ctx.clearRect(0, 0, W, H); P.forEach(function (p) { ctx.fillStyle = "rgba(236,239,238,.3)"; ctx.fillRect(p.sx, p.sy, 1.2, 1.2); }); }
+    return { start: function () { if (started) return; started = true; if (RM) still(); else requestAnimationFrame(frame); } };
   })();
 
   /* reveal on scroll */
