@@ -1,968 +1,476 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Ahmed Atef | Hardware Engineer & Developer</title>
-  <meta name="description" content="Portfolio of Ahmed Atef — Hardware Design Engineer, PCB Designer, 2D/3D Designer & Software Developer."/>
-  <meta property="og:title" content="Ahmed Atef | Hardware Engineer & Developer"/>
-  <meta property="og:url" content="https://ahmed-atef-tech.github.io"/>
-  <meta name="theme-color" content="#16171a"/>
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
-
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ahmed Atef — Hardware Design</title>
+<meta name="description" content="Ahmed Atef designs printed circuit boards and electronics, and builds the machines around them: 3D printers, CNC, sheet metal and pneumatics.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400;700&family=Big+Shoulders+Display:wght@600;800&display=swap" rel="stylesheet">
 <style>
-/* ═══════════════════════════════════════════
-   ROOT & RESET
-═══════════════════════════════════════════ */
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-:root{
-  --bg:         #16171a;
-  --bg-2:       #1c1d21;
-  --bg-card:    #222428;
-  --bg-card-h:  #2a2c32;
-  --teal:       #00d4b4;
-  --teal-dim:   rgba(0,212,180,0.12);
-  --teal-glow:  rgba(0,212,180,0.25);
-  --teal-line:  rgba(0,212,180,0.08);
-  --orange:     #ff8c42;
-  --orange-dim: rgba(255,140,66,0.12);
-  --purple:     #9b6dff;
-  --purple-dim: rgba(155,109,255,0.12);
-  --green:      #3ddc84;
-  --green-dim:  rgba(61,220,132,0.12);
-  --txt:        #dde1ea;
-  --txt-m:      #7c8494;
-  --txt-d:      #3e424e;
-  --border:     rgba(255,255,255,0.055);
-  --border-t:   rgba(0,212,180,0.18);
-  --r:          14px;
-  --r-sm:       9px;
-  --shadow:     0 8px 32px rgba(0,0,0,0.45);
+:root {
+  --fr4: #E9E0C7;
+  --fr4-deep: #DACFB0;
+  --mask: #6B1E2A;
+  --mask-deep: #551621;
+  --cu: #B8733A;
+  --cu-bright: #D3904F;
+  --silk: #F6F3EA;
+  --ink: #241816;
+  --ink-soft: #5B4A42;
+  --rule: #C9BC98;
+  --display: "Big Shoulders Display", "Arial Narrow", "Roboto Condensed", sans-serif;
+  --body: "Atkinson Hyperlegible Next", "Atkinson Hyperlegible", system-ui, sans-serif;
+  --gutter: clamp(16px, 4vw, 48px);
+  --swap: 420ms cubic-bezier(.2,.7,.2,1);
+  color-scheme: light;
 }
-html{scroll-behavior:smooth;}
-body{
-  font-family:'Inter',sans-serif;
-  background:var(--bg);
-  color:var(--txt);
-  overflow-x:hidden;
-  min-height:100vh;
+:root[data-layer="mech"] {
+  --fr4: #DCDFE2;
+  --fr4-deep: #CDD1D5;
+  --mask: #26415F;
+  --mask-deep: #1D334B;
+  --cu: #E2622B;
+  --cu-bright: #F07A44;
+  --silk: #F4F5F6;
+  --ink: #1B1F24;
+  --ink-soft: #4A525C;
+  --rule: #B3B9BF;
 }
-a{text-decoration:none;color:inherit;}
-img{display:block;max-width:100%;}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --fr4: #1F1714; --fr4-deep: #2A201C; --ink: #EFE7D6; --ink-soft: #BFB19C; --rule: #4A3B33; color-scheme: dark; }
+  :root:not([data-theme="light"])[data-layer="mech"] { --fr4: #16191D; --fr4-deep: #20252B; --ink: #E6E9EC; --ink-soft: #A9B0B8; --rule: #3A4048; }
+}
+:root[data-theme="dark"] { --fr4: #1F1714; --fr4-deep: #2A201C; --ink: #EFE7D6; --ink-soft: #BFB19C; --rule: #4A3B33; color-scheme: dark; }
 
-/* ═══════════════════════════════════════════
-   PCB SVG BACKGROUND (Inline)
-═══════════════════════════════════════════ */
-.pcb-bg{
-  position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--fr4);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  transition: background-color var(--swap), color var(--swap);
 }
-.pcb-bg svg{width:100%;height:100%;opacity:0.55;}
+img { max-width: 100%; display: block; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--cu); outline-offset: 3px; border-radius: 2px; }
+.wrap { max-width: 1180px; margin: 0 auto; padding-left: max(var(--gutter), env(safe-area-inset-left, 0px)); padding-right: max(var(--gutter), env(safe-area-inset-right, 0px)); }
+h1, h2, h3, h4 { text-wrap: balance; }
 
-/* ═══════════════════════════════════════════
-   NAV
-═══════════════════════════════════════════ */
-nav{
-  position:fixed;top:0;left:0;right:0;z-index:200;
-  background:rgba(22,23,26,0.88);
-  backdrop-filter:blur(18px);
-  border-bottom:1px solid var(--border);
-  padding:0 24px;
-  height:60px;
-  display:flex;align-items:center;justify-content:space-between;
-  transition:background 0.3s;
-}
-.nav-logo{
-  display:flex;align-items:center;gap:11px;
-  font-weight:800;font-size:15px;letter-spacing:-0.3px;
-}
-.logo-mark{
-  width:34px;height:34px;border-radius:8px;
-  background:linear-gradient(135deg,#00d4b4 0%,#007d6a 100%);
-  display:flex;align-items:center;justify-content:center;
-  font-size:13px;font-weight:900;color:#0a0d0c;letter-spacing:-1px;
-  flex-shrink:0;
-}
-.nav-links{display:flex;gap:2px;list-style:none;align-items:center;}
-.nav-links a{
-  color:var(--txt-m);font-size:13.5px;font-weight:500;
-  padding:6px 12px;border-radius:7px;
-  transition:all 0.2s;
-}
-.nav-links a:hover{color:var(--txt);background:rgba(255,255,255,0.06);}
-.nav-links a.active{color:var(--teal);}
-.nav-cta{
-  display:flex;align-items:center;gap:8px;
-  background:var(--teal-dim);border:1px solid var(--border-t);
-  border-radius:8px;padding:6px 14px;font-size:13px;font-weight:600;
-  color:var(--teal);transition:all 0.2s;
-}
-.nav-cta:hover{background:rgba(0,212,180,0.2);transform:translateY(-1px);}
+/* ---------- top bar ---------- */
+.top { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 22px 0; }
+.mark { font-family: var(--display); font-weight: 800; font-size: 1.5rem; letter-spacing: .01em; text-decoration: none; }
+.top nav { display: flex; gap: clamp(14px, 3vw, 28px); }
+.top nav a { text-decoration: none; color: var(--ink-soft); font-size: .95rem; }
+.top nav a:hover { color: var(--ink); text-decoration: underline; text-decoration-color: var(--cu); text-underline-offset: 5px; }
 
-/* ═══════════════════════════════════════════
-   HERO
-═══════════════════════════════════════════ */
-.hero{
-  position:relative;z-index:1;
-  padding:130px 0 90px;
-  overflow:hidden;
+/* ---------- the board ---------- */
+.board {
+  position: relative;
+  background: var(--mask);
+  color: var(--silk);
+  border-radius: 22px;
+  padding: clamp(28px, 5vw, 64px);
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: clamp(24px, 4vw, 56px);
+  align-items: center;
+  overflow: hidden;
+  transition: background-color var(--swap), color var(--swap);
 }
-.hero-img-bg{
-  position:absolute;inset:0;
-  background:url('assets/hero-bg.png') center/cover no-repeat;
-  opacity:0.08;
-  pointer-events:none;
+.hole { position: absolute; width: 18px; height: 18px; border-radius: 50%; background: var(--fr4); box-shadow: 0 0 0 4px var(--cu); transition: background-color var(--swap), box-shadow var(--swap); }
+.hole.tl { top: 18px; left: 18px; } .hole.tr { top: 18px; right: 18px; }
+.hole.bl { bottom: 18px; left: 18px; } .hole.br { bottom: 18px; right: 18px; }
+.board h1 {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: clamp(4rem, 12vw, 9.5rem);
+  line-height: .86;
+  margin: 0 0 28px;
+  letter-spacing: -.005em;
 }
-.hero-inner{
-  max-width:1080px;margin:0 auto;padding:0 24px;
-  display:grid;grid-template-columns:1fr auto;gap:40px;align-items:center;
-}
-@media(max-width:700px){.hero-inner{grid-template-columns:1fr;}}
+.board h1 span { display: block; }
+.lede { font-size: clamp(1.1rem, 1.6vw, 1.3rem); max-width: 34ch; margin: 0 0 32px; }
+.fab-note { position: absolute; left: clamp(28px, 5vw, 64px); bottom: 20px; font-size: .78rem; color: var(--silk); opacity: .75; margin: 0; }
+.fab-note::before { content: ""; display: inline-block; width: 9px; height: 9px; border: 1.5px solid currentColor; margin-right: 8px; vertical-align: -1px; }
 
-.hero-badge{
-  display:inline-flex;align-items:center;gap:8px;
-  background:var(--teal-dim);border:1px solid var(--border-t);
-  border-radius:100px;padding:5px 14px;
-  font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;
-  color:var(--teal);letter-spacing:0.5px;text-transform:uppercase;
-  margin-bottom:24px;
+.parts { display: flex; flex-wrap: wrap; gap: 14px; }
+.part {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 10px;
+  min-width: 132px;
+  padding: 10px 12px;
+  border: 1.5px solid var(--silk);
+  border-radius: 4px;
+  text-decoration: none;
+  color: var(--silk);
 }
-.badge-dot{
-  width:6px;height:6px;border-radius:50%;background:var(--teal);
-  animation:blink 1.8s infinite;
-}
-@keyframes blink{0%,100%{opacity:1;}50%{opacity:0.3;}}
+.part b { font-family: var(--display); font-weight: 800; font-size: 1.35rem; line-height: 1; }
+.part i { font-style: normal; font-size: .95rem; }
+.pads { display: grid; gap: 4px; }
+.pads::before, .pads::after { content: ""; width: 7px; height: 5px; background: var(--cu); border-radius: 1px; transition: background-color 160ms; }
+.part:hover .pads::before, .part:hover .pads::after, .part:focus-visible .pads::before, .part:focus-visible .pads::after { background: var(--cu-bright); }
+.part:hover { background: var(--mask-deep); }
 
-.hero h1{
-  font-size:clamp(38px,5.5vw,66px);font-weight:900;
-  line-height:1.08;letter-spacing:-2.5px;
-  margin-bottom:18px;
-}
-.hero h1 em{font-style:normal;color:var(--teal);}
+.chip { width: 100%; height: auto; max-height: 440px; }
+.chip .tr { fill: none; stroke: var(--cu); stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 1; animation: route 900ms cubic-bezier(.4,0,.2,1) forwards; animation-delay: calc(250ms + var(--i) * 28ms); transition: stroke var(--swap); }
+.chip .via { fill: var(--mask-deep); stroke: var(--cu); stroke-width: 2.6; transition: fill var(--swap), stroke var(--swap); }
+.chip .pad { fill: var(--cu); transition: fill var(--swap); }
+.chip .silk-line { fill: none; stroke: var(--silk); stroke-width: 1.6; }
+.chip .silk-dot { fill: var(--silk); }
+.chip .silk-ref { fill: var(--silk); font-family: var(--display); font-weight: 800; font-size: 30px; }
+@keyframes route { to { stroke-dashoffset: 0; } }
 
-.hero-tagline{
-  font-size:16px;color:var(--txt-m);line-height:1.65;
-  max-width:520px;margin-bottom:32px;
-}
-.hero-tagline strong{color:var(--txt);font-weight:600;}
+/* ---------- sections on bare FR-4 ---------- */
+section { padding: clamp(64px, 9vw, 120px) 0 0; }
+.sec-head { display: grid; grid-template-columns: minmax(80px, 160px) minmax(0, 1fr); gap: 8px 32px; align-items: end; margin-bottom: 36px; }
+.ref { font-family: var(--display); font-weight: 800; font-size: clamp(3rem, 7vw, 5.5rem); line-height: .8; color: var(--mask); transition: color var(--swap); }
+:root[data-theme="dark"] .ref { color: var(--cu); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .ref { color: var(--cu); } }
+.sec-head h2 { font-family: var(--display); font-weight: 600; font-size: clamp(1.9rem, 3.4vw, 2.6rem); line-height: 1.05; margin: 0; }
+.body-col { margin-left: calc(min(160px, 20vw) + 32px); }
 
-.hero-chips{
-  display:flex;flex-wrap:wrap;gap:8px;margin-bottom:36px;
-}
-.chip{
-  display:flex;align-items:center;gap:6px;
-  background:var(--bg-card);border:1px solid var(--border);
-  border-radius:7px;padding:5px 12px;font-size:12px;font-weight:500;
-  color:var(--txt-m);transition:all 0.2s;
-}
-.chip:hover{border-color:var(--border-t);color:var(--teal);}
-.chip-dot{width:5px;height:5px;border-radius:50%;}
+.about p { max-width: 62ch; margin: 0 0 1em; }
+.toolbox { width: 100%; max-width: 760px; border-collapse: collapse; margin-top: 28px; font-size: 1rem; }
+.toolbox caption { text-align: left; font-weight: 700; padding-bottom: 10px; }
+.toolbox th, .toolbox td { text-align: left; padding: 12px 16px 12px 0; border-top: 1px solid var(--rule); vertical-align: top; }
+.toolbox th { font-weight: 400; color: var(--ink-soft); width: 34%; }
 
-.hero-btns{display:flex;gap:10px;flex-wrap:wrap;}
-.btn{
-  display:inline-flex;align-items:center;gap:8px;
-  padding:10px 20px;border-radius:var(--r-sm);
-  font-size:13.5px;font-weight:600;cursor:pointer;
-  border:1px solid transparent;transition:all 0.2s;
+/* ---------- layer switch ---------- */
+.layers { display: flex; flex-wrap: wrap; gap: 10px; margin: 0 0 40px; padding: 0; }
+.layer-btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  font: inherit; font-size: 1rem; color: var(--ink);
+  background: transparent; border: 1.5px solid var(--rule); border-radius: 6px;
+  padding: 10px 16px 10px 12px; cursor: pointer;
+  transition: border-color 160ms, background-color 160ms;
 }
-.btn-teal{
-  background:var(--teal);color:#0a1210;
-  box-shadow:0 4px 16px rgba(0,212,180,0.2);
-}
-.btn-teal:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,212,180,0.35);}
-.btn-ghost{
-  background:var(--bg-card);border-color:var(--border);color:var(--txt);
-}
-.btn-ghost:hover{background:var(--bg-card-h);transform:translateY(-2px);}
+.layer-btn:hover { border-color: var(--ink-soft); }
+.layer-btn[aria-selected="true"] { border-color: var(--ink); background: var(--fr4-deep); }
+.sw { width: 16px; height: 16px; border-radius: 3px; flex: none; }
+.sw.cu { background: #B8733A; } .sw.mech { background: #26415F; } .sw.fw { background: #6B1E2A; box-shadow: inset 0 0 0 4px #F6F3EA; }
+.layer-btn small { color: var(--ink-soft); font-size: .9rem; }
 
-/* Hero right — Identity card */
-.hero-card{
-  background:var(--bg-card);border:1px solid var(--border);
-  border-radius:var(--r);padding:28px;min-width:240px;
-  position:relative;overflow:hidden;
-}
-.hero-card::before{
-  content:'';position:absolute;top:-1px;left:24px;right:24px;height:2px;
-  background:linear-gradient(90deg,transparent,var(--teal),transparent);
-}
-.hc-avatar{
-  width:72px;height:72px;border-radius:50%;margin:0 auto 16px;
-  border:2px solid var(--border-t);overflow:hidden;
-  background:linear-gradient(135deg,#1c2828,var(--bg));
-}
-.hc-avatar img{width:100%;height:100%;object-fit:cover;}
-.hc-name{font-size:16px;font-weight:700;text-align:center;margin-bottom:4px;}
-.hc-role{font-size:12px;color:var(--teal);text-align:center;
-  font-family:'JetBrains Mono',monospace;margin-bottom:20px;}
-.hc-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-.hc-stat{
-  background:var(--bg-2);border:1px solid var(--border);
-  border-radius:var(--r-sm);padding:10px;text-align:center;
-}
-.hc-stat-n{font-size:22px;font-weight:800;color:var(--teal);line-height:1;}
-.hc-stat-l{font-size:10px;color:var(--txt-m);margin-top:4px;
-  font-family:'JetBrains Mono',monospace;}
+.panel[hidden] { display: none; }
+.panel-intro { max-width: 60ch; color: var(--ink-soft); margin: 0 0 32px; }
 
-/* ═══════════════════════════════════════════
-   SECTION BASE
-═══════════════════════════════════════════ */
-.section{
-  position:relative;z-index:1;
-  padding:80px 0;
-}
-.section+.section{border-top:1px solid var(--border);}
-.container{max-width:1080px;margin:0 auto;padding:0 24px;}
+/* featured board */
+.feature { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: clamp(24px, 4vw, 56px); align-items: start; padding: clamp(24px, 3vw, 40px); border: 1.5px solid var(--rule); border-radius: 14px; background: var(--fr4-deep); }
+.feature h3 { font-family: var(--display); font-weight: 600; font-size: clamp(1.7rem, 2.8vw, 2.2rem); line-height: 1.05; margin: 0 0 10px; }
+.status { display: inline-block; font-size: .9rem; padding: 3px 10px; border-radius: 20px; background: var(--mask); color: var(--silk); margin-bottom: 16px; }
+.feature ul { padding-left: 1.1em; margin: 0 0 20px; }
+.feature li { margin-bottom: 4px; }
+.feature p { margin: 0 0 16px; }
+.blk { width: 100%; height: auto; }
+.blk .b { fill: none; stroke: var(--ink); stroke-width: 1.5; }
+.blk .t { fill: var(--ink); font-family: var(--body); font-size: 13px; }
+.blk .ts { fill: var(--ink-soft); font-family: var(--body); font-size: 11.5px; }
+.blk .cu { fill: none; stroke: var(--cu); stroke-width: 2; }
+.blk .bar { stroke: var(--mask); stroke-width: 2; stroke-dasharray: 6 5; }
+:root[data-theme="dark"] .blk .bar { stroke: var(--cu-bright); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .blk .bar { stroke: var(--cu-bright); } }
 
-.sec-head{margin-bottom:48px;}
-.sec-eye{
-  font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;
-  color:var(--teal);letter-spacing:2px;text-transform:uppercase;
-  display:flex;align-items:center;gap:8px;margin-bottom:10px;
-}
-.sec-eye::before{
-  content:'';width:20px;height:1px;background:var(--teal);
-}
-.sec-title{
-  font-size:clamp(24px,3.5vw,36px);font-weight:800;
-  letter-spacing:-1px;margin-bottom:10px;
-}
-.sec-sub{font-size:15px;color:var(--txt-m);}
+.link { font-weight: 700; text-decoration-color: var(--cu); text-decoration-thickness: 2px; text-underline-offset: 4px; }
+.link:hover { color: var(--mask); }
+:root[data-theme="dark"] .link:hover { color: var(--cu-bright); }
 
-/* ═══════════════════════════════════════════
-   FILTER TABS
-═══════════════════════════════════════════ */
-.filter-bar{
-  display:flex;gap:6px;flex-wrap:wrap;margin-bottom:32px;
-}
-.filter-btn{
-  padding:6px 14px;border-radius:7px;font-size:12.5px;font-weight:600;
-  cursor:pointer;border:1px solid var(--border);
-  background:var(--bg-card);color:var(--txt-m);
-  transition:all 0.2s;
-}
-.filter-btn:hover,.filter-btn.active{
-  background:var(--teal-dim);border-color:var(--border-t);color:var(--teal);
-}
+.list { list-style: none; margin: 40px 0 0; padding: 0; border-bottom: 1px solid var(--rule); }
+.list > li { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); gap: 8px 40px; padding: 22px 0; border-top: 1px solid var(--rule); }
+.list h4 { margin: 0; font-size: 1.15rem; }
+.list p { margin: 0; color: var(--ink-soft); max-width: 60ch; }
+.list .tools { display: block; margin-top: 6px; font-size: .95rem; color: var(--ink); }
 
-/* ═══════════════════════════════════════════
-   GALLERY GRID
-═══════════════════════════════════════════ */
-.gallery{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(310px,1fr));
-  gap:20px;
-}
-.gallery.cols-2{grid-template-columns:repeat(auto-fill,minmax(460px,1fr));}
-@media(max-width:600px){
-  .gallery,.gallery.cols-2{grid-template-columns:1fr;}
-}
+/* apps */
+.apps { display: grid; gap: 24px; }
+.app { display: grid; grid-template-columns: minmax(0, 220px) minmax(0, 1fr); gap: 8px 28px; align-items: center; }
+@media (max-width: 560px) { .app { grid-template-columns: 1fr; } }
+.app img { border-radius: 10px; border: 1px solid var(--rule); aspect-ratio: 16 / 10; object-fit: cover; width: 100%; height: auto; background: var(--fr4-deep); }
+.app h3 { font-size: 1.15rem; margin: 0 0 4px; }
+.app p { margin: 0 0 12px; color: var(--ink-soft); }
+.app .acts { display: flex; gap: 20px; flex-wrap: wrap; }
 
-/* ═══════════════════════════════════════════
-   PROJECT CARD
-═══════════════════════════════════════════ */
-.proj-card{
-  background:var(--bg-card);border:1px solid var(--border);
-  border-radius:var(--r);overflow:hidden;
-  transition:all 0.28s ease;position:relative;cursor:default;
-}
-.proj-card:hover{
-  transform:translateY(-5px);border-color:var(--border-t);
-  box-shadow:0 16px 48px rgba(0,0,0,0.5),0 0 0 1px var(--teal-line);
-}
-.proj-card[data-cat="pcb"]:hover{border-color:rgba(61,220,132,0.25);}
-.proj-card[data-cat="software"]:hover{border-color:rgba(0,212,180,0.25);}
-.proj-card[data-cat="article"]:hover{border-color:rgba(155,109,255,0.25);}
+/* bench */
+.bench { list-style: none; padding: 0; margin: 0; max-width: 760px; }
+.bench li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 14px; padding: 14px 0; border-top: 1px solid var(--rule); }
+.bench li:last-child { border-bottom: 1px solid var(--rule); }
+.led { width: 12px; height: 12px; border-radius: 50%; margin-top: 7px; background: var(--cu); box-shadow: 0 0 0 3px var(--fr4-deep); }
 
-.proj-thumb{
-  width:100%;height:180px;overflow:hidden;
-  position:relative;background:var(--bg-2);
-}
-.proj-thumb img{
-  width:100%;height:100%;object-fit:cover;object-position:top;
-  transition:transform 0.5s ease;
-}
-.proj-card:hover .proj-thumb img{transform:scale(1.06);}
-.proj-thumb-overlay{
-  position:absolute;inset:0;
-  background:linear-gradient(to bottom,transparent 40%,var(--bg-card));
-}
-.proj-cat-badge{
-  position:absolute;top:12px;left:12px;
-  display:flex;align-items:center;gap:5px;
-  padding:4px 10px;border-radius:6px;font-size:11px;font-weight:700;
-  letter-spacing:0.5px;text-transform:uppercase;
-  font-family:'JetBrains Mono',monospace;backdrop-filter:blur(8px);
-}
-.badge-pcb{background:rgba(61,220,132,0.15);border:1px solid rgba(61,220,132,0.3);color:#3ddc84;}
-.badge-software{background:rgba(0,212,180,0.12);border:1px solid rgba(0,212,180,0.25);color:#00d4b4;}
-.badge-project{background:rgba(255,140,66,0.12);border:1px solid rgba(255,140,66,0.25);color:#ff8c42;}
-.badge-article{background:rgba(155,109,255,0.12);border:1px solid rgba(155,109,255,0.25);color:#9b6dff;}
+/* contact: pin header */
+.header-strip { display: grid; max-width: 760px; border: 1.5px solid var(--ink); border-radius: 6px; overflow: hidden; }
+.pin { display: grid; grid-template-columns: 28px minmax(0, 1fr); align-items: center; gap: 16px; padding: 16px 20px; text-decoration: none; border-bottom: 1px solid var(--rule); }
+.pin:last-child { border-bottom: 0; }
+.pin > span:last-child { display: grid; grid-template-columns: minmax(90px, 140px) minmax(0, 1fr); gap: 4px 16px; align-items: baseline; }
+.pin:hover { background: var(--fr4-deep); }
+.pin .pd { width: 22px; height: 22px; border-radius: 50%; background: var(--cu); box-shadow: inset 0 0 0 6px var(--cu), inset 0 0 0 11px var(--fr4); transition: background-color var(--swap); }
+.pin:first-child .pd { border-radius: 3px; }
+.pin b { display: block; font-size: 1.05rem; }
+.pin span span { color: var(--ink-soft); font-size: .98rem; overflow-wrap: break-word; }
+.open { font-size: 1.15rem; max-width: 52ch; margin: 0 0 28px; }
 
-.proj-body{padding:20px;}
-.proj-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px;gap:12px;}
-.proj-name{font-size:16px;font-weight:700;letter-spacing:-0.2px;line-height:1.3;}
-.proj-ver{
-  font-family:'JetBrains Mono',monospace;font-size:10px;
-  color:var(--txt-d);background:var(--bg-2);
-  border:1px solid var(--border);border-radius:4px;padding:2px 7px;
-  flex-shrink:0;margin-top:2px;
-}
-.proj-desc{
-  font-size:13px;color:var(--txt-m);line-height:1.6;
-  margin-bottom:16px;
-  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;
-}
-.proj-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:18px;}
-.proj-tag{
-  font-size:11px;font-weight:500;padding:3px 9px;border-radius:5px;
-  background:var(--bg-2);border:1px solid var(--border);color:var(--txt-m);
-}
-.proj-footer{display:flex;gap:8px;align-items:center;}
-.proj-btn{
-  flex:1;display:flex;align-items:center;justify-content:center;gap:7px;
-  padding:9px 16px;border-radius:var(--r-sm);font-size:13px;font-weight:600;
-  border:1px solid transparent;transition:all 0.2s;cursor:pointer;
-}
-.proj-btn-primary{
-  background:var(--teal-dim);border-color:var(--border-t);color:var(--teal);
-}
-.proj-btn-primary:hover{background:rgba(0,212,180,0.2);transform:translateY(-1px);}
-.proj-btn-primary.green{
-  background:var(--green-dim);border-color:rgba(61,220,132,0.25);color:var(--green);
-}
-.proj-btn-primary.green:hover{background:rgba(61,220,132,0.2);}
-.proj-btn-primary.purple{
-  background:var(--purple-dim);border-color:rgba(155,109,255,0.25);color:var(--purple);
-}
-.proj-btn-primary.purple:hover{background:rgba(155,109,255,0.2);}
-.proj-btn-icon{
-  width:38px;height:38px;display:flex;align-items:center;justify-content:center;
-  background:var(--bg-2);border:1px solid var(--border);
-  border-radius:var(--r-sm);color:var(--txt-m);transition:all 0.2s;
-  flex-shrink:0;
-}
-.proj-btn-icon:hover{background:var(--bg-card-h);color:var(--txt);transform:translateY(-1px);}
+footer { padding: clamp(64px, 9vw, 110px) 0 40px; }
+footer p { margin: 0; color: var(--ink-soft); font-size: .92rem; }
 
-/* ═══════════════════════════════════════════
-   PCB SECTION SPECIAL
-═══════════════════════════════════════════ */
-.pcb-banner{
-  background:var(--bg-card);border:1px solid var(--border);
-  border-radius:var(--r);padding:28px 32px;margin-bottom:32px;
-  display:flex;align-items:center;justify-content:space-between;gap:24px;
-  flex-wrap:wrap;position:relative;overflow:hidden;
+@media (max-width: 860px) {
+  .board { grid-template-columns: 1fr; padding-bottom: 64px; }
+  .chip { max-width: 420px; margin: 0 auto; }
+  .feature { grid-template-columns: 1fr; }
+  .list > li { grid-template-columns: 1fr; }
+  .sec-head { grid-template-columns: 1fr; }
+  .body-col { margin-left: 0; }
 }
-.pcb-banner::before{
-  content:'';position:absolute;top:0;left:0;right:0;height:2px;
-  background:linear-gradient(90deg,transparent,var(--green),transparent);
+@media (max-width: 520px) {
+  .top nav { gap: 14px; }
+  .top nav a { font-size: .9rem; }
+  .hole { width: 12px; height: 12px; box-shadow: 0 0 0 3px var(--cu); }
+  .hole.tl, .hole.tr { top: 12px; } .hole.bl, .hole.br { bottom: 12px; }
+  .hole.tl, .hole.bl { left: 12px; } .hole.tr, .hole.br { right: 12px; }
+  .part { flex: 1 1 100%; }
+  .pin > span:last-child { grid-template-columns: 1fr; }
 }
-.pcb-banner-info h3{font-size:18px;font-weight:700;margin-bottom:6px;}
-.pcb-banner-info p{font-size:13px;color:var(--txt-m);max-width:480px;line-height:1.5;}
-.pcb-banner-link{
-  display:flex;align-items:center;gap:8px;
-  background:var(--green-dim);border:1px solid rgba(61,220,132,0.25);
-  border-radius:var(--r-sm);padding:10px 18px;
-  color:var(--green);font-size:13px;font-weight:600;
-  white-space:nowrap;transition:all 0.2s;
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .chip .tr { animation: none; stroke-dashoffset: 0; }
+  *, *::before, *::after { transition: none !important; }
 }
-.pcb-banner-link:hover{background:rgba(61,220,132,0.2);transform:translateY(-1px);}
-
-/* ═══════════════════════════════════════════
-   ARTICLES — HORIZONTAL CARD
-═══════════════════════════════════════════ */
-.articles-grid{display:flex;flex-direction:column;gap:16px;}
-.article-card{
-  background:var(--bg-card);border:1px solid var(--border);
-  border-radius:var(--r);padding:24px;
-  display:flex;gap:24px;align-items:center;
-  transition:all 0.25s;
-}
-.article-card:hover{
-  border-color:rgba(155,109,255,0.25);transform:translateY(-3px);
-  box-shadow:0 12px 36px rgba(0,0,0,0.4);
-}
-.article-num{
-  font-family:'JetBrains Mono',monospace;font-size:32px;font-weight:900;
-  color:var(--txt-d);flex-shrink:0;min-width:40px;line-height:1;
-}
-.article-body{flex:1;}
-.article-title{font-size:16px;font-weight:700;margin-bottom:6px;letter-spacing:-0.2px;}
-.article-desc{font-size:13px;color:var(--txt-m);line-height:1.55;margin-bottom:12px;}
-.article-meta{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
-.article-tag{
-  font-size:11px;padding:3px 9px;border-radius:5px;font-weight:600;
-  background:var(--purple-dim);border:1px solid rgba(155,109,255,0.2);color:var(--purple);
-}
-.article-date{font-size:12px;color:var(--txt-d);font-family:'JetBrains Mono',monospace;}
-.article-coming{
-  font-size:11px;padding:3px 9px;border-radius:5px;font-weight:600;
-  background:rgba(255,140,66,0.1);border:1px solid rgba(255,140,66,0.2);color:var(--orange);
-  font-family:'JetBrains Mono',monospace;
-}
-.article-arrow{
-  color:var(--txt-d);flex-shrink:0;transition:all 0.2s;
-}
-.article-card:hover .article-arrow{color:var(--purple);transform:translateX(4px);}
-
-/* ═══════════════════════════════════════════
-   EMPTY STATE
-═══════════════════════════════════════════ */
-.empty-state{
-  grid-column:1/-1;
-  background:var(--bg-card);border:1px dashed var(--border);
-  border-radius:var(--r);padding:48px;text-align:center;
-}
-.empty-icon{font-size:40px;margin-bottom:16px;opacity:0.4;}
-.empty-title{font-size:16px;font-weight:600;margin-bottom:8px;color:var(--txt-m);}
-.empty-sub{font-size:13px;color:var(--txt-d);}
-
-/* ═══════════════════════════════════════════
-   FOOTER
-═══════════════════════════════════════════ */
-footer{
-  position:relative;z-index:1;
-  border-top:1px solid var(--border);
-  padding:40px 0;
-  background:rgba(22,23,26,0.95);
-}
-.footer-inner{
-  max-width:1080px;margin:0 auto;padding:0 24px;
-  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;
-}
-.footer-left{display:flex;align-items:center;gap:10px;}
-.footer-logo-mark{
-  width:28px;height:28px;border-radius:6px;
-  background:linear-gradient(135deg,#00d4b4,#007d6a);
-  display:flex;align-items:center;justify-content:center;
-  font-size:11px;font-weight:900;color:#0a1210;
-}
-.footer-copy{font-size:13px;color:var(--txt-d);}
-.footer-links{display:flex;gap:12px;}
-.footer-link{
-  color:var(--txt-m);font-size:13px;font-weight:500;
-  transition:color 0.2s;
-}
-.footer-link:hover{color:var(--teal);}
-
-/* ═══════════════════════════════════════════
-   SCROLL REVEAL
-═══════════════════════════════════════════ */
-.reveal{opacity:0;transform:translateY(22px);transition:all 0.55s ease;}
-.reveal.visible{opacity:1;transform:translateY(0);}
-
-/* ═══════════════════════════════════════════
-   SVG ICONS
-═══════════════════════════════════════════ */
-.icon{display:inline-block;vertical-align:middle;}
 </style>
 </head>
 <body>
+<div class="wrap">
+  <header class="top">
+    <a class="mark" href="#top">Ahmed Atef</a>
+    <nav aria-label="Sections">
+      <a href="#about">About</a>
+      <a href="#work">Work</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
 
-<!-- PCB Trace Background -->
-<div class="pcb-bg">
-  <svg viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-      <style>
-        .trace{stroke:#00d4b4;stroke-width:1;fill:none;opacity:0.18;}
-        .via{fill:none;stroke:#00d4b4;opacity:0.22;}
-        .pad{fill:#00d4b4;opacity:0.12;}
-        .grid{stroke:#00d4b4;stroke-width:0.4;opacity:0.06;}
-      </style>
-    </defs>
-    <!-- Grid -->
-    <line class="grid" x1="0" y1="60" x2="1440" y2="60"/>
-    <line class="grid" x1="0" y1="120" x2="1440" y2="120"/>
-    <line class="grid" x1="0" y1="180" x2="1440" y2="180"/>
-    <line class="grid" x1="0" y1="240" x2="1440" y2="240"/>
-    <line class="grid" x1="0" y1="300" x2="1440" y2="300"/>
-    <line class="grid" x1="0" y1="360" x2="1440" y2="360"/>
-    <line class="grid" x1="0" y1="420" x2="1440" y2="420"/>
-    <line class="grid" x1="0" y1="480" x2="1440" y2="480"/>
-    <line class="grid" x1="0" y1="540" x2="1440" y2="540"/>
-    <line class="grid" x1="0" y1="600" x2="1440" y2="600"/>
-    <line class="grid" x1="0" y1="660" x2="1440" y2="660"/>
-    <line class="grid" x1="0" y1="720" x2="1440" y2="720"/>
-    <line class="grid" x1="0" y1="780" x2="1440" y2="780"/>
-    <line class="grid" x1="0" y1="840" x2="1440" y2="840"/>
-    <line class="grid" x1="60" y1="0" x2="60" y2="900"/>
-    <line class="grid" x1="120" y1="0" x2="120" y2="900"/>
-    <line class="grid" x1="180" y1="0" x2="180" y2="900"/>
-    <line class="grid" x1="240" y1="0" x2="240" y2="900"/>
-    <line class="grid" x1="300" y1="0" x2="300" y2="900"/>
-    <line class="grid" x1="360" y1="0" x2="360" y2="900"/>
-    <line class="grid" x1="420" y1="0" x2="420" y2="900"/>
-    <line class="grid" x1="480" y1="0" x2="480" y2="900"/>
-    <line class="grid" x1="540" y1="0" x2="540" y2="900"/>
-    <line class="grid" x1="600" y1="0" x2="600" y2="900"/>
-    <line class="grid" x1="660" y1="0" x2="660" y2="900"/>
-    <line class="grid" x1="720" y1="0" x2="720" y2="900"/>
-    <line class="grid" x1="780" y1="0" x2="780" y2="900"/>
-    <line class="grid" x1="840" y1="0" x2="840" y2="900"/>
-    <line class="grid" x1="900" y1="0" x2="900" y2="900"/>
-    <line class="grid" x1="960" y1="0" x2="960" y2="900"/>
-    <line class="grid" x1="1020" y1="0" x2="1020" y2="900"/>
-    <line class="grid" x1="1080" y1="0" x2="1080" y2="900"/>
-    <line class="grid" x1="1140" y1="0" x2="1140" y2="900"/>
-    <line class="grid" x1="1200" y1="0" x2="1200" y2="900"/>
-    <line class="grid" x1="1260" y1="0" x2="1260" y2="900"/>
-    <line class="grid" x1="1320" y1="0" x2="1320" y2="900"/>
-    <line class="grid" x1="1380" y1="0" x2="1380" y2="900"/>
-    <!-- Circuit Traces -->
-    <path class="trace" d="M 60 120 L 180 120 L 180 240 L 360 240"/>
-    <path class="trace" d="M 360 240 L 360 360 L 540 360 L 540 300 L 720 300"/>
-    <path class="trace" d="M 720 300 L 900 300 L 900 180 L 1080 180"/>
-    <path class="trace" d="M 1080 180 L 1200 180 L 1200 60 L 1380 60"/>
-    <path class="trace" d="M 120 480 L 300 480 L 300 600 L 480 600"/>
-    <path class="trace" d="M 480 600 L 600 600 L 600 720 L 780 720 L 780 660 L 960 660"/>
-    <path class="trace" d="M 960 660 L 1140 660 L 1140 540 L 1320 540"/>
-    <path class="trace" d="M 240 780 L 420 780 L 420 840"/>
-    <path class="trace" d="M 1020 420 L 1020 480 L 1200 480 L 1200 420 L 1380 420"/>
-    <!-- Vias -->
-    <circle class="via" cx="180" cy="240" r="6" stroke-width="1.5"/>
-    <circle class="pad" cx="180" cy="240" r="3"/>
-    <circle class="via" cx="360" cy="360" r="6" stroke-width="1.5"/>
-    <circle class="pad" cx="360" cy="360" r="3"/>
-    <circle class="via" cx="720" cy="300" r="6" stroke-width="1.5"/>
-    <circle class="pad" cx="720" cy="300" r="3"/>
-    <circle class="via" cx="1080" cy="180" r="6" stroke-width="1.5"/>
-    <circle class="pad" cx="1080" cy="180" r="3"/>
-    <circle class="via" cx="480" cy="600" r="6" stroke-width="1.5"/>
-    <circle class="pad" cx="480" cy="600" r="3"/>
-    <circle class="via" cx="960" cy="660" r="6" stroke-width="1.5"/>
-    <circle class="pad" cx="960" cy="660" r="3"/>
-    <!-- Component outlines -->
-    <rect class="via" x="642" y="262" width="36" height="76" rx="3" stroke-width="1"/>
-    <rect class="via" x="1170" y="142" width="60" height="36" rx="3" stroke-width="1"/>
-    <rect class="via" x="450" y="562" width="60" height="36" rx="3" stroke-width="1"/>
-    <!-- Crosshairs -->
-    <line class="trace" x1="654" y1="255" x2="666" y2="255" opacity="0.3"/>
-    <line class="trace" x1="660" y1="249" x2="660" y2="261" opacity="0.3"/>
-    <line class="trace" x1="1182" y1="135" x2="1194" y2="135" opacity="0.3"/>
-    <line class="trace" x1="1188" y1="129" x2="1188" y2="141" opacity="0.3"/>
-  </svg>
+  <main id="top">
+    <div class="board">
+      <span class="hole tl" aria-hidden="true"></span><span class="hole tr" aria-hidden="true"></span>
+      <span class="hole bl" aria-hidden="true"></span><span class="hole br" aria-hidden="true"></span>
+      <div>
+        <h1><span>Ahmed</span><span>Atef</span></h1>
+        <p class="lede">I design printed circuit boards and the electronics on them, then build the machines they end up in.</p>
+        <div class="parts">
+          <a class="part" href="#about"><span class="pads" aria-hidden="true"></span><span><b>U1</b> <i>About</i></span><span class="pads" aria-hidden="true"></span></a>
+          <a class="part" href="#work"><span class="pads" aria-hidden="true"></span><span><b>U2</b> <i>Work</i></span><span class="pads" aria-hidden="true"></span></a>
+          <a class="part" href="#contact"><span class="pads" aria-hidden="true"></span><span><b>J1</b> <i>Contact</i></span><span class="pads" aria-hidden="true"></span></a>
+        </div>
+      </div>
+      <div aria-hidden="false"><svg class="chip" viewBox="0 0 420 360" role="img" aria-labelledby="chip-t">
+<title id="chip-t">A QFP chip footprint with copper traces fanning out to vias</title>
+<g class="traces"><path class="tr" pathLength="1" style="--i:0" d="M136.0 138.0 H118.0 L63.4 83.4 H28.0"/>
+<path class="tr" pathLength="1" style="--i:1" d="M136.0 150.0 H118.0 L79.0 111.0 H28.0"/>
+<path class="tr" pathLength="1" style="--i:2" d="M136.0 162.0 H118.0 L94.6 138.6 H28.0"/>
+<path class="tr" pathLength="1" style="--i:3" d="M136.0 174.0 H118.0 L110.2 166.2 H28.0"/>
+<path class="tr" pathLength="1" style="--i:4" d="M136.0 186.0 H118.0 L110.2 193.8 H28.0"/>
+<path class="tr" pathLength="1" style="--i:5" d="M136.0 198.0 H118.0 L94.6 221.4 H28.0"/>
+<path class="tr" pathLength="1" style="--i:6" d="M136.0 210.0 H118.0 L79.0 249.0 H28.0"/>
+<path class="tr" pathLength="1" style="--i:7" d="M136.0 222.0 H118.0 L63.4 276.6 H28.0"/>
+<path class="tr" pathLength="1" style="--i:8" d="M284.0 138.0 H302.0 L356.6 83.4 H392.0"/>
+<path class="tr" pathLength="1" style="--i:9" d="M284.0 150.0 H302.0 L341.0 111.0 H392.0"/>
+<path class="tr" pathLength="1" style="--i:10" d="M284.0 162.0 H302.0 L325.4 138.6 H392.0"/>
+<path class="tr" pathLength="1" style="--i:11" d="M284.0 174.0 H302.0 L309.8 166.2 H392.0"/>
+<path class="tr" pathLength="1" style="--i:12" d="M284.0 186.0 H302.0 L309.8 193.8 H392.0"/>
+<path class="tr" pathLength="1" style="--i:13" d="M284.0 198.0 H302.0 L325.4 221.4 H392.0"/>
+<path class="tr" pathLength="1" style="--i:14" d="M284.0 210.0 H302.0 L341.0 249.0 H392.0"/>
+<path class="tr" pathLength="1" style="--i:15" d="M284.0 222.0 H302.0 L356.6 276.6 H392.0"/>
+<path class="tr" pathLength="1" style="--i:16" d="M168.0 106.0 V90.0 L126.0 48.0 V26.0"/>
+<path class="tr" pathLength="1" style="--i:17" d="M180.0 106.0 V90.0 L150.0 60.0 V26.0"/>
+<path class="tr" pathLength="1" style="--i:18" d="M192.0 106.0 V90.0 L174.0 72.0 V26.0"/>
+<path class="tr" pathLength="1" style="--i:19" d="M204.0 106.0 V90.0 L198.0 84.0 V26.0"/>
+<path class="tr" pathLength="1" style="--i:20" d="M216.0 106.0 V90.0 L222.0 84.0 V26.0"/>
+<path class="tr" pathLength="1" style="--i:21" d="M228.0 106.0 V90.0 L246.0 72.0 V26.0"/>
+<path class="tr" pathLength="1" style="--i:22" d="M240.0 106.0 V90.0 L270.0 60.0 V26.0"/>
+<path class="tr" pathLength="1" style="--i:23" d="M252.0 106.0 V90.0 L294.0 48.0 V26.0"/>
+<path class="tr" pathLength="1" style="--i:24" d="M168.0 254.0 V270.0 L126.0 312.0 V334.0"/>
+<path class="tr" pathLength="1" style="--i:25" d="M180.0 254.0 V270.0 L150.0 300.0 V334.0"/>
+<path class="tr" pathLength="1" style="--i:26" d="M192.0 254.0 V270.0 L174.0 288.0 V334.0"/>
+<path class="tr" pathLength="1" style="--i:27" d="M204.0 254.0 V270.0 L198.0 276.0 V334.0"/>
+<path class="tr" pathLength="1" style="--i:28" d="M216.0 254.0 V270.0 L222.0 276.0 V334.0"/>
+<path class="tr" pathLength="1" style="--i:29" d="M228.0 254.0 V270.0 L246.0 288.0 V334.0"/>
+<path class="tr" pathLength="1" style="--i:30" d="M240.0 254.0 V270.0 L270.0 300.0 V334.0"/>
+<path class="tr" pathLength="1" style="--i:31" d="M252.0 254.0 V270.0 L294.0 312.0 V334.0"/></g>
+<circle class="via" cx="28.0" cy="83.4" r="4.5"/><circle class="via" cx="28.0" cy="111.0" r="4.5"/><circle class="via" cx="28.0" cy="138.6" r="4.5"/><circle class="via" cx="28.0" cy="166.2" r="4.5"/><circle class="via" cx="28.0" cy="193.8" r="4.5"/><circle class="via" cx="28.0" cy="221.4" r="4.5"/><circle class="via" cx="28.0" cy="249.0" r="4.5"/><circle class="via" cx="28.0" cy="276.6" r="4.5"/><circle class="via" cx="392.0" cy="83.4" r="4.5"/><circle class="via" cx="392.0" cy="111.0" r="4.5"/><circle class="via" cx="392.0" cy="138.6" r="4.5"/><circle class="via" cx="392.0" cy="166.2" r="4.5"/><circle class="via" cx="392.0" cy="193.8" r="4.5"/><circle class="via" cx="392.0" cy="221.4" r="4.5"/><circle class="via" cx="392.0" cy="249.0" r="4.5"/><circle class="via" cx="392.0" cy="276.6" r="4.5"/><circle class="via" cx="126.0" cy="26.0" r="4.5"/><circle class="via" cx="150.0" cy="26.0" r="4.5"/><circle class="via" cx="174.0" cy="26.0" r="4.5"/><circle class="via" cx="198.0" cy="26.0" r="4.5"/><circle class="via" cx="222.0" cy="26.0" r="4.5"/><circle class="via" cx="246.0" cy="26.0" r="4.5"/><circle class="via" cx="270.0" cy="26.0" r="4.5"/><circle class="via" cx="294.0" cy="26.0" r="4.5"/><circle class="via" cx="126.0" cy="334.0" r="4.5"/><circle class="via" cx="150.0" cy="334.0" r="4.5"/><circle class="via" cx="174.0" cy="334.0" r="4.5"/><circle class="via" cx="198.0" cy="334.0" r="4.5"/><circle class="via" cx="222.0" cy="334.0" r="4.5"/><circle class="via" cx="246.0" cy="334.0" r="4.5"/><circle class="via" cx="270.0" cy="334.0" r="4.5"/><circle class="via" cx="294.0" cy="334.0" r="4.5"/>
+<g transform="translate(98 68) rotate(45)"><rect class="silk-line" x="-11" y="-6" width="22" height="12" rx="1.5"/><rect class="pad" x="-9" y="-4" width="6" height="8" rx="1"/><rect class="pad" x="3" y="-4" width="6" height="8" rx="1"/></g><g transform="translate(322 68) rotate(-45)"><rect class="silk-line" x="-11" y="-6" width="22" height="12" rx="1.5"/><rect class="pad" x="-9" y="-4" width="6" height="8" rx="1"/><rect class="pad" x="3" y="-4" width="6" height="8" rx="1"/></g><g transform="translate(98 292) rotate(-45)"><rect class="silk-line" x="-11" y="-6" width="22" height="12" rx="1.5"/><rect class="pad" x="-9" y="-4" width="6" height="8" rx="1"/><rect class="pad" x="3" y="-4" width="6" height="8" rx="1"/></g><g transform="translate(322 292) rotate(45)"><rect class="silk-line" x="-11" y="-6" width="22" height="12" rx="1.5"/><rect class="pad" x="-9" y="-4" width="6" height="8" rx="1"/><rect class="pad" x="3" y="-4" width="6" height="8" rx="1"/></g>
+<rect class="silk-line" x="154" y="124" width="112" height="112" rx="3"/>
+<circle class="silk-dot" cx="166" cy="136" r="4"/>
+<text class="silk-ref" x="210" y="186" text-anchor="middle">U2</text>
+<rect class="pad" x="136.0" y="135.8" width="14" height="4.4" rx="1"/><rect class="pad" x="136.0" y="147.8" width="14" height="4.4" rx="1"/><rect class="pad" x="136.0" y="159.8" width="14" height="4.4" rx="1"/><rect class="pad" x="136.0" y="171.8" width="14" height="4.4" rx="1"/><rect class="pad" x="136.0" y="183.8" width="14" height="4.4" rx="1"/><rect class="pad" x="136.0" y="195.8" width="14" height="4.4" rx="1"/><rect class="pad" x="136.0" y="207.8" width="14" height="4.4" rx="1"/><rect class="pad" x="136.0" y="219.8" width="14" height="4.4" rx="1"/><rect class="pad" x="270.0" y="135.8" width="14" height="4.4" rx="1"/><rect class="pad" x="270.0" y="147.8" width="14" height="4.4" rx="1"/><rect class="pad" x="270.0" y="159.8" width="14" height="4.4" rx="1"/><rect class="pad" x="270.0" y="171.8" width="14" height="4.4" rx="1"/><rect class="pad" x="270.0" y="183.8" width="14" height="4.4" rx="1"/><rect class="pad" x="270.0" y="195.8" width="14" height="4.4" rx="1"/><rect class="pad" x="270.0" y="207.8" width="14" height="4.4" rx="1"/><rect class="pad" x="270.0" y="219.8" width="14" height="4.4" rx="1"/><rect class="pad" x="165.8" y="106.0" width="4.4" height="14" rx="1"/><rect class="pad" x="177.8" y="106.0" width="4.4" height="14" rx="1"/><rect class="pad" x="189.8" y="106.0" width="4.4" height="14" rx="1"/><rect class="pad" x="201.8" y="106.0" width="4.4" height="14" rx="1"/><rect class="pad" x="213.8" y="106.0" width="4.4" height="14" rx="1"/><rect class="pad" x="225.8" y="106.0" width="4.4" height="14" rx="1"/><rect class="pad" x="237.8" y="106.0" width="4.4" height="14" rx="1"/><rect class="pad" x="249.8" y="106.0" width="4.4" height="14" rx="1"/><rect class="pad" x="165.8" y="240.0" width="4.4" height="14" rx="1"/><rect class="pad" x="177.8" y="240.0" width="4.4" height="14" rx="1"/><rect class="pad" x="189.8" y="240.0" width="4.4" height="14" rx="1"/><rect class="pad" x="201.8" y="240.0" width="4.4" height="14" rx="1"/><rect class="pad" x="213.8" y="240.0" width="4.4" height="14" rx="1"/><rect class="pad" x="225.8" y="240.0" width="4.4" height="14" rx="1"/><rect class="pad" x="237.8" y="240.0" width="4.4" height="14" rx="1"/><rect class="pad" x="249.8" y="240.0" width="4.4" height="14" rx="1"/>
+</svg></div>
+      <p class="fab-note">Hardware design engineer, Cairo, Egypt</p>
+    </div>
+
+    <section id="about" class="about">
+      <div class="sec-head"><span class="ref" aria-hidden="true">U1</span><h2>About</h2></div>
+      <div class="body-col">
+        <p>I'm a hardware design engineer. Most of my work is taking a circuit from schematic to a finished, assembled board: choosing parts, laying out the PCB, designing for manufacturing and bringing the board up on the bench.</p>
+        <p>The boards rarely live on their own, so I also work on what's around them. I design sheet-metal and 3D-printed parts, build my own FDM printers and CNC machines, and put together pneumatic stations for simple production lines.</p>
+        <table class="toolbox">
+          <caption>What I work with</caption>
+          <tr><th scope="row">PCB design</th><td>KiCad, Altium Designer</td></tr>
+          <tr><th scope="row">Simulation</th><td>LTspice and SPICE</td></tr>
+          <tr><th scope="row">Microcontrollers</th><td>STM32, ESP32, Arduino</td></tr>
+          <tr><th scope="row">Firmware</th><td>C, C++</td></tr>
+          <tr><th scope="row">Mechanical design</th><td>SolidWorks, sheet metal, parts for FDM printing</td></tr>
+          <tr><th scope="row">Fabrication</th><td>FDM 3D printing, CNC, pneumatic circuits</td></tr>
+          <tr><th scope="row">Software tools</th><td>Python, Electron, Node.js, AutoHotkey</td></tr>
+        </table>
+      </div>
+    </section>
+
+    <section id="work">
+      <div class="sec-head"><span class="ref" aria-hidden="true">U2</span><h2>Work</h2></div>
+      <div class="body-col">
+        <div class="layers" role="tablist" aria-label="Board layers">
+          <button class="layer-btn" role="tab" id="tab-cu" aria-controls="panel-cu" aria-selected="true" data-layer="cu"><span class="sw cu" aria-hidden="true"></span>Copper <small>electronics</small></button>
+          <button class="layer-btn" role="tab" id="tab-mech" aria-controls="panel-mech" aria-selected="false" tabindex="-1" data-layer="mech"><span class="sw mech" aria-hidden="true"></span>Mechanical <small>machines and parts</small></button>
+          <button class="layer-btn" role="tab" id="tab-fw" aria-controls="panel-fw" aria-selected="false" tabindex="-1" data-layer="fw"><span class="sw fw" aria-hidden="true"></span>Firmware <small>software tools</small></button>
+        </div>
+
+        <div class="panel" id="panel-cu" role="tabpanel" aria-labelledby="tab-cu">
+          <article class="feature">
+            <div>
+              <span class="status">Rev A, Rev B in progress</span>
+              <h3>Isolated 4-channel AC controller</h3>
+              <p>A KiCad board that lets a microcontroller switch four mains loads safely, with the logic side fully isolated from 220&nbsp;V.</p>
+              <ul>
+                <li>Four channels, 220&nbsp;V at up to 8&nbsp;A</li>
+                <li>Omron G3MB zero-cross solid-state relays</li>
+                <li>A fuse on every channel and a varistor on the mains input</li>
+                <li>LTV-814 optocoupler feedback, so firmware can confirm each output is live</li>
+              </ul>
+              <p>Testing Rev A turned up issues I'm fixing in Rev B. The write-up will cover what went wrong and what changed.</p>
+              <a class="link" href="https://github.com/Ahmed-Atef-Tech/Isolated-4CH-AC-Controller">See the design files on GitHub</a>
+            </div>
+            <svg class="blk" viewBox="0 0 440 300" role="img" aria-labelledby="blk-t blk-d">
+              <title id="blk-t">Block diagram of the AC controller</title>
+              <desc id="blk-d">A microcontroller on the low-voltage side drives four channels across an isolation barrier. Each channel has a solid-state relay and a fuse, and an optocoupler sends feedback back across the barrier.</desc>
+              <rect class="b" x="12" y="104" width="100" height="92" rx="4"/>
+              <text class="t" x="62" y="146" text-anchor="middle">MCU</text>
+              <text class="ts" x="62" y="164" text-anchor="middle">logic side</text>
+              <line class="bar" x1="168" y1="8" x2="168" y2="292"/>
+              <text class="ts" x="176" y="296">isolation barrier</text>
+              <g>
+                <rect class="b" x="212" y="20" width="96" height="44" rx="4"/><text class="t" x="260" y="47" text-anchor="middle">SSR + fuse</text>
+                <rect class="b" x="212" y="88" width="96" height="44" rx="4"/><text class="t" x="260" y="115" text-anchor="middle">SSR + fuse</text>
+                <rect class="b" x="212" y="156" width="96" height="44" rx="4"/><text class="t" x="260" y="183" text-anchor="middle">SSR + fuse</text>
+                <rect class="b" x="212" y="224" width="96" height="44" rx="4"/><text class="t" x="260" y="251" text-anchor="middle">SSR + fuse</text>
+              </g>
+              <path class="cu" d="M112 120 H140 V42 H212 M140 120 V110 H212 M112 136 H150 V178 H212 M150 178 V246 H212"/>
+              <path class="cu" d="M308 42 H356 M308 110 H356 M308 178 H356 M308 246 H356"/>
+              <text class="t" x="364" y="46">load 1</text><text class="t" x="364" y="114">load 2</text><text class="t" x="364" y="182">load 3</text><text class="t" x="364" y="250">load 4</text>
+              <path class="cu" d="M330 246 V276 H62 V196" stroke-dasharray="3 4"/>
+              <text class="ts" x="70" y="234">feedback via</text>
+              <text class="ts" x="70" y="249">LTV-814</text>
+            </svg>
+          </article>
+          <ul class="list">
+            <li><h4>Power and switching</h4><p>High-current stages, isolated mains switching and protection: fusing, surge suppression and creepage on the board.</p></li>
+            <li><h4>Motor control</h4><p>Motor driver and control boards, from the power stage to the connectors.</p></li>
+            <li><h4>MCU boards</h4><p>STM32 and ESP32 boards from schematic to bring-up, in 2-layer and 4-layer stack-ups.</p></li>
+          </ul>
+        </div>
+
+        <div class="panel" id="panel-mech" role="tabpanel" aria-labelledby="tab-mech" hidden>
+          <p class="panel-intro">The machines and parts the electronics go into. I design them in SolidWorks and build most of them myself.</p>
+          <ul class="list" style="margin-top:0">
+            <li><h4>FDM 3D printers and CNC machines</h4><p>Machines I designed and built myself: frame, motion system, wiring and firmware setup. Build logs are being documented now.<span class="tools">Frame and motion design, electronics, firmware setup</span></p></li>
+            <li><h4>Sheet metal</h4><p>Enclosures, brackets and mounting panels, designed with bends and tolerances that a fabricator can make.<span class="tools">SolidWorks sheet metal</span></p></li>
+            <li><h4>3D-printed parts</h4><p>Functional parts designed for FDM printing: enclosures, brackets, jigs and quick prototypes.<span class="tools">SolidWorks, FDM printing</span></p></li>
+            <li><h4>Pneumatics</h4><p>Pneumatic circuits for simple production-line stations: cylinders, valves and the sequence that runs them.<span class="tools">Cylinders, valves, sequencing</span></p></li>
+          </ul>
+        </div>
+
+        <div class="panel" id="panel-fw" role="tabpanel" aria-labelledby="tab-fw" hidden>
+          <p class="panel-intro">Desktop tools I build to speed up my own work. They're free to download.</p>
+          <div class="apps">
+            <article class="app">
+              <img src="assets/multi-researcher-preview.png" alt="Multi Researcher app window" loading="lazy" width="800" height="500">
+              <div><h3>Multi Researcher</h3>
+              <p>Search several sources at once and collect the results in one place.</p>
+              <div class="acts"><a class="link" href="https://github.com/Ahmed-Atef-Tech/multi-researcher/releases/latest/download/MultiResearcher.exe">Download for Windows</a><a class="link" href="https://github.com/Ahmed-Atef-Tech/multi-researcher">Source</a></div></div>
+            </article>
+            <article class="app">
+              <img src="assets/shutdown-timer-preview.png" alt="Shutdown Timer app window" loading="lazy" width="800" height="500">
+              <div><h3>Shutdown Timer</h3>
+              <p>Schedule a Windows shutdown with a countdown that sits in the system tray.</p>
+              <div class="acts"><a class="link" href="https://github.com/Ahmed-Atef-Tech/shutdown-timer/releases/latest/download/ShutdownTimer.exe">Download for Windows</a><a class="link" href="https://github.com/Ahmed-Atef-Tech/shutdown-timer">Source</a></div></div>
+            </article>
+          </div>
+          <ul class="list">
+            <li><h4>AI Files Filter</h4><p>Sorts images into folders using AI models that run locally through Ollama, with copy, move and undo. <a class="link" href="https://github.com/Ahmed-Atef-Tech/AI-Files-Filter">Source</a></p></li>
+            <li><h4>AutoHotkey scripts</h4><p>Small automations for repetitive Windows work.</p></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="bench">
+      <div class="sec-head"><span class="ref" aria-hidden="true">TP1</span><h2>On the bench now</h2></div>
+      <div class="body-col">
+        <ul class="bench">
+          <li><span class="led" aria-hidden="true"></span><span>Rev B of the isolated AC controller, with fixes from Rev A testing</span></li>
+          <li><span class="led" aria-hidden="true"></span><span>Documenting my 3D printer and CNC builds, with photos and wiring</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="sec-head"><span class="ref" aria-hidden="true">J1</span><h2>Contact</h2></div>
+      <div class="body-col">
+        <p class="open">Open to full-time roles and freelance hardware work: PCB design, electronics and the machines around them.</p>
+        <div class="header-strip">
+          <a class="pin" href="mailto:ahmed.atef.tech@gmail.com"><span class="pd" aria-hidden="true"></span><span><b>Email</b><span>ahmed.atef.tech@gmail.com</span></span></a>
+          <a class="pin" href="https://www.linkedin.com/in/ahmed-atef-8a73a8263/"><span class="pd" aria-hidden="true"></span><span><b>LinkedIn</b><span>Ahmed Atef</span></span></a>
+          <a class="pin" href="https://wa.me/201019876314"><span class="pd" aria-hidden="true"></span><span><b>WhatsApp</b><span>Send a message</span></span></a>
+          <a class="pin" href="https://github.com/Ahmed-Atef-Tech"><span class="pd" aria-hidden="true"></span><span><b>GitHub</b><span>Ahmed-Atef-Tech</span></span></a>
+          <a class="pin" href="https://www.youtube.com/@AhmedAtef-Tech/videos"><span class="pd" aria-hidden="true"></span><span><b>YouTube</b><span>AhmedAtef-Tech</span></span></a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>Ahmed Atef, hardware design engineer. Cairo, Egypt.</p>
+  </footer>
 </div>
 
-<!-- Navigation -->
-<nav id="nav">
-  <a href="#" class="nav-logo">
-    <div class="logo-mark">AT</div>
-    Ahmed Atef
-  </a>
-  <ul class="nav-links">
-    <li><a href="#pcb" id="nav-pcb">PCB</a></li>
-    <li><a href="#software" id="nav-sw">Software</a></li>
-    <li><a href="#projects" id="nav-proj">Projects</a></li>
-    <li><a href="#articles" id="nav-art">Articles</a></li>
-  </ul>
-  <a href="https://github.com/Ahmed-Atef-Tech" target="_blank" class="nav-cta">
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.604-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836a9.59 9.59 0 012.504.337c1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.579.688.481C19.138 20.161 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg>
-    GitHub
-  </a>
-</nav>
-
-<!-- ═══ HERO ═══ -->
-<section class="hero">
-  <div class="hero-img-bg"></div>
-  <div class="container">
-    <div class="hero-inner">
-      <div class="hero-left">
-        <div class="hero-badge">
-          <span class="badge-dot"></span>
-          Hardware Engineer · Open to Work
-        </div>
-        <h1>Ahmed<br/><em>Atef</em></h1>
-        <p class="hero-tagline">
-          <strong>Hardware Design Engineer</strong> specializing in PCB layout, embedded systems, and 2D/3D design —
-          with a passion for building practical software tools.
-        </p>
-        <div class="hero-chips">
-          <span class="chip"><span class="chip-dot" style="background:#3ddc84"></span>PCB Design</span>
-          <span class="chip"><span class="chip-dot" style="background:#00d4b4"></span>Embedded Systems</span>
-          <span class="chip"><span class="chip-dot" style="background:#ff8c42"></span>2D / 3D Design</span>
-          <span class="chip"><span class="chip-dot" style="background:#9b6dff"></span>AHK Scripting</span>
-          <span class="chip"><span class="chip-dot" style="background:#00d4b4"></span>Electron Apps</span>
-        </div>
-        <div class="hero-btns">
-          <a href="#projects" class="btn btn-teal">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            View Projects
-          </a>
-          <a href="#pcb" class="btn btn-ghost">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M3 5H1v16c0 1.1.9 2 2 2h16v-2H3V5zm18-4H7c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V3c0-1.1-.9-2-2-2zm0 16H7V3h14v14zm-4-4H9v-2h8v2zm0-4H9V7h8v2z"/></svg>
-            PCB Gallery
-          </a>
-        </div>
-      </div>
-
-      <div class="hero-card">
-        <div class="hc-avatar">
-          <img src="https://avatars.githubusercontent.com/u/181205625?v=4" alt="Ahmed Atef"
-            onerror="this.parentElement.innerHTML='<div style=\'width:100%;height:100%;border-radius:50%;background:linear-gradient(135deg,#1c3030,#16171a);display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:900;color:#00d4b4;\'>AT</div>'"/>
-        </div>
-        <div class="hc-name">Ahmed Atef</div>
-        <div class="hc-role">HW_ENGINEER · PCB_DESIGNER</div>
-        <div class="hc-stats">
-          <div class="hc-stat">
-            <div class="hc-stat-n">2+</div>
-            <div class="hc-stat-l">APPS</div>
-          </div>
-          <div class="hc-stat">
-            <div class="hc-stat-n">8</div>
-            <div class="hc-stat-l">REPOS</div>
-          </div>
-          <div class="hc-stat">
-            <div class="hc-stat-n">PCB</div>
-            <div class="hc-stat-l">EXPERT</div>
-          </div>
-          <div class="hc-stat">
-            <div class="hc-stat-n">3D</div>
-            <div class="hc-stat-l">DESIGN</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══ PCB SECTION ═══ -->
-<section class="section" id="pcb">
-  <div class="container">
-    <div class="sec-head reveal">
-      <div class="sec-eye">// pcb_hardware</div>
-      <h2 class="sec-title">PCB & Hardware Projects</h2>
-      <p class="sec-sub">Circuit designs, embedded systems, and hardware builds</p>
-    </div>
-
-    <div class="pcb-banner reveal">
-      <div class="pcb-banner-info">
-        <h3>🔧 Hardware Design Portfolio</h3>
-        <p>Explore my PCB designs, schematics, and hardware projects on GitHub — including source files, BOMs, and Gerbers.</p>
-      </div>
-      <a href="https://github.com/Ahmed-Atef-Tech?tab=repositories" target="_blank" class="pcb-banner-link">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.604-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836a9.59 9.59 0 012.504.337c1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.579.688.481C19.138 20.161 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg>
-        All PCB Repos
-      </a>
-    </div>
-
-    <div class="gallery reveal">
-      <!-- PCB Card 1 -->
-      <div class="proj-card" data-cat="pcb">
-        <div class="proj-thumb">
-          <img src="assets/pcb-placeholder.png" alt="PCB Project"/>
-          <div class="proj-thumb-overlay"></div>
-          <span class="proj-cat-badge badge-pcb">
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M3 5H1v16c0 1.1.9 2 2 2h16v-2H3V5zm18-4H7c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V3c0-1.1-.9-2-2-2zm0 16H7V3h14v14z"/></svg>
-            PCB
-          </span>
-        </div>
-        <div class="proj-body">
-          <div class="proj-header">
-            <div class="proj-name">PCB Project #1</div>
-            <span class="proj-ver">v1.0</span>
-          </div>
-          <p class="proj-desc">Add your PCB project description here — schematic, purpose, and key features of the design.</p>
-          <div class="proj-tags">
-            <span class="proj-tag">KiCad</span>
-            <span class="proj-tag">4-Layer</span>
-            <span class="proj-tag">SMD</span>
-          </div>
-          <div class="proj-footer">
-            <a href="https://github.com/Ahmed-Atef-Tech" class="proj-btn proj-btn-primary green">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.604-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836a9.59 9.59 0 012.504.337c1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.579.688.481C19.138 20.161 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg>
-              View Files
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Empty state for more PCB -->
-      <div class="proj-card" data-cat="pcb" style="display:flex;align-items:center;justify-content:center;min-height:280px;">
-        <div style="text-align:center;padding:32px;">
-          <div style="font-size:36px;margin-bottom:12px;opacity:0.25;">🔌</div>
-          <div style="font-size:14px;font-weight:600;color:var(--txt-m);margin-bottom:6px;">More PCB Projects</div>
-          <div style="font-size:12px;color:var(--txt-d);">Update index.html to add your projects</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══ SOFTWARE SECTION ═══ -->
-<section class="section" id="software">
-  <div class="container">
-    <div class="sec-head reveal">
-      <div class="sec-eye">// software_tools</div>
-      <h2 class="sec-title">Software & Desktop Apps</h2>
-      <p class="sec-sub">Windows tools built with Electron — portable, no install required</p>
-    </div>
-
-    <div class="gallery cols-2 reveal">
-      <!-- Shutdown Timer -->
-      <div class="proj-card" data-cat="software">
-        <div class="proj-thumb">
-          <img src="assets/shutdown-timer-preview.png" alt="Shutdown Timer"/>
-          <div class="proj-thumb-overlay"></div>
-          <span class="proj-cat-badge badge-software">
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M11.5 2v9.5H2C2 6.257 6.257 2 11.5 2zm1 0C17.743 2 22 6.257 22 11.5h-9.5V2z"/></svg>
-            Windows App
-          </span>
-        </div>
-        <div class="proj-body">
-          <div class="proj-header">
-            <div class="proj-name">Shutdown Timer</div>
-            <span class="proj-ver">v1.0.0</span>
-          </div>
-          <p class="proj-desc">Schedule automatic Windows shutdown with a beautiful glassmorphism UI. Countdown timer with system tray support — set it and forget it.</p>
-          <div class="proj-tags">
-            <span class="proj-tag">Electron</span>
-            <span class="proj-tag">Windows</span>
-            <span class="proj-tag">System Tray</span>
-            <span class="proj-tag">Portable</span>
-          </div>
-          <div class="proj-footer">
-            <a href="https://github.com/Ahmed-Atef-Tech/shutdown-timer/releases/latest/download/ShutdownTimer.exe"
-               class="proj-btn proj-btn-primary" id="dl-shutdown">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zm-8 2V5h2v6h1.17L12 13.17 9.83 11H11zm-6 7h14v2H5z"/></svg>
-              Download .exe
-            </a>
-            <a href="https://github.com/Ahmed-Atef-Tech/shutdown-timer" target="_blank" class="proj-btn-icon">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.604-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836a9.59 9.59 0 012.504.337c1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.579.688.481C19.138 20.161 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg>
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Multi Researcher -->
-      <div class="proj-card" data-cat="software">
-        <div class="proj-thumb">
-          <img src="assets/multi-researcher-preview.png" alt="Multi Researcher"/>
-          <div class="proj-thumb-overlay"></div>
-          <span class="proj-cat-badge badge-software">
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M11.5 2v9.5H2C2 6.257 6.257 2 11.5 2zm1 0C17.743 2 22 6.257 22 11.5h-9.5V2z"/></svg>
-            Windows App
-          </span>
-        </div>
-        <div class="proj-body">
-          <div class="proj-header">
-            <div class="proj-name">Multi Researcher</div>
-            <span class="proj-ver">v1.0.0</span>
-          </div>
-          <p class="proj-desc">A powerful desktop tool for multi-source research. Search and collect information from multiple sources simultaneously in one organized interface.</p>
-          <div class="proj-tags">
-            <span class="proj-tag">Electron</span>
-            <span class="proj-tag">Windows</span>
-            <span class="proj-tag">Research</span>
-            <span class="proj-tag">Portable</span>
-          </div>
-          <div class="proj-footer">
-            <a href="https://github.com/Ahmed-Atef-Tech/multi-researcher/releases/latest/download/MultiResearcher.exe"
-               class="proj-btn proj-btn-primary" id="dl-researcher">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zm-8 2V5h2v6h1.17L12 13.17 9.83 11H11zm-6 7h14v2H5z"/></svg>
-              Download .exe
-            </a>
-            <a href="https://github.com/Ahmed-Atef-Tech/multi-researcher" target="_blank" class="proj-btn-icon">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.604-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836a9.59 9.59 0 012.504.337c1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.579.688.481C19.138 20.161 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg>
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══ ALL PROJECTS ═══ -->
-<section class="section" id="projects">
-  <div class="container">
-    <div class="sec-head reveal">
-      <div class="sec-eye">// all_projects</div>
-      <h2 class="sec-title">All Projects</h2>
-      <p class="sec-sub">Everything I've built — filter by category</p>
-    </div>
-
-    <div class="filter-bar reveal">
-      <button class="filter-btn active" data-filter="all" onclick="filterProjects(this,'all')">All</button>
-      <button class="filter-btn" data-filter="pcb" onclick="filterProjects(this,'pcb')">⚡ PCB / Hardware</button>
-      <button class="filter-btn" data-filter="software" onclick="filterProjects(this,'software')">💻 Software</button>
-      <button class="filter-btn" data-filter="3d" onclick="filterProjects(this,'3d')">🎨 3D Design</button>
-      <button class="filter-btn" data-filter="script" onclick="filterProjects(this,'script')">🤖 Scripts</button>
-    </div>
-
-    <div class="gallery" id="all-projects-grid">
-      <div class="proj-card" data-filter="software">
-        <div class="proj-thumb" style="height:140px;">
-          <img src="assets/shutdown-timer-preview.png" alt="Shutdown Timer"/>
-          <div class="proj-thumb-overlay"></div>
-          <span class="proj-cat-badge badge-software">Software</span>
-        </div>
-        <div class="proj-body">
-          <div class="proj-header"><div class="proj-name">Shutdown Timer</div></div>
-          <p class="proj-desc">Windows auto-shutdown scheduler with countdown and tray icon.</p>
-          <div class="proj-tags"><span class="proj-tag">Electron</span><span class="proj-tag">Windows</span></div>
-          <div class="proj-footer">
-            <a href="https://github.com/Ahmed-Atef-Tech/shutdown-timer" class="proj-btn proj-btn-primary">View Project</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="proj-card" data-filter="software">
-        <div class="proj-thumb" style="height:140px;">
-          <img src="assets/multi-researcher-preview.png" alt="Multi Researcher"/>
-          <div class="proj-thumb-overlay"></div>
-          <span class="proj-cat-badge badge-software">Software</span>
-        </div>
-        <div class="proj-body">
-          <div class="proj-header"><div class="proj-name">Multi Researcher</div></div>
-          <p class="proj-desc">Desktop multi-source research and data collection tool.</p>
-          <div class="proj-tags"><span class="proj-tag">Electron</span><span class="proj-tag">Research</span></div>
-          <div class="proj-footer">
-            <a href="https://github.com/Ahmed-Atef-Tech/multi-researcher" class="proj-btn proj-btn-primary">View Project</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="proj-card" data-filter="pcb">
-        <div class="proj-thumb" style="height:140px;">
-          <img src="assets/pcb-placeholder.png" alt="PCB"/>
-          <div class="proj-thumb-overlay"></div>
-          <span class="proj-cat-badge badge-pcb">PCB</span>
-        </div>
-        <div class="proj-body">
-          <div class="proj-header"><div class="proj-name">PCB Project #1</div></div>
-          <p class="proj-desc">Add your PCB project description here.</p>
-          <div class="proj-tags"><span class="proj-tag">KiCad</span><span class="proj-tag">Hardware</span></div>
-          <div class="proj-footer">
-            <a href="https://github.com/Ahmed-Atef-Tech" class="proj-btn proj-btn-primary green">View Files</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="proj-card" data-filter="script">
-        <div class="proj-thumb" style="height:140px;background:linear-gradient(135deg,#1a1b2e,#0f1020);">
-          <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:48px;opacity:0.3;">🤖</div>
-          <div class="proj-thumb-overlay"></div>
-          <span class="proj-cat-badge badge-project">Script</span>
-        </div>
-        <div class="proj-body">
-          <div class="proj-header"><div class="proj-name">AHK Scripts</div></div>
-          <p class="proj-desc">AutoHotKey automation scripts for Windows productivity.</p>
-          <div class="proj-tags"><span class="proj-tag">AutoHotKey</span><span class="proj-tag">Windows</span></div>
-          <div class="proj-footer">
-            <a href="https://github.com/Ahmed-Atef-Tech" class="proj-btn proj-btn-primary">View Scripts</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══ ARTICLES ═══ -->
-<section class="section" id="articles">
-  <div class="container">
-    <div class="sec-head reveal">
-      <div class="sec-eye">// articles_tutorials</div>
-      <h2 class="sec-title">Articles & Tutorials</h2>
-      <p class="sec-sub">Guides, write-ups, and technical articles — coming soon</p>
-    </div>
-
-    <div class="articles-grid reveal">
-      <div class="article-card" style="opacity:0.6;cursor:default;">
-        <div class="article-num">01</div>
-        <div class="article-body">
-          <div class="article-title">How to Design a 4-Layer PCB from Scratch</div>
-          <p class="article-desc">A complete walkthrough of the PCB design process — from schematic capture to Gerber export, including impedance control and power plane design.</p>
-          <div class="article-meta">
-            <span class="article-tag">PCB Design</span>
-            <span class="article-tag">Tutorial</span>
-            <span class="article-coming">Coming Soon</span>
-          </div>
-        </div>
-        <svg class="article-arrow" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
-      </div>
-
-      <div class="article-card" style="opacity:0.6;cursor:default;">
-        <div class="article-num">02</div>
-        <div class="article-body">
-          <div class="article-title">Building Windows Desktop Apps with Electron.js</div>
-          <p class="article-desc">Step-by-step guide to building portable Windows applications using Electron — including system tray integration and native Windows APIs.</p>
-          <div class="article-meta">
-            <span class="article-tag">Electron</span>
-            <span class="article-tag">JavaScript</span>
-            <span class="article-coming">Coming Soon</span>
-          </div>
-        </div>
-        <svg class="article-arrow" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
-      </div>
-
-      <div class="article-card" style="opacity:0.6;cursor:default;">
-        <div class="article-num">03</div>
-        <div class="article-body">
-          <div class="article-title">AutoHotKey: Automate Your Windows Workflow</div>
-          <p class="article-desc">Practical AHK scripting guide — from simple hotkeys to complex macros that save hours of repetitive work every day.</p>
-          <div class="article-meta">
-            <span class="article-tag">AutoHotKey</span>
-            <span class="article-tag">Automation</span>
-            <span class="article-coming">Coming Soon</span>
-          </div>
-        </div>
-        <svg class="article-arrow" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══ FOOTER ═══ -->
-<footer>
-  <div class="footer-inner">
-    <div class="footer-left">
-      <div class="footer-logo-mark">AT</div>
-      <span class="footer-copy">Ahmed Atef · Hardware Engineer & Developer</span>
-    </div>
-    <div class="footer-links">
-      <a href="https://github.com/Ahmed-Atef-Tech" target="_blank" class="footer-link">GitHub</a>
-      <a href="#pcb" class="footer-link">PCB</a>
-      <a href="#software" class="footer-link">Software</a>
-      <a href="#articles" class="footer-link">Articles</a>
-    </div>
-  </div>
-</footer>
-
 <script>
-  // Scroll reveal
-  const reveals=document.querySelectorAll('.reveal');
-  const ro=new IntersectionObserver((entries)=>{
-    entries.forEach((e,i)=>{
-      if(e.isIntersecting){
-        setTimeout(()=>e.target.classList.add('visible'),i*70);
-        ro.unobserve(e.target);
-      }
+(function () {
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.layer-btn'));
+  var root = document.documentElement;
+  function select(tab, focus) {
+    tabs.forEach(function (t) {
+      var on = t === tab;
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      t.tabIndex = on ? 0 : -1;
+      document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
     });
-  },{threshold:0.08});
-  reveals.forEach(el=>ro.observe(el));
-
-  // Filter
-  function filterProjects(btn,cat){
-    document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
-    btn.classList.add('active');
-    const cards=document.querySelectorAll('#all-projects-grid .proj-card');
-    cards.forEach(c=>{
-      const show=cat==='all'||c.dataset.filter===cat;
-      c.style.display=show?'':'none';
-    });
+    var layer = tab.getAttribute('data-layer');
+    if (layer === 'mech') root.setAttribute('data-layer', 'mech'); else root.removeAttribute('data-layer');
+    if (focus) tab.focus();
   }
-
-  // Active nav on scroll
-  const sections=['pcb','software','projects','articles'];
-  window.addEventListener('scroll',()=>{
-    let current='';
-    sections.forEach(id=>{
-      const el=document.getElementById(id);
-      if(el&&window.scrollY>=el.offsetTop-120) current=id;
-    });
-    document.querySelectorAll('.nav-links a').forEach(a=>{
-      a.classList.toggle('active',a.getAttribute('href')==='#'+current);
+  tabs.forEach(function (tab, i) {
+    tab.addEventListener('click', function () { select(tab, false); });
+    tab.addEventListener('keydown', function (e) {
+      var n = null;
+      if (e.key === 'ArrowRight') n = tabs[(i + 1) % tabs.length];
+      if (e.key === 'ArrowLeft') n = tabs[(i - 1 + tabs.length) % tabs.length];
+      if (e.key === 'Home') n = tabs[0];
+      if (e.key === 'End') n = tabs[tabs.length - 1];
+      if (n) { e.preventDefault(); select(n, true); }
     });
   });
+})();
 </script>
 </body>
 </html>
