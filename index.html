@@ -14,7 +14,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="preload" as="image" href="assets/photo/hero.jpg">
-<script>try{var d=document.documentElement;if(matchMedia("(prefers-reduced-motion: reduce)").matches||location.hash==="#calm")d.classList.add("calm");if(!sessionStorage.getItem("aa-intro"))d.classList.add("intro-on")}catch(e){}</script>
+<script>document.documentElement.classList.add("js");try{var d=document.documentElement;if(matchMedia("(prefers-reduced-motion: reduce)").matches||location.hash==="#calm")d.classList.add("calm");if(!sessionStorage.getItem("aa-intro"))d.classList.add("intro-on")}catch(e){}</script>
 <style>
 /* Layout: dark rounded panels (hero, contact) bracket a light page; rounded image cards meet sharp hairline lists. */
 :root {
@@ -120,7 +120,8 @@ html.calm .lo-halo { display: block; position: absolute; left: 50%; top: 50%; wi
 .uses { margin-top: clamp(44px, 6vw, 70px); display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 34px; color: var(--ink-2); font: 600 1.02rem var(--display); letter-spacing: -.01em; }
 
 /* ---------- section head ---------- */
-.s-head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px 40px; align-items: end; padding-bottom: 28px; margin-bottom: 36px; border-bottom: 1px solid var(--line); }
+.s-head { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px 40px; align-items: end; padding-bottom: 28px; margin-bottom: 36px; }
+.s-head::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: var(--line); transform-origin: left; }
 .s-head h2 { font-weight: 600; font-size: clamp(2.1rem, 5vw, 4rem); line-height: .98; letter-spacing: -.045em; }
 .s-head p { color: var(--ink-2); max-width: 46ch; justify-self: end; }
 @media (max-width: 760px) { .s-head { grid-template-columns: minmax(0, 1fr); } .s-head p { justify-self: start; } }
@@ -194,6 +195,22 @@ pre.code.done code::after { animation: caret 1s steps(1) 3 forwards; }
 .tw-off { visibility: hidden; }
 .tw-cur::after { content: ""; display: inline-block; width: .5em; height: 1.05em; margin-left: 1px; vertical-align: -.18em; background: var(--copper); animation: caret .8s steps(1) infinite; }
 
+/* ---------- scroll entrances ---------- */
+.js [data-rv] { opacity: 0; transform: translateY(38px); transition: opacity 900ms var(--ease), transform 1100ms var(--ease); transition-delay: var(--d, 0ms); }
+.js [data-rv].in { opacity: 1; transform: none; }
+.js [data-rv="pic"] { transform: none; clip-path: inset(14% 8% 14% 8% round 22px); transition: opacity 700ms var(--ease), clip-path 1300ms var(--ease); transition-delay: var(--d, 0ms); }
+.js [data-rv="pic"].in { clip-path: inset(0 0 0 0 round 22px); }
+.js [data-rv="pic"] img { scale: 1.18; transition: scale 1600ms var(--ease), filter 900ms var(--ease), transform 1100ms var(--ease); transition-delay: var(--d, 0ms), 0ms, 0ms; }
+.js [data-rv="pic"].in img { scale: 1; }
+.js [data-rv="panel"] { transform: none; clip-path: inset(6% 4% 6% 4% round 28px); transition: opacity 800ms var(--ease), clip-path 1400ms var(--ease); }
+.js [data-rv="panel"].in { clip-path: inset(0 0 0 0 round 28px); }
+.js .s-head::after { transform: scaleX(0); transition: transform 1400ms var(--ease) 200ms; }
+.js .s-head.in::after { transform: none; }
+.js .s-head[data-rv] { transform: none; opacity: 1; }
+.js .s-head[data-rv] h2, .js .s-head[data-rv] > p, .js .s-head[data-rv] .s-side { opacity: 0; transform: translateY(30px); transition: opacity 900ms var(--ease), transform 1100ms var(--ease); }
+.js .s-head[data-rv] > p, .js .s-head[data-rv] .s-side { transition-delay: 180ms; }
+.js .s-head.in h2, .js .s-head.in > p, .js .s-head.in .s-side { opacity: 1; transform: none; }
+
 /* ---------- per-skill text effects ---------- */
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 .fx-ch { opacity: 0; }
@@ -243,6 +260,9 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; a
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { transition: none !important; animation: none !important; }
+  html.js [data-rv], html.js .s-head[data-rv] h2, html.js .s-head[data-rv] > p, html.js .s-head[data-rv] .s-side { transform: none !important; clip-path: none !important; transition: opacity 900ms ease !important; }
+  html.js [data-rv] img { scale: 1 !important; }
+  html.js .s-head::after { transform: none !important; }
   .hero .panel-bg img { transform: none; filter: none; }
   .hero h1 span b { transform: none; }
   .statement .w { color: var(--ink); }
@@ -457,6 +477,26 @@ inbox = Path(<span class="s">"D:/exports"</span>)
     intro.addEventListener("click", finish);
     window.addEventListener("keydown", finish, { once: true });
   } else startHero();
+
+  /* scroll entrances: everything below the hero arrives as you scroll */
+  (function () {
+    function mark(sel, kind, step) {
+      document.querySelectorAll(sel).forEach(function (el, i) {
+        el.setAttribute("data-rv", kind || ""); if (step) el.style.setProperty("--d", ((i % 2) * step) + "ms");
+      });
+    }
+    mark(".uses", ""); mark(".s-head", "");
+    mark(".skill .pic", "pic", 140); mark(".skill .txt", "", 140);
+    mark(".tool", "", 0); mark(".contact", "panel"); mark("footer .wrap", "");
+    document.querySelectorAll(".tool").forEach(function (el, i) { el.style.setProperty("--d", (i * 90) + "ms"); });
+    var els = document.querySelectorAll("[data-rv]");
+    if (!("IntersectionObserver" in window)) { els.forEach(function (e) { e.classList.add("in"); }); return; }
+    var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }); }, { threshold: .08, rootMargin: "0px 0px -6% 0px" });
+    els.forEach(function (e) { io.observe(e); });
+    window.addEventListener("scroll", function () {
+      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) els.forEach(function (e) { e.classList.add("in"); });
+    }, { passive: true });
+  })();
 
   /* statement: words fill in as you scroll */
   var st = document.getElementById("statement");
