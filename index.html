@@ -246,7 +246,7 @@ pre.code.done code::after { animation: caret 1s steps(1) 3 forwards; }
 .split::before { content: ""; position: absolute; inset: 0; clip-path: polygon(calc(var(--a) - var(--g)) 0, calc(var(--a) + var(--g)) 0, calc(var(--b) + var(--g)) 100%, calc(var(--b) - var(--g)) 100%); background: linear-gradient(180deg, rgba(232, 161, 91, .05), rgba(232, 161, 91, .55) 50%, rgba(232, 161, 91, .05)); opacity: .35; transition: opacity 2400ms ease-in-out; }
 .tx > *, .tc { transition: opacity 1600ms ease-in-out; }
 /* code for the thing in the picture, typed again on every change */
-.tc { position: relative; display: none; width: max-content; max-width: 100%; margin-top: 16px; padding: 11px 14px; border-radius: 12px; font: 400 .72rem/1.6 var(--code); white-space: pre; color: #E6ECE8; background: rgba(6, 8, 7, .5); border: 1px solid rgba(255, 255, 255, .1); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); overflow: hidden; pointer-events: none; }
+.tc { position: relative; display: none; width: calc(39ch + 30px); max-width: 100%; margin-top: 16px; padding: 11px 14px; border-radius: 3px; font: 400 .72rem/1.6 var(--code); white-space: pre; color: #E6ECE8; background: rgba(6, 8, 7, .5); border: 1px solid rgba(255, 255, 255, .1); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); overflow: hidden; pointer-events: none; }
 .tc.on { display: block; }
 .tc code::after { content: ""; display: inline-block; width: .5em; height: 1.05em; margin-left: 1px; vertical-align: -.18em; background: var(--copper); animation: caret 1s steps(1) infinite; }
 .s2 .tc { margin-left: auto; text-align: left; }
@@ -756,9 +756,9 @@ inbox = Path(<span class="s">"D:/exports"</span>)
       if (RM) return;
       var my = ++tok, i = 0, j = 0;
       /* hold the panel at its full size so it does not grow while typing */
-      pre.style.width = pre.style.height = "";
+      pre.style.height = "";
       nodes.forEach(function (o) { o.n.nodeValue = o.t; });
-      if (pre.offsetWidth) { pre.style.width = pre.offsetWidth + "px"; pre.style.height = pre.offsetHeight + "px"; }
+      if (pre.offsetHeight) pre.style.height = pre.offsetHeight + "px";
       nodes.forEach(function (o) { o.n.nodeValue = ""; });
       (function step() {
         if (my !== tok || i >= nodes.length) return;
