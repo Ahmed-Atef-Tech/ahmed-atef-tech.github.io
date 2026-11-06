@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Ahmed Atef | Hardware Engineer & Developer</title>
-  <meta name="description" content="Portfolio of Ahmed Atef — Hardware Design Engineer, PCB Designer, 2D/3D Designer & Software Developer."/>
-  <meta property="og:title" content="Ahmed Atef | Hardware Engineer & Developer"/>
+  <title>Ahmed Atef | Hardware Design Engineer</title>
+  <meta name="description" content="Ahmed Atef, hardware design engineer: PCB design, embedded electronics, sheet metal, 3D printing and pneumatics."/>
+  <meta property="og:title" content="Ahmed Atef | Hardware Design Engineer"/>
   <meta property="og:url" content="https://ahmed-atef-tech.github.io"/>
   <meta name="theme-color" content="#16171a"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
@@ -418,6 +418,78 @@ nav{
 .empty-sub{font-size:13px;color:var(--txt-d);}
 
 /* ═══════════════════════════════════════════
+   SKILLS
+═══════════════════════════════════════════ */
+.skills-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:20px;}
+@media(max-width:600px){.skills-grid{grid-template-columns:1fr;}}
+.skill-card{
+  background:var(--bg-card);border:1px solid var(--border);
+  border-radius:var(--r);padding:24px;position:relative;overflow:hidden;
+  transition:all 0.28s ease;
+}
+.skill-card::before{
+  content:'';position:absolute;top:0;left:24px;right:24px;height:2px;
+  background:linear-gradient(90deg,transparent,var(--accent,var(--teal)),transparent);
+  opacity:0.6;transition:opacity 0.28s;
+}
+.skill-card:hover{transform:translateY(-5px);border-color:var(--border-t);box-shadow:0 16px 48px rgba(0,0,0,0.5);}
+.skill-card:hover::before{opacity:1;}
+.skill-icon{
+  width:44px;height:44px;border-radius:10px;margin-bottom:18px;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--accent-dim,var(--teal-dim));color:var(--accent,var(--teal));
+  border:1px solid var(--border);
+}
+.skill-title{font-size:17px;font-weight:700;letter-spacing:-0.2px;margin-bottom:8px;}
+.skill-desc{font-size:13.5px;color:var(--txt-m);line-height:1.6;margin-bottom:16px;}
+.skill-list{list-style:none;display:grid;gap:7px;margin-bottom:18px;}
+.skill-list li{display:flex;gap:10px;font-size:13px;color:var(--txt);line-height:1.5;}
+.skill-list li::before{content:'';flex-shrink:0;width:6px;height:6px;margin-top:7px;border-radius:2px;background:var(--accent,var(--teal));}
+.skill-card .proj-tags{margin-bottom:0;}
+
+/* ═══════════════════════════════════════════
+   TOOLS (small items)
+═══════════════════════════════════════════ */
+.mini-tools{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin-top:20px;}
+@media(max-width:600px){.mini-tools{grid-template-columns:1fr;}}
+.mini-tool{
+  background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r);
+  padding:18px 20px;display:flex;gap:16px;align-items:center;transition:all 0.25s;
+}
+.mini-tool:hover{border-color:var(--border-t);transform:translateY(-3px);}
+.mini-tool .skill-icon{margin-bottom:0;flex-shrink:0;}
+.mini-name{font-size:15px;font-weight:700;margin-bottom:3px;}
+.mini-desc{font-size:13px;color:var(--txt-m);line-height:1.5;}
+.mini-desc a{color:var(--teal);font-weight:600;}
+
+/* ═══════════════════════════════════════════
+   CONTACT
+═══════════════════════════════════════════ */
+.contact-card{
+  background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r);
+  padding:40px;position:relative;overflow:hidden;
+  display:grid;grid-template-columns:1fr auto;gap:32px;align-items:center;
+}
+.contact-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--teal),transparent);
+}
+.contact-card h3{font-size:22px;font-weight:800;letter-spacing:-0.5px;margin-bottom:8px;}
+.contact-card p{font-size:14px;color:var(--txt-m);line-height:1.6;max-width:520px;}
+.contact-mail{
+  display:inline-block;margin-top:16px;font-family:'JetBrains Mono',monospace;font-size:14px;
+  color:var(--teal);background:var(--teal-dim);border:1px solid var(--border-t);
+  border-radius:var(--r-sm);padding:8px 14px;user-select:all;word-break:break-all;
+}
+.contact-links{display:grid;grid-template-columns:1fr 1fr;gap:10px;min-width:280px;}
+.contact-links .btn{justify-content:center;}
+@media(max-width:760px){
+  .contact-card{grid-template-columns:1fr;padding:28px 22px;}
+  .contact-links{min-width:0;}
+}
+@media(max-width:640px){.nav-links{display:none;}}
+
+/* ═══════════════════════════════════════════
    FOOTER
 ═══════════════════════════════════════════ */
 footer{
@@ -550,10 +622,9 @@ footer{
     Ahmed Atef
   </a>
   <ul class="nav-links">
-    <li><a href="#pcb" id="nav-pcb">PCB</a></li>
-    <li><a href="#software" id="nav-sw">Software</a></li>
-    <li><a href="#projects" id="nav-proj">Projects</a></li>
-    <li><a href="#articles" id="nav-art">Articles</a></li>
+    <li><a href="#skills" id="nav-skills">Skills</a></li>
+    <li><a href="#tools" id="nav-tools">Tools</a></li>
+    <li><a href="#contact" id="nav-contact">Contact</a></li>
   </ul>
   <a href="https://github.com/Ahmed-Atef-Tech" target="_blank" class="nav-cta">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.604-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836a9.59 9.59 0 012.504.337c1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.579.688.481C19.138 20.161 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg>
@@ -573,24 +644,26 @@ footer{
         </div>
         <h1>Ahmed<br/><em>Atef</em></h1>
         <p class="hero-tagline">
-          <strong>Hardware Design Engineer</strong> specializing in PCB layout, embedded systems, and 2D/3D design —
-          with a passion for building practical software tools.
+          <strong>Hardware Design Engineer</strong> working on PCB design and embedded electronics,
+          plus the mechanical side around them: sheet metal, 3D-printed parts and pneumatics.
+          I also build small software tools that speed up my work.
         </p>
         <div class="hero-chips">
           <span class="chip"><span class="chip-dot" style="background:#3ddc84"></span>PCB Design</span>
           <span class="chip"><span class="chip-dot" style="background:#00d4b4"></span>Embedded Systems</span>
-          <span class="chip"><span class="chip-dot" style="background:#ff8c42"></span>2D / 3D Design</span>
-          <span class="chip"><span class="chip-dot" style="background:#9b6dff"></span>AHK Scripting</span>
-          <span class="chip"><span class="chip-dot" style="background:#00d4b4"></span>Electron Apps</span>
+          <span class="chip"><span class="chip-dot" style="background:#3ddc84"></span>Power Electronics</span>
+          <span class="chip"><span class="chip-dot" style="background:#ff8c42"></span>Sheet Metal</span>
+          <span class="chip"><span class="chip-dot" style="background:#ff8c42"></span>3D Printing</span>
+          <span class="chip"><span class="chip-dot" style="background:#9b6dff"></span>Pneumatics</span>
         </div>
         <div class="hero-btns">
-          <a href="#projects" class="btn btn-teal">
+          <a href="#skills" class="btn btn-teal">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            View Projects
+            View Skills
           </a>
-          <a href="#pcb" class="btn btn-ghost">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M3 5H1v16c0 1.1.9 2 2 2h16v-2H3V5zm18-4H7c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V3c0-1.1-.9-2-2-2zm0 16H7V3h14v14zm-4-4H9v-2h8v2zm0-4H9V7h8v2z"/></svg>
-            PCB Gallery
+          <a href="#contact" class="btn btn-ghost">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+            Contact Me
           </a>
         </div>
       </div>
@@ -604,20 +677,20 @@ footer{
         <div class="hc-role">HW_ENGINEER · PCB_DESIGNER</div>
         <div class="hc-stats">
           <div class="hc-stat">
-            <div class="hc-stat-n">2+</div>
-            <div class="hc-stat-l">APPS</div>
-          </div>
-          <div class="hc-stat">
-            <div class="hc-stat-n">8</div>
-            <div class="hc-stat-l">REPOS</div>
-          </div>
-          <div class="hc-stat">
             <div class="hc-stat-n">PCB</div>
-            <div class="hc-stat-l">EXPERT</div>
+            <div class="hc-stat-l">LAYOUT</div>
           </div>
           <div class="hc-stat">
-            <div class="hc-stat-n">3D</div>
-            <div class="hc-stat-l">DESIGN</div>
+            <div class="hc-stat-n">MCU</div>
+            <div class="hc-stat-l">FIRMWARE</div>
+          </div>
+          <div class="hc-stat">
+            <div class="hc-stat-n">CAD</div>
+            <div class="hc-stat-l">SHEET METAL</div>
+          </div>
+          <div class="hc-stat">
+            <div class="hc-stat-n">FDM</div>
+            <div class="hc-stat-l">3D PRINT</div>
           </div>
         </div>
       </div>
@@ -625,76 +698,95 @@ footer{
   </div>
 </section>
 
-<!-- ═══ PCB SECTION ═══ -->
-<section class="section" id="pcb">
+<!-- ═══ SKILLS ═══ -->
+<section class="section" id="skills">
   <div class="container">
     <div class="sec-head reveal">
-      <div class="sec-eye">// pcb_hardware</div>
-      <h2 class="sec-title">PCB & Hardware Projects</h2>
-      <p class="sec-sub">Circuit designs, embedded systems, and hardware builds</p>
+      <div class="sec-eye">// hardware_skills</div>
+      <h2 class="sec-title">Hardware Skills</h2>
+      <p class="sec-sub">What I work on, from the circuit board to the machine around it</p>
     </div>
 
-    <div class="pcb-banner reveal">
-      <div class="pcb-banner-info">
-        <h3>🔧 Hardware Design Portfolio</h3>
-        <p>Explore my PCB designs, schematics, and hardware projects on GitHub — including source files, BOMs, and Gerbers.</p>
+    <div class="skills-grid reveal">
+      <div class="skill-card" style="--accent:#3ddc84;--accent-dim:rgba(61,220,132,0.12)">
+        <div class="skill-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2"/><path d="M9 6V3M12 6V3M15 6V3M9 21v-3M12 21v-3M15 21v-3M6 9H3M6 12H3M6 15H3M21 9h-3M21 12h-3M21 15h-3"/></svg></div>
+        <div class="skill-title">PCB Design</div>
+        <p class="skill-desc">Taking a circuit from schematic to a board that can be manufactured and assembled.</p>
+        <ul class="skill-list">
+          <li>Schematic capture and part selection</li>
+          <li>PCB layout for 2-layer and 4-layer boards</li>
+          <li>Design for manufacturing (DFM) and PCBA</li>
+          <li>Board bring-up and testing on the bench</li>
+        </ul>
+        <div class="proj-tags"><span class="proj-tag">KiCad</span><span class="proj-tag">Altium Designer</span></div>
       </div>
-      <a href="https://github.com/Ahmed-Atef-Tech?tab=repositories" target="_blank" class="pcb-banner-link">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.604-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836a9.59 9.59 0 012.504.337c1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.579.688.481C19.138 20.161 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg>
-        All PCB Repos
-      </a>
-    </div>
-
-    <div class="gallery reveal">
-      <!-- PCB Card 1 -->
-      <div class="proj-card" data-cat="pcb">
-        <div class="proj-thumb">
-          <img src="assets/pcb-placeholder.png" alt="PCB Project"/>
-          <div class="proj-thumb-overlay"></div>
-          <span class="proj-cat-badge badge-pcb">
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M3 5H1v16c0 1.1.9 2 2 2h16v-2H3V5zm18-4H7c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V3c0-1.1-.9-2-2-2zm0 16H7V3h14v14z"/></svg>
-            PCB
-          </span>
-        </div>
-        <div class="proj-body">
-          <div class="proj-header">
-            <div class="proj-name">PCB Project #1</div>
-            <span class="proj-ver">v1.0</span>
-          </div>
-          <p class="proj-desc">Add your PCB project description here — schematic, purpose, and key features of the design.</p>
-          <div class="proj-tags">
-            <span class="proj-tag">KiCad</span>
-            <span class="proj-tag">4-Layer</span>
-            <span class="proj-tag">SMD</span>
-          </div>
-          <div class="proj-footer">
-            <a href="https://github.com/Ahmed-Atef-Tech" class="proj-btn proj-btn-primary green">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.604-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836a9.59 9.59 0 012.504.337c1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.579.688.481C19.138 20.161 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg>
-              View Files
-            </a>
-          </div>
-        </div>
+      <div class="skill-card" style="--accent:#3ddc84;--accent-dim:rgba(61,220,132,0.12)">
+        <div class="skill-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z"/></svg></div>
+        <div class="skill-title">Power and Circuit Simulation</div>
+        <p class="skill-desc">Checking circuits in simulation and designing the power side of a board.</p>
+        <ul class="skill-list">
+          <li>Circuit simulation before building</li>
+          <li>Power stages and high-current paths</li>
+          <li>Isolated mains (220 V) switching and protection</li>
+          <li>Motor driver and control circuits</li>
+        </ul>
+        <div class="proj-tags"><span class="proj-tag">LTspice</span><span class="proj-tag">SPICE</span></div>
       </div>
-
-      <!-- Empty state for more PCB -->
-      <div class="proj-card" data-cat="pcb" style="display:flex;align-items:center;justify-content:center;min-height:280px;">
-        <div style="text-align:center;padding:32px;">
-          <div style="font-size:36px;margin-bottom:12px;opacity:0.25;">🔌</div>
-          <div style="font-size:14px;font-weight:600;color:var(--txt-m);margin-bottom:6px;">More PCB Projects</div>
-          <div style="font-size:12px;color:var(--txt-d);">Update index.html to add your projects</div>
-        </div>
+      <div class="skill-card" style="--accent:#00d4b4;--accent-dim:rgba(0,212,180,0.12)">
+        <div class="skill-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg></div>
+        <div class="skill-title">Embedded Systems</div>
+        <p class="skill-desc">Microcontroller boards and the firmware that makes them do their job.</p>
+        <ul class="skill-list">
+          <li>STM32 and ESP32 based boards</li>
+          <li>Arduino for quick prototypes</li>
+          <li>Firmware in C and C++</li>
+        </ul>
+        <div class="proj-tags"><span class="proj-tag">STM32</span><span class="proj-tag">ESP32</span><span class="proj-tag">Arduino</span><span class="proj-tag">C</span><span class="proj-tag">C++</span></div>
+      </div>
+      <div class="skill-card" style="--accent:#ff8c42;--accent-dim:rgba(255,140,66,0.12)">
+        <div class="skill-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 18h10l6-10"/><path d="M4 21h10M14 18v3"/><path d="M20 8l-2-3"/></svg></div>
+        <div class="skill-title">Mechanical Design and Sheet Metal</div>
+        <p class="skill-desc">Designing the enclosures and parts that hold the electronics in place.</p>
+        <ul class="skill-list">
+          <li>Sheet-metal enclosures, brackets and panels</li>
+          <li>Parts designed with bends and tolerances a workshop can make</li>
+          <li>3D models for fit checks with the PCB</li>
+        </ul>
+        <div class="proj-tags"><span class="proj-tag">SolidWorks</span><span class="proj-tag">Sheet Metal</span></div>
+      </div>
+      <div class="skill-card" style="--accent:#ff8c42;--accent-dim:rgba(255,140,66,0.12)">
+        <div class="skill-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 21h16"/><path d="M7 21v-5h10v5"/><path d="M8 3h8v5l-2 4h-4l-2-4z"/></svg></div>
+        <div class="skill-title">3D Printing and Machine Building</div>
+        <p class="skill-desc">Printing functional parts and building my own machines.</p>
+        <ul class="skill-list">
+          <li>Functional parts designed for FDM printing</li>
+          <li>Running and tuning FDM printers</li>
+          <li>Building my own 3D printers and CNC machines: frame, motion, wiring and setup</li>
+        </ul>
+        <div class="proj-tags"><span class="proj-tag">FDM</span><span class="proj-tag">3D Printing</span><span class="proj-tag">CNC</span></div>
+      </div>
+      <div class="skill-card" style="--accent:#9b6dff;--accent-dim:rgba(155,109,255,0.12)">
+        <div class="skill-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="8" width="13" height="8" rx="1.5"/><path d="M15 12h7M19 9v6M8 8V5h4"/></svg></div>
+        <div class="skill-title">Pneumatics and Automation</div>
+        <p class="skill-desc">Pneumatic systems for simple production-line stations.</p>
+        <ul class="skill-list">
+          <li>Pneumatic circuits with cylinders and valves</li>
+          <li>Sequencing the steps of a station</li>
+          <li>Combining pneumatics with electronic control</li>
+        </ul>
+        <div class="proj-tags"><span class="proj-tag">Pneumatics</span><span class="proj-tag">Automation</span></div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ═══ SOFTWARE SECTION ═══ -->
-<section class="section" id="software">
+<!-- ═══ TOOLS ═══ -->
+<section class="section" id="tools">
   <div class="container">
     <div class="sec-head reveal">
-      <div class="sec-eye">// software_tools</div>
-      <h2 class="sec-title">Software & Desktop Apps</h2>
-      <p class="sec-sub">Windows tools built with Electron — portable, no install required</p>
+      <div class="sec-eye">// my_tools</div>
+      <h2 class="sec-title">Tools I Build to Work Faster</h2>
+      <p class="sec-sub">When a task at my desk can be automated, I write a small tool for it. They're free to download.</p>
     </div>
 
     <div class="gallery cols-2 reveal">
@@ -705,7 +797,7 @@ footer{
           <div class="proj-thumb-overlay"></div>
           <span class="proj-cat-badge badge-software">
             <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M11.5 2v9.5H2C2 6.257 6.257 2 11.5 2zm1 0C17.743 2 22 6.257 22 11.5h-9.5V2z"/></svg>
-            Windows App
+            Tool
           </span>
         </div>
         <div class="proj-body">
@@ -713,7 +805,7 @@ footer{
             <div class="proj-name">Shutdown Timer</div>
             <span class="proj-ver">v1.0.0</span>
           </div>
-          <p class="proj-desc">Schedule automatic Windows shutdown with a beautiful glassmorphism UI. Countdown timer with system tray support — set it and forget it.</p>
+          <p class="proj-desc">Schedules a Windows shutdown with a countdown in the system tray, so the PC turns itself off after a long task.</p>
           <div class="proj-tags">
             <span class="proj-tag">Electron</span>
             <span class="proj-tag">Windows</span>
@@ -740,7 +832,7 @@ footer{
           <div class="proj-thumb-overlay"></div>
           <span class="proj-cat-badge badge-software">
             <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M11.5 2v9.5H2C2 6.257 6.257 2 11.5 2zm1 0C17.743 2 22 6.257 22 11.5h-9.5V2z"/></svg>
-            Windows App
+            Tool
           </span>
         </div>
         <div class="proj-body">
@@ -748,7 +840,7 @@ footer{
             <div class="proj-name">Multi Researcher</div>
             <span class="proj-ver">v1.0.0</span>
           </div>
-          <p class="proj-desc">A powerful desktop tool for multi-source research. Search and collect information from multiple sources simultaneously in one organized interface.</p>
+          <p class="proj-desc">Searches several sources at once and collects the results in one organized window, instead of jumping between tabs.</p>
           <div class="proj-tags">
             <span class="proj-tag">Electron</span>
             <span class="proj-tag">Windows</span>
@@ -768,161 +860,64 @@ footer{
         </div>
       </div>
     </div>
+    <div class="mini-tools reveal">
+      <div class="mini-tool">
+        <div class="skill-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 15l5-5 4 4 3-3 6 6"/><circle cx="16" cy="8.5" r="1.5"/></svg></div>
+        <div>
+          <div class="mini-name">AI Files Filter</div>
+          <p class="mini-desc">Sorts images into folders using AI models that run locally. <a href="https://github.com/Ahmed-Atef-Tech/AI-Files-Filter" target="_blank">Source</a></p>
+        </div>
+      </div>
+      <div class="mini-tool">
+        <div class="skill-icon" style="--accent:#9b6dff;--accent-dim:rgba(155,109,255,0.12)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M7 14h10"/></svg></div>
+        <div>
+          <div class="mini-name">AutoHotkey Scripts</div>
+          <p class="mini-desc">Small automations for repetitive Windows work.</p>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
-<!-- ═══ ALL PROJECTS ═══ -->
-<section class="section" id="projects">
+<!-- ═══ CONTACT ═══ -->
+<section class="section" id="contact">
   <div class="container">
     <div class="sec-head reveal">
-      <div class="sec-eye">// all_projects</div>
-      <h2 class="sec-title">All Projects</h2>
-      <p class="sec-sub">Everything I've built — filter by category</p>
+      <div class="sec-eye">// contact</div>
+      <h2 class="sec-title">Get in Touch</h2>
+      <p class="sec-sub">Open to full-time roles and freelance hardware work</p>
     </div>
 
-    <div class="filter-bar reveal">
-      <button class="filter-btn active" data-filter="all" onclick="filterProjects(this,'all')">All</button>
-      <button class="filter-btn" data-filter="pcb" onclick="filterProjects(this,'pcb')">⚡ PCB / Hardware</button>
-      <button class="filter-btn" data-filter="software" onclick="filterProjects(this,'software')">💻 Software</button>
-      <button class="filter-btn" data-filter="3d" onclick="filterProjects(this,'3d')">🎨 3D Design</button>
-      <button class="filter-btn" data-filter="script" onclick="filterProjects(this,'script')">🤖 Scripts</button>
-    </div>
-
-    <div class="gallery" id="all-projects-grid">
-      <div class="proj-card" data-filter="software">
-        <div class="proj-thumb" style="height:140px;">
-          <img src="assets/shutdown-timer-preview.png" alt="Shutdown Timer"/>
-          <div class="proj-thumb-overlay"></div>
-          <span class="proj-cat-badge badge-software">Software</span>
-        </div>
-        <div class="proj-body">
-          <div class="proj-header"><div class="proj-name">Shutdown Timer</div></div>
-          <p class="proj-desc">Windows auto-shutdown scheduler with countdown and tray icon.</p>
-          <div class="proj-tags"><span class="proj-tag">Electron</span><span class="proj-tag">Windows</span></div>
-          <div class="proj-footer">
-            <a href="https://github.com/Ahmed-Atef-Tech/shutdown-timer" class="proj-btn proj-btn-primary">View Project</a>
-          </div>
-        </div>
+    <div class="contact-card reveal">
+      <div>
+        <h3>Have a board or a machine in mind?</h3>
+        <p>Send me what you want to build. PCB design, electronics, enclosures or a simple automation station.</p>
+        <span class="contact-mail">ahmed.atef.tech@gmail.com</span>
       </div>
-
-      <div class="proj-card" data-filter="software">
-        <div class="proj-thumb" style="height:140px;">
-          <img src="assets/multi-researcher-preview.png" alt="Multi Researcher"/>
-          <div class="proj-thumb-overlay"></div>
-          <span class="proj-cat-badge badge-software">Software</span>
-        </div>
-        <div class="proj-body">
-          <div class="proj-header"><div class="proj-name">Multi Researcher</div></div>
-          <p class="proj-desc">Desktop multi-source research and data collection tool.</p>
-          <div class="proj-tags"><span class="proj-tag">Electron</span><span class="proj-tag">Research</span></div>
-          <div class="proj-footer">
-            <a href="https://github.com/Ahmed-Atef-Tech/multi-researcher" class="proj-btn proj-btn-primary">View Project</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="proj-card" data-filter="pcb">
-        <div class="proj-thumb" style="height:140px;">
-          <img src="assets/pcb-placeholder.png" alt="PCB"/>
-          <div class="proj-thumb-overlay"></div>
-          <span class="proj-cat-badge badge-pcb">PCB</span>
-        </div>
-        <div class="proj-body">
-          <div class="proj-header"><div class="proj-name">PCB Project #1</div></div>
-          <p class="proj-desc">Add your PCB project description here.</p>
-          <div class="proj-tags"><span class="proj-tag">KiCad</span><span class="proj-tag">Hardware</span></div>
-          <div class="proj-footer">
-            <a href="https://github.com/Ahmed-Atef-Tech" class="proj-btn proj-btn-primary green">View Files</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="proj-card" data-filter="script">
-        <div class="proj-thumb" style="height:140px;background:linear-gradient(135deg,#1a1b2e,#0f1020);">
-          <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:48px;opacity:0.3;">🤖</div>
-          <div class="proj-thumb-overlay"></div>
-          <span class="proj-cat-badge badge-project">Script</span>
-        </div>
-        <div class="proj-body">
-          <div class="proj-header"><div class="proj-name">AHK Scripts</div></div>
-          <p class="proj-desc">AutoHotKey automation scripts for Windows productivity.</p>
-          <div class="proj-tags"><span class="proj-tag">AutoHotKey</span><span class="proj-tag">Windows</span></div>
-          <div class="proj-footer">
-            <a href="https://github.com/Ahmed-Atef-Tech" class="proj-btn proj-btn-primary">View Scripts</a>
-          </div>
-        </div>
+      <div class="contact-links">
+        <a href="mailto:ahmed.atef.tech@gmail.com" class="btn btn-teal">Email</a>
+        <a href="https://www.linkedin.com/in/ahmed-atef-8a73a8263/" target="_blank" class="btn btn-ghost">LinkedIn</a>
+        <a href="https://wa.me/201019876314" target="_blank" class="btn btn-ghost">WhatsApp</a>
+        <a href="https://github.com/Ahmed-Atef-Tech" target="_blank" class="btn btn-ghost">GitHub</a>
+        <a href="https://www.youtube.com/@AhmedAtef-Tech/videos" target="_blank" class="btn btn-ghost">YouTube</a>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ═══ ARTICLES ═══ -->
-<section class="section" id="articles">
-  <div class="container">
-    <div class="sec-head reveal">
-      <div class="sec-eye">// articles_tutorials</div>
-      <h2 class="sec-title">Articles & Tutorials</h2>
-      <p class="sec-sub">Guides, write-ups, and technical articles — coming soon</p>
-    </div>
-
-    <div class="articles-grid reveal">
-      <div class="article-card" style="opacity:0.6;cursor:default;">
-        <div class="article-num">01</div>
-        <div class="article-body">
-          <div class="article-title">How to Design a 4-Layer PCB from Scratch</div>
-          <p class="article-desc">A complete walkthrough of the PCB design process — from schematic capture to Gerber export, including impedance control and power plane design.</p>
-          <div class="article-meta">
-            <span class="article-tag">PCB Design</span>
-            <span class="article-tag">Tutorial</span>
-            <span class="article-coming">Coming Soon</span>
-          </div>
-        </div>
-        <svg class="article-arrow" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
-      </div>
-
-      <div class="article-card" style="opacity:0.6;cursor:default;">
-        <div class="article-num">02</div>
-        <div class="article-body">
-          <div class="article-title">Building Windows Desktop Apps with Electron.js</div>
-          <p class="article-desc">Step-by-step guide to building portable Windows applications using Electron — including system tray integration and native Windows APIs.</p>
-          <div class="article-meta">
-            <span class="article-tag">Electron</span>
-            <span class="article-tag">JavaScript</span>
-            <span class="article-coming">Coming Soon</span>
-          </div>
-        </div>
-        <svg class="article-arrow" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
-      </div>
-
-      <div class="article-card" style="opacity:0.6;cursor:default;">
-        <div class="article-num">03</div>
-        <div class="article-body">
-          <div class="article-title">AutoHotKey: Automate Your Windows Workflow</div>
-          <p class="article-desc">Practical AHK scripting guide — from simple hotkeys to complex macros that save hours of repetitive work every day.</p>
-          <div class="article-meta">
-            <span class="article-tag">AutoHotKey</span>
-            <span class="article-tag">Automation</span>
-            <span class="article-coming">Coming Soon</span>
-          </div>
-        </div>
-        <svg class="article-arrow" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
-      </div>
-    </div>
-  </div>
-</section>
 
 <!-- ═══ FOOTER ═══ -->
 <footer>
   <div class="footer-inner">
     <div class="footer-left">
       <div class="footer-logo-mark">AT</div>
-      <span class="footer-copy">Ahmed Atef · Hardware Engineer & Developer</span>
+      <span class="footer-copy">Ahmed Atef · Hardware Design Engineer · Cairo, Egypt</span>
     </div>
     <div class="footer-links">
       <a href="https://github.com/Ahmed-Atef-Tech" target="_blank" class="footer-link">GitHub</a>
-      <a href="#pcb" class="footer-link">PCB</a>
-      <a href="#software" class="footer-link">Software</a>
-      <a href="#articles" class="footer-link">Articles</a>
+      <a href="#skills" class="footer-link">Skills</a>
+      <a href="#tools" class="footer-link">Tools</a>
+      <a href="#contact" class="footer-link">Contact</a>
     </div>
   </div>
 </footer>
@@ -940,19 +935,8 @@ footer{
   },{threshold:0.08});
   reveals.forEach(el=>ro.observe(el));
 
-  // Filter
-  function filterProjects(btn,cat){
-    document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
-    btn.classList.add('active');
-    const cards=document.querySelectorAll('#all-projects-grid .proj-card');
-    cards.forEach(c=>{
-      const show=cat==='all'||c.dataset.filter===cat;
-      c.style.display=show?'':'none';
-    });
-  }
-
   // Active nav on scroll
-  const sections=['pcb','software','projects','articles'];
+  const sections=['skills','tools','contact'];
   window.addEventListener('scroll',()=>{
     let current='';
     sections.forEach(id=>{
