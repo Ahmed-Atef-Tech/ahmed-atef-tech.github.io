@@ -169,6 +169,28 @@ section.block { padding-top: clamp(100px, 13vw, 170px); }
 .mail code { font: 500 clamp(1.05rem, 2.2vw, 1.5rem) var(--body); padding: 10px 16px; border-radius: 10px; background: rgba(243, 244, 241, .1); border: 1px solid rgba(243, 244, 241, .2); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); user-select: all; overflow-wrap: anywhere; }
 .links { display: flex; flex-wrap: wrap; gap: 8px; }
 
+/* ---------- PCB accents ---------- */
+main { position: relative; }
+.route { position: absolute; left: 0; top: 0; width: 100%; pointer-events: none; z-index: 0; display: none; overflow: visible; }
+@media (min-width: 1100px) { .route { display: block; } }
+.route .bed { fill: none; stroke: rgba(18, 22, 20, .1); stroke-width: 2; stroke-linejoin: round; }
+.route .cu { fill: none; stroke: var(--copper); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.route circle { fill: var(--paper); stroke: rgba(18, 22, 20, .22); stroke-width: 2; transition: fill 400ms, stroke 400ms; }
+.route circle.lit { fill: var(--copper); stroke: var(--copper); }
+.statement, #skills, #tools { position: relative; z-index: 1; }
+.pic .ref, .pic .fid { position: absolute; z-index: 1; opacity: 0; transition: opacity 500ms var(--ease); pointer-events: none; }
+.pic .ref { left: 18px; bottom: 14px; font: 600 .95rem var(--display); color: rgba(243, 244, 241, .9); letter-spacing: .02em; }
+.pic .fid { right: 18px; bottom: 16px; width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid rgba(243, 244, 241, .85); }
+.pic .fid::before, .pic .fid::after { content: ""; position: absolute; background: rgba(243, 244, 241, .85); }
+.pic .fid::before { left: 50%; top: -6px; bottom: -6px; width: 1.5px; margin-left: -.75px; }
+.pic .fid::after { top: 50%; left: -6px; right: -6px; height: 1.5px; margin-top: -.75px; }
+.skill:hover .ref, .skill:hover .fid, .skill:focus .ref, .skill:focus .fid { opacity: 1; }
+.tool h3 { position: relative; justify-self: start; }
+.tool h3::after { content: ""; position: absolute; left: 0; right: 0; bottom: -9px; height: 2px; background: var(--copper); transform: scaleX(0); transform-origin: left; transition: transform 600ms var(--ease); }
+.tool h3::before { content: ""; position: absolute; right: -11px; bottom: -13px; width: 10px; height: 10px; border-radius: 50%; border: 2px solid var(--copper); background: var(--paper-2); opacity: 0; transition: opacity 200ms 450ms; }
+.tool:hover h3::after { transform: none; }
+.tool:hover h3::before { opacity: 1; }
+
 footer { padding-block: 34px 40px; color: var(--ink-2); font-size: .92rem; }
 footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; }
 .foot-mark { display: flex; align-items: center; gap: 16px; }
@@ -205,6 +227,7 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; a
 </header>
 
 <main id="top">
+  <svg class="route" id="route" aria-hidden="true"><path class="bed" id="route-bed"/><path class="cu" id="route-cu"/><g id="route-vias"></g></svg>
   <section class="panel hero" id="hero" aria-labelledby="hero-title">
     <div class="panel-bg" aria-hidden="true"><img src="assets/photo/hero.jpg" alt="" width="1672" height="941" fetchpriority="high"></div>
     <p class="status"><i aria-hidden="true"></i>Open to work in Cairo, Egypt</p>
@@ -236,42 +259,42 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; a
     </div>
     <div class="skills">
       <article class="skill" tabindex="0">
-        <div class="pic"><img src="assets/blur/pcb.jpg" alt="" loading="lazy" width="1600" height="1000"><div class="chip"><h3>PCB design</h3><span>KiCad, Altium</span></div></div>
+        <div class="pic"><img src="assets/blur/pcb.jpg" alt="" loading="lazy" width="1600" height="1000"><div class="chip"><h3>PCB design</h3><span>KiCad, Altium</span></div><span class="ref" aria-hidden="true">U1</span><span class="fid" aria-hidden="true"></span></div>
         <div class="txt">
           <p class="lede">Taking a circuit from schematic to a board that a factory can make and assemble.</p>
           <ul><li>Schematic capture and part selection</li><li>Layout for 2-layer and 4-layer boards</li><li>Design for manufacturing and assembly</li><li>Bring-up and testing on the bench</li></ul>
         </div>
       </article>
       <article class="skill" tabindex="0">
-        <div class="pic"><img src="assets/blur/power.jpg" alt="" loading="lazy" width="1600" height="1000"><div class="chip"><h3>Power and simulation</h3><span>LTspice, SPICE</span></div></div>
+        <div class="pic"><img src="assets/blur/power.jpg" alt="" loading="lazy" width="1600" height="1000"><div class="chip"><h3>Power and simulation</h3><span>LTspice, SPICE</span></div><span class="ref" aria-hidden="true">Q1</span><span class="fid" aria-hidden="true"></span></div>
         <div class="txt">
           <p class="lede">The power side of a board, checked in simulation before anything gets built.</p>
           <ul><li>Circuit simulation</li><li>Power stages and high-current paths</li><li>Isolated 220 V switching and protection</li><li>Motor driver and control circuits</li></ul>
         </div>
       </article>
       <article class="skill" tabindex="0">
-        <div class="pic"><img src="assets/blur/embedded.jpg" alt="" loading="lazy" width="1600" height="1000"><div class="chip"><h3>Embedded systems</h3><span>STM32, ESP32, Arduino</span></div></div>
+        <div class="pic"><img src="assets/blur/embedded.jpg" alt="" loading="lazy" width="1600" height="1000"><div class="chip"><h3>Embedded systems</h3><span>STM32, ESP32, Arduino</span></div><span class="ref" aria-hidden="true">U2</span><span class="fid" aria-hidden="true"></span></div>
         <div class="txt">
           <p class="lede">Microcontroller boards and the firmware that makes them do their job.</p>
           <ul><li>STM32 and ESP32 based boards</li><li>Arduino for quick prototypes</li><li>Firmware in C and C++</li></ul>
         </div>
       </article>
       <article class="skill" tabindex="0">
-        <div class="pic"><img src="assets/blur/sheet.jpg" alt="" loading="lazy" width="1600" height="1000"><div class="chip"><h3>Sheet metal</h3><span>SolidWorks</span></div></div>
+        <div class="pic"><img src="assets/blur/sheet.jpg" alt="" loading="lazy" width="1600" height="1000"><div class="chip"><h3>Sheet metal</h3><span>SolidWorks</span></div><span class="ref" aria-hidden="true">J1</span><span class="fid" aria-hidden="true"></span></div>
         <div class="txt">
           <p class="lede">Enclosures and parts that hold the electronics in place.</p>
           <ul><li>Enclosures, brackets and mounting panels</li><li>Bends and tolerances a workshop can make</li><li>3D models to check the fit with the PCB</li></ul>
         </div>
       </article>
       <article class="skill" tabindex="0">
-        <div class="pic"><img src="assets/blur/print.jpg" alt="" loading="lazy" width="1600" height="1000"><div class="chip"><h3>3D printing and machines</h3><span>FDM, CNC</span></div></div>
+        <div class="pic"><img src="assets/blur/print.jpg" alt="" loading="lazy" width="1600" height="1000"><div class="chip"><h3>3D printing and machines</h3><span>FDM, CNC</span></div><span class="ref" aria-hidden="true">M1</span><span class="fid" aria-hidden="true"></span></div>
         <div class="txt">
           <p class="lede">Printing functional parts, and building my own printers and CNC machines.</p>
           <ul><li>Parts designed for FDM printing</li><li>Running and tuning FDM printers</li><li>Building 3D printers and CNC machines: frame, motion, wiring and setup</li></ul>
         </div>
       </article>
       <article class="skill" tabindex="0">
-        <div class="pic"><img src="assets/blur/pneumatics.jpg" alt="" loading="lazy" width="1600" height="1000"><div class="chip"><h3>Pneumatics</h3><span>Cylinders, valves</span></div></div>
+        <div class="pic"><img src="assets/blur/pneumatics.jpg" alt="" loading="lazy" width="1600" height="1000"><div class="chip"><h3>Pneumatics</h3><span>Cylinders, valves</span></div><span class="ref" aria-hidden="true">K1</span><span class="fid" aria-hidden="true"></span></div>
         <div class="txt">
           <p class="lede">Pneumatic systems for simple production-line stations.</p>
           <ul><li>Pneumatic circuits with cylinders and valves</li><li>Sequencing the steps of a station</li><li>Electronic control of the pneumatics</li></ul>
@@ -362,10 +385,71 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; a
   }
   window.addEventListener("scroll", fill, { passive: true }); window.addEventListener("resize", fill); fill();
 
+  /* copper trace that routes down the page as you scroll */
+  (function () {
+    var svg = document.getElementById("route"), bed = document.getElementById("route-bed"), cu = document.getElementById("route-cu"), vg = document.getElementById("route-vias");
+    var main = document.getElementById("top"), L = 0, y0 = 0, y1 = 0, vias = [];
+    var anchors = [document.querySelector(".statement .big"), document.getElementById("skills-title"), document.getElementById("tools-title"), document.getElementById("contact")];
+    function build() {
+      if (getComputedStyle(svg).display === "none") return;
+      var mr = main.getBoundingClientRect(), wrap = document.querySelector("#skills").getBoundingClientRect();
+      var cs = getComputedStyle(document.querySelector("#skills")), left = wrap.left - mr.left + parseFloat(cs.paddingLeft);
+      var x = left - 46, alt = x - 26, pts = [], v = [];
+      svg.setAttribute("width", mr.width); svg.setAttribute("height", main.scrollHeight);
+      anchors.forEach(function (a, i) {
+        var r = a.getBoundingClientRect(), y = (i === 3 ? r.top - 40 : r.top + Math.min(r.height / 2, 40)) - mr.top;
+        if (i === 0) { pts.push([x, y]); v.push([x, y, left - 14]); return; }
+        var prev = pts[pts.length - 1], mid = (prev[1] + y) / 2, xx = i % 2 ? alt : x;
+        pts.push([prev[0], mid - 13], [xx, mid + 13], [xx, y - 26], [x, y]);
+        v.push([x, y, i === 3 ? null : left - 14]);
+      });
+      var d = "M" + pts.map(function (q) { return q[0].toFixed(1) + " " + q[1].toFixed(1); }).join(" L");
+      v.forEach(function (q) { if (q[2]) d += " M" + q[0] + " " + q[1].toFixed(1) + " H" + q[2].toFixed(1); });
+      bed.setAttribute("d", d); cu.setAttribute("d", d);
+      L = cu.getTotalLength(); cu.style.strokeDasharray = L; y0 = pts[0][1]; y1 = pts[pts.length - 1][1];
+      vg.innerHTML = ""; vias = v.map(function (q) {
+        var c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        c.setAttribute("cx", q[0]); c.setAttribute("cy", q[1].toFixed(1)); c.setAttribute("r", 6); vg.appendChild(c); return { el: c, y: q[1] };
+      });
+      draw();
+    }
+    function draw() {
+      if (!L) return;
+      var mr = main.getBoundingClientRect(), front = window.innerHeight * .62 - mr.top;
+      var p = RM ? 1 : Math.max(0, Math.min(1, (front - y0) / (y1 - y0)));
+      cu.style.strokeDashoffset = (L * (1 - p)).toFixed(1);
+      vias.forEach(function (o) { o.el.classList.toggle("lit", RM || front >= o.y); });
+    }
+    var t; window.addEventListener("resize", function () { clearTimeout(t); t = setTimeout(build, 150); });
+    window.addEventListener("scroll", draw, { passive: true });
+    window.addEventListener("load", build); if (document.fonts && document.fonts.ready) document.fonts.ready.then(build); build();
+  })();
+
+  /* hacker touch: headings decode from glyphs the first time they appear */
+  var GL = "01<>/\\#*+=$%&?";
+  function scramble(el, dur, to) {
+    var final = to || el.getAttribute("data-t") || el.textContent;
+    if (!el.getAttribute("data-t")) el.setAttribute("data-t", final);
+    if (RM) { el.textContent = final; return; }
+    var t0 = performance.now(), id = (el._sid = (el._sid || 0) + 1);
+    (function tick(now) {
+      if (el._sid !== id) return;
+      var p = Math.min(1, (now - t0) / dur), out = "";
+      for (var i = 0; i < final.length; i++) out += (i / final.length < p || final[i] === " ") ? final[i] : GL[(Math.random() * GL.length) | 0];
+      el.textContent = out;
+      if (p < 1) requestAnimationFrame(tick); else el.textContent = final;
+    })(t0);
+  }
+  if ("IntersectionObserver" in window) {
+    var hio = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { scramble(e.target, 700); hio.unobserve(e.target); } }); }, { threshold: .8 });
+    document.querySelectorAll(".s-head h2, .contact h2").forEach(function (h) { h.setAttribute("aria-label", h.textContent); hio.observe(h); });
+  }
+  document.querySelectorAll(".nav ul a").forEach(function (a) { a.addEventListener("mouseenter", function () { scramble(a, 320); }); });
+
   /* copy email */
   document.getElementById("copy").addEventListener("click", function () {
     var b = this, el = document.getElementById("mail");
-    function ok() { b.textContent = "Copied"; setTimeout(function () { b.textContent = "Copy email"; }, 1600); }
+    function ok() { scramble(b, 400, "Copied"); setTimeout(function () { scramble(b, 400, "Copy email"); }, 1700); }
     function fb() { var r = document.createRange(); r.selectNodeContents(el); var s = getSelection(); s.removeAllRanges(); s.addRange(r); b.textContent = "Press Ctrl+C"; }
     if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(el.textContent).then(ok, fb); else fb();
   });
