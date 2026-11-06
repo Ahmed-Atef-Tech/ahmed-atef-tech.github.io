@@ -91,7 +91,7 @@ html.calm .lo-halo { display: block; position: absolute; left: 50%; top: 50%; wi
 /* ---------- dark panels ---------- */
 .panel { position: relative; margin: 10px; border-radius: 28px; overflow: hidden; background: var(--mask); color: var(--light); isolation: isolate; }
 .panel-bg { position: absolute; inset: 0; z-index: -1; }
-.panel-bg img { width: 100%; height: 100%; object-fit: cover; object-position: 62% 30%; }
+.panel-bg img { width: 100%; height: 100%; object-fit: cover; object-position: 58% 35%; }
 .panel-bg::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(5,7,8,.62) 0%, rgba(5,7,8,.18) 45%, rgba(5,7,8,0) 70%), linear-gradient(180deg, rgba(5,7,8,.1) 0%, rgba(5,7,8,0) 40%, rgba(5,7,8,.7) 100%); }
 
 /* hero */
@@ -162,7 +162,7 @@ section.block { padding-top: clamp(100px, 13vw, 170px); }
 
 /* ---------- contact ---------- */
 .contact { margin-top: clamp(100px, 13vw, 170px); padding: clamp(40px, 7vw, 96px) clamp(20px, 5vw, 72px); min-height: 560px; display: flex; flex-direction: column; justify-content: flex-end; gap: 30px; }
-.contact .panel-bg img { object-position: 55% 40%; }
+.contact .panel-bg img { object-position: 62% 25%; }
 .contact h2 { font-weight: 700; font-size: clamp(2.4rem, 6.8vw, 6.2rem); line-height: .92; letter-spacing: -.055em; max-width: 13ch; }
 .contact .sub { color: rgba(243, 244, 241, .8); max-width: 48ch; }
 .mail { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
@@ -206,7 +206,7 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; a
 
 <main id="top">
   <section class="panel hero" id="hero" aria-labelledby="hero-title">
-    <div class="panel-bg" aria-hidden="true"><img src="assets/photo/hero.jpg" alt="" width="2200" height="1228" fetchpriority="high"></div>
+    <div class="panel-bg" aria-hidden="true"><img src="assets/photo/hero.jpg" alt="" width="1672" height="941" fetchpriority="high"></div>
     <p class="status"><i aria-hidden="true"></i>Open to work in Cairo, Egypt</p>
       <h1 id="hero-title">
         <span><b style="--i:0">Ahmed Atef.</b></span>
@@ -311,7 +311,7 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; a
   </section>
 
   <section class="panel contact" id="contact" aria-labelledby="contact-title">
-    <div class="panel-bg" aria-hidden="true"><img src="assets/photo/contact.jpg" alt="" loading="lazy" width="1672" height="941"></div>
+    <div class="panel-bg" aria-hidden="true"><img src="assets/photo/contact.jpg" alt="" loading="lazy" width="2200" height="1228"></div>
     <h2 id="contact-title">Have a board or a machine in mind?</h2>
     <p class="sub">I'm open to full-time roles and freelance hardware work. Tell me what you want to build.</p>
     <div class="mail"><code id="mail">ahmed.atef.tech@gmail.com</code><button class="btn btn-light" id="copy" type="button">Copy email</button></div>
