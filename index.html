@@ -241,17 +241,17 @@ pre.code.done code::after { animation: caret 1s steps(1) 3 forwards; }
 /* ---------- diagonal split: S1 and S2 share one block, cut on the diagonal ---------- */
 @property --a { syntax: "<percentage>"; inherits: true; initial-value: 100%; }
 @property --b { syntax: "<percentage>"; inherits: true; initial-value: 0%; }
-.split { position: relative; --a: 100%; --b: 0%; --g: 6px; aspect-ratio: 16 / 9.5; min-height: 560px; max-height: 760px; border-radius: 28px; overflow: hidden; box-shadow: 0 0 0 1px var(--glass-line), 0 30px 80px rgba(0, 0, 0, .4); transition: --a 1100ms var(--ease), --b 1100ms var(--ease); }
-.split:has(.s1:hover) { --b: 18%; }
-.split:has(.s2:hover) { --a: 82%; }
+.split { position: relative; --a: 100%; --b: 0%; --g: 6px; aspect-ratio: 16 / 9.5; min-height: 560px; max-height: 760px; border-radius: 28px; overflow: hidden; box-shadow: 0 0 0 1px var(--glass-line), 0 30px 80px rgba(0, 0, 0, .4); transition: --a 2400ms cubic-bezier(.45, 0, .2, 1), --b 2400ms cubic-bezier(.45, 0, .2, 1); }
+.split:has(.s1:hover) { --b: 7%; }
+.split:has(.s2:hover) { --a: 93%; }
 .tri { position: absolute; inset: 0; overflow: hidden; background: var(--mask); }
 .s1 { clip-path: polygon(0 0, calc(var(--a) - var(--g)) 0, calc(var(--b) - var(--g)) 100%, 0 100%); }
 .s2 { clip-path: polygon(calc(var(--a) + var(--g)) 0, 100% 0, 100% 100%, calc(var(--b) + var(--g)) 100%); }
-.tri img { position: absolute; width: 120%; height: 120%; max-width: none; object-fit: cover; opacity: 0; transition: opacity 1000ms var(--ease), transform 1400ms var(--ease); }
+.tri img { position: absolute; width: 120%; height: 120%; max-width: none; object-fit: cover; opacity: 0; transition: opacity 2400ms ease-in-out, transform 4000ms cubic-bezier(.3, 0, .2, 1); }
 .s1 img { left: -24%; top: -4%; }
 .s2 img { left: 4%; top: -16%; }
 .tri img.on { opacity: 1; }
-.tri:hover img.on { transform: scale(1.05); }
+.tri:hover img.on { transform: scale(1.02); }
 .tri::after { content: ""; position: absolute; inset: 0; pointer-events: none; }
 .s1::after { background: linear-gradient(135deg, rgba(5, 5, 6, .82) 0%, rgba(5, 5, 6, .35) 30%, rgba(5, 5, 6, 0) 52%); }
 .s2::after { background: linear-gradient(315deg, rgba(5, 5, 6, .82) 0%, rgba(5, 5, 6, .35) 30%, rgba(5, 5, 6, 0) 52%); }
@@ -263,7 +263,7 @@ pre.code.done code::after { animation: caret 1s steps(1) 3 forwards; }
 .s2 .tx p { margin-left: auto; }
 .tags { display: flex; flex-wrap: wrap; gap: 6px; }
 .s2 .tags { justify-content: flex-end; }
-.tag { font: 500 .86rem var(--body); padding: 7px 12px; border-radius: 8px; cursor: pointer; color: rgba(243, 244, 241, .8); background: rgba(8, 8, 9, .32); border: 1px solid rgba(255, 255, 255, .16); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); transition: color 300ms, background-color 300ms, border-color 300ms; }
+.tag { font: 500 .86rem var(--body); padding: 7px 12px; border-radius: 8px; cursor: pointer; color: rgba(243, 244, 241, .8); background: rgba(8, 8, 9, .32); border: 1px solid rgba(255, 255, 255, .16); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); transition: color 900ms, background-color 900ms, border-color 900ms; }
 .tag:hover { border-color: rgba(255, 255, 255, .4); }
 .tag.on { color: #170F09; background: var(--copper); border-color: var(--copper); }
 .js .split[data-rv] { opacity: 1; transform: none; }
@@ -724,7 +724,7 @@ inbox = Path(<span class="s">"D:/exports"</span>)
       b.addEventListener("click", function () { hold = true; set(i); });
     });
     t.addEventListener("mouseleave", function () { hold = false; });
-    if (!RM) setInterval(function () { if (!hold && !document.hidden) set((k + 1) % imgs.length); }, 3600 + ti * 500);
+    if (!RM) setInterval(function () { if (!hold && !document.hidden) set((k + 1) % imgs.length); }, 7000 + ti * 1200);
   });
 
   /* copy email */
