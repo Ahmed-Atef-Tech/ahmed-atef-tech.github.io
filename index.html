@@ -207,6 +207,37 @@ pre.code.done code::after { animation: caret 1s steps(1) 3 forwards; }
 .tw-off { visibility: hidden; }
 .tw-cur::after { content: ""; display: inline-block; width: .5em; height: 1.05em; margin-left: 1px; vertical-align: -.18em; background: var(--copper); animation: caret .8s steps(1) infinite; }
 
+/* ---------- skill groups ---------- */
+.groups { display: grid; gap: clamp(24px, 3vw, 36px); }
+.group { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: clamp(18px, 3vw, 40px); padding: 14px; border-radius: 28px; align-items: start; }
+.group:nth-child(2) .g-media { order: 2; }
+.g-media { position: sticky; top: 92px; }
+.group .pic { position: relative; border-radius: 18px; overflow: hidden; aspect-ratio: 16 / 11; max-width: 100%; background: var(--mask); }
+.group .pic img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; filter: blur(3px) saturate(.9); transform: scale(1.05); transition: opacity 700ms var(--ease), filter 900ms var(--ease), transform 1100ms var(--ease); }
+.group .pic img.on { opacity: 1; }
+.group:hover .pic img.on, .group:focus-within .pic img.on { filter: none; transform: scale(1.01); }
+.group .pic .pic-code { display: none; }
+.group .pic .pic-code.on { display: block; opacity: 1; }
+.group:hover .ref, .group:hover .fid, .group:focus-within .ref, .group:focus-within .fid { opacity: 1; }
+.g-body { padding: 10px 10px 6px; display: grid; gap: 6px; }
+.g-body .lede { font-size: 1.12rem; max-width: 52ch; margin-bottom: 8px; }
+.sub { position: relative; padding: 14px 16px 12px 18px; border-radius: 14px; cursor: pointer; outline-offset: 2px; transition: background-color 350ms; }
+.sub::before { content: ""; position: absolute; left: 0; top: 16px; bottom: 16px; width: 2px; border-radius: 0; background: var(--line); transition: background-color 350ms; }
+.sub.on { background: var(--paper-2); }
+.sub.on::before { background: var(--copper); box-shadow: 0 0 10px rgba(232, 161, 91, .6); }
+.sub h4 { margin: 0 0 6px; font: 600 1.2rem var(--display); letter-spacing: -.02em; }
+.sub ul { margin: 0; }
+.sub li { padding: 4px 0; color: var(--ink-2); display: grid; grid-template-columns: 16px minmax(0, 1fr); gap: 6px; font-size: .98rem; }
+.sub li::before { content: ""; width: 6px; height: 6px; margin-top: 10px; background: var(--copper); opacity: .8; }
+.sub.on li { color: var(--ink); }
+@media (max-width: 900px) { .group { grid-template-columns: minmax(0, 1fr); } .group:nth-child(2) .g-media { order: 0; } .g-media { position: relative; top: 0; } }
+.stack { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; margin-bottom: 18px; }
+.st { border-radius: 16px; padding: 16px 18px; }
+.st h3 { margin: 0 0 4px; font: 600 1.05rem var(--display); letter-spacing: -.02em; }
+.st p { margin: 0; color: var(--copper); font-size: .95rem; }
+@media (max-width: 520px) { .group .pic .pic-code.on { display: none; } }
+@media (max-width: 900px) { .stack { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
 /* ---------- scroll entrances ---------- */
 .js [data-rv] { opacity: 0; transform: translateY(38px); transition: opacity 900ms var(--ease), transform 1100ms var(--ease); transition-delay: var(--d, 0ms); }
 .js [data-rv].in { opacity: 1; transform: none; }
@@ -332,76 +363,73 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; a
   <section class="wrap" id="skills" aria-labelledby="skills-title">
     <div class="s-head">
       <h2 id="skills-title">What I work on</h2>
-      <p>From the circuit on the board to the machine around it. Hover an area to bring it into focus.</p>
+      <p>Two sides of the same product: the electronics, and the enclosure and machine around them. Point at a skill to see it.</p>
     </div>
-    <div class="skills">
-      <article class="skill glass" tabindex="0" data-fx="electric">
-        <div class="pic"><img src="assets/blur/pcb.jpg" alt="" loading="lazy" width="1600" height="1000"><pre class="pic-code" data-type="hover" aria-hidden="true"><code><span class="c">;; rules for the mains side</span>
+    <div class="groups">
+      <article class="group glass">
+        <div class="g-media">
+          <div class="pic"><img data-k="0" class="on" src="assets/blur/pcb.jpg" alt="" loading="lazy" width="800" height="500"><img data-k="1" src="assets/blur/sim.jpg" alt="" loading="lazy" width="800" height="500"><img data-k="2" src="assets/blur/embedded.jpg" alt="" loading="lazy" width="800" height="500"><pre class="pic-code on" data-k="0" aria-hidden="true"><code><span class="c">;; rules for the mains side</span>
 (<span class="k">net</span> <span class="s">"VBUS"</span> (<span class="f">node</span> U1 <span class="n">4</span>) (<span class="f">node</span> C7 <span class="n">1</span>))
 (<span class="k">rule</span> <span class="s">"power"</span> (<span class="f">track_width</span> (<span class="k">min</span> <span class="n">0.5mm</span>)))
 (<span class="k">rule</span> <span class="s">"mains"</span> (<span class="f">clearance</span> (<span class="k">min</span> <span class="n">6mm</span>)))
-<span class="c">;; drc: 0 errors, 0 warnings</span></code></pre><div class="chip"><h3>PCB design</h3><span>KiCad, Altium</span></div><span class="ref" aria-hidden="true">U1</span><span class="fid" aria-hidden="true"></span></div>
-        <div class="txt">
-          <p class="lede">Taking a circuit from schematic to a board that a factory can make and assemble.</p>
-          <ul><li>Schematic capture and part selection</li><li>Layout for 2-layer and 4-layer boards</li><li>Design for manufacturing and assembly</li><li>Bring-up and testing on the bench</li></ul>
-        </div>
-      </article>
-      <article class="skill glass" tabindex="0" data-fx="scope">
-        <div class="pic"><img src="assets/blur/power.jpg" alt="" loading="lazy" width="1600" height="1000"><pre class="pic-code" data-type="hover" aria-hidden="true"><code><span class="c">* buck stage, 12 V to 3.3 V</span>
-<span class="f">V1</span> in <span class="n">0</span> <span class="n">12</span>
-<span class="f">S1</span> in sw ctl <span class="n">0</span> SW
-<span class="f">L1</span> sw out <span class="n">10u</span>
-<span class="f">C1</span> out <span class="n">0</span> <span class="n">47u</span>
-<span class="k">.tran</span> <span class="n">0</span> <span class="n">2m</span> <span class="n">0</span> <span class="n">10n</span></code></pre><div class="chip"><h3>Power and simulation</h3><span>LTspice, SPICE</span></div><span class="ref" aria-hidden="true">Q1</span><span class="fid" aria-hidden="true"></span></div>
-        <div class="txt">
-          <p class="lede">The power side of a board, checked in simulation before anything gets built.</p>
-          <ul><li>Circuit simulation</li><li>Power stages and high-current paths</li><li>Isolated 220 V switching and protection</li><li>Motor driver and control circuits</li></ul>
-        </div>
-      </article>
-      <article class="skill glass" tabindex="0" data-fx="type">
-        <div class="pic"><img src="assets/blur/embedded.jpg" alt="" loading="lazy" width="1600" height="1000"><pre class="pic-code" data-type="hover" aria-hidden="true"><code><span class="c">// read the board temperature, switch the fan</span>
+<span class="c">;; drc: 0 errors, 0 warnings</span></code></pre><pre class="pic-code" data-k="1" aria-hidden="true"><code><span class="c"># usb 2.0 pair, check before layout sign-off</span>
+diff_impedance = <span class="n">90</span> ohm  <span class="c"># target</span>
+eye_height     = <span class="n">142</span> mV  <span class="k">PASS</span>
+pdn_ripple_3v3 = <span class="n">21</span> mV   <span class="k">PASS</span>
+ir_drop_3v3    = <span class="n">18</span> mV   <span class="k">PASS</span></code></pre><pre class="pic-code" data-k="2" aria-hidden="true"><code><span class="c">// read the board temperature, switch the fan</span>
 <span class="k">void</span> <span class="f">loop</span>(<span class="k">void</span>) {
   <span class="k">float</span> t = <span class="f">ntc_read_celsius</span>(ADC_CH1);
   <span class="f">relay_set</span>(FAN, t &gt; <span class="n">45.0f</span>);
   <span class="f">HAL_Delay</span>(<span class="n">100</span>);
-}</code></pre><div class="chip"><h3>Embedded systems</h3><span>STM32, ESP32, Arduino</span></div><span class="ref" aria-hidden="true">U2</span><span class="fid" aria-hidden="true"></span></div>
-        <div class="txt">
-          <p class="lede">Microcontroller boards and the firmware that makes them do their job.</p>
-          <ul><li>STM32 and ESP32 based boards</li><li>Arduino for quick prototypes</li><li>Firmware in C and C++</li></ul>
+}</code></pre><div class="chip"><h3>Electronics design</h3><span>PCB, simulation, embedded</span></div><span class="ref" aria-hidden="true">U1</span><span class="fid" aria-hidden="true"></span></div>
+        </div>
+        <div class="g-body">
+          <p class="lede">From the circuit to a working board. I design it, check it in simulation, and write the firmware that runs it.</p>
+        <div class="sub on" data-k="0" data-fx="electric" tabindex="0">
+          <h4>PCB design</h4>
+          <ul><li>Schematic capture and part selection</li><li>2-layer and 4-layer layout</li><li>Power stages, isolated 220 V switching and motor drivers</li><li>Design for manufacturing and bring-up on the bench</li></ul>
+        </div>
+        <div class="sub" data-k="1" data-fx="scope" tabindex="0">
+          <h4>Simulation and integrity</h4>
+          <ul><li>Circuit simulation before anything gets built</li><li>Signal integrity on high-speed traces</li><li>Power integrity: supply ripple and voltage drop</li><li>Electromagnetic simulation of boards and enclosures</li></ul>
+        </div>
+        <div class="sub" data-k="2" data-fx="type" tabindex="0">
+          <h4>Embedded systems</h4>
+          <ul><li>STM32 and ESP32 based boards</li><li>Firmware in C and C++</li><li>Arduino for quick prototypes</li></ul>
+        </div>
         </div>
       </article>
-      <article class="skill glass" tabindex="0" data-fx="fold">
-        <div class="pic"><img src="assets/blur/sheet.jpg" alt="" loading="lazy" width="1600" height="1000"><pre class="pic-code" data-type="hover" aria-hidden="true"><code><span class="c">// enclosure_front.sldprt</span>
+      <article class="group glass">
+        <div class="g-media">
+          <div class="pic"><img data-k="0" class="on" src="assets/blur/print.jpg" alt="" loading="lazy" width="800" height="500"><img data-k="1" src="assets/blur/sheet.jpg" alt="" loading="lazy" width="800" height="500"><img data-k="2" src="assets/blur/pneumatics.jpg" alt="" loading="lazy" width="800" height="500"><pre class="pic-code on" data-k="0" aria-hidden="true"><code><span class="c">; layer 42, z = 8.40</span>
+<span class="k">G1</span> Z<span class="n">8.40</span> F<span class="n">600</span>
+<span class="k">G1</span> X<span class="n">112.3</span> Y<span class="n">98.1</span> E<span class="n">3.214</span> F<span class="n">1800</span>
+<span class="k">G1</span> X<span class="n">118.9</span> Y<span class="n">98.4</span> E<span class="n">3.268</span>
+<span class="k">M106</span> S<span class="n">255</span>   <span class="c">; part fan on</span></code></pre><pre class="pic-code" data-k="1" aria-hidden="true"><code><span class="c">// enclosure_front.sldprt</span>
 thickness   = <span class="n">1.5</span> mm   <span class="c">// aluminum 5052</span>
 bend_radius = <span class="n">1.5</span> mm
 k_factor    = <span class="n">0.44</span>
 vent_slots  = <span class="n">9</span> x <span class="n">45</span> mm
-<span class="f">flat_pattern</span>() <span class="k">-&gt;</span> <span class="s">"front.dxf"</span></code></pre><div class="chip"><h3>Sheet metal</h3><span>SolidWorks</span></div><span class="ref" aria-hidden="true">J1</span><span class="fid" aria-hidden="true"></span></div>
-        <div class="txt">
-          <p class="lede">Enclosures and parts that hold the electronics in place.</p>
-          <ul><li>Enclosures, brackets and mounting panels</li><li>Bends and tolerances a workshop can make</li><li>3D models to check the fit with the PCB</li></ul>
-        </div>
-      </article>
-      <article class="skill glass" tabindex="0" data-fx="print">
-        <div class="pic"><img src="assets/blur/print.jpg" alt="" loading="lazy" width="1600" height="1000"><pre class="pic-code" data-type="hover" aria-hidden="true"><code><span class="c">; layer 42, z = 8.40</span>
-<span class="k">G1</span> Z<span class="n">8.40</span> F<span class="n">600</span>
-<span class="k">G1</span> X<span class="n">112.3</span> Y<span class="n">98.1</span> E<span class="n">3.214</span> F<span class="n">1800</span>
-<span class="k">G1</span> X<span class="n">118.9</span> Y<span class="n">98.4</span> E<span class="n">3.268</span>
-<span class="k">M106</span> S<span class="n">255</span>   <span class="c">; part fan on</span></code></pre><div class="chip"><h3>3D printing and machines</h3><span>FDM, CNC</span></div><span class="ref" aria-hidden="true">M1</span><span class="fid" aria-hidden="true"></span></div>
-        <div class="txt">
-          <p class="lede">Printing functional parts, and building my own printers and CNC machines.</p>
-          <ul><li>Parts designed for FDM printing</li><li>Running and tuning FDM printers</li><li>Building 3D printers and CNC machines: frame, motion, wiring and setup</li></ul>
-        </div>
-      </article>
-      <article class="skill glass" tabindex="0" data-fx="pneumatic">
-        <div class="pic"><img src="assets/blur/pneumatics.jpg" alt="" loading="lazy" width="1600" height="1000"><pre class="pic-code" data-type="hover" aria-hidden="true"><code><span class="c">// station sequence: A+ B+ B- A-</span>
+<span class="f">flat_pattern</span>() <span class="k">-&gt;</span> <span class="s">"front.dxf"</span></code></pre><pre class="pic-code" data-k="2" aria-hidden="true"><code><span class="c">// station sequence: A+ B+ B- A-</span>
 <span class="k">IF</span> start <span class="k">AND</span> home <span class="k">THEN</span>
   valve_A := <span class="k">TRUE</span>;   <span class="c">// extend A</span>
 <span class="k">END_IF</span>;
-<span class="k">IF</span> a_out <span class="k">THEN</span> valve_B := <span class="k">TRUE</span>; <span class="k">END_IF</span>;</code></pre><div class="chip"><h3>Pneumatics</h3><span>Cylinders, valves</span></div><span class="ref" aria-hidden="true">K1</span><span class="fid" aria-hidden="true"></span></div>
-        <div class="txt">
-          <p class="lede">Pneumatic systems for simple production-line stations.</p>
-          <ul><li>Pneumatic circuits with cylinders and valves</li><li>Sequencing the steps of a station</li><li>Electronic control of the pneumatics</li></ul>
+<span class="k">IF</span> a_out <span class="k">THEN</span> valve_B := <span class="k">TRUE</span>; <span class="k">END_IF</span>;</code></pre><div class="chip"><h3>Enclosures and machines</h3><span>3D printing, sheet metal, pneumatics</span></div><span class="ref" aria-hidden="true">M1</span><span class="fid" aria-hidden="true"></span></div>
+        </div>
+        <div class="g-body">
+          <p class="lede">The physical side: the enclosure that protects the board, and the machine it controls.</p>
+        <div class="sub on" data-k="0" data-fx="print" tabindex="0">
+          <h4>3D-printed enclosures</h4>
+          <ul><li>Enclosures and parts designed for FDM printing</li><li>Fit checks between the board and its case</li><li>Jigs and fixtures for production</li></ul>
+        </div>
+        <div class="sub" data-k="1" data-fx="fold" tabindex="0">
+          <h4>Sheet-metal enclosures and frames</h4>
+          <ul><li>Sheet-metal enclosures, brackets and panels</li><li>Bends and tolerances a workshop can make</li><li>Machine frames and mounts</li></ul>
+        </div>
+        <div class="sub" data-k="2" data-fx="pneumatic" tabindex="0">
+          <h4>Machines and pneumatics</h4>
+          <ul><li>Building FDM 3D printers and CNC machines</li><li>Motion systems: belts, lead screws and linear rails</li><li>Pneumatic stations with cylinders, valves and sequencing</li></ul>
+        </div>
         </div>
       </article>
     </div>
@@ -409,9 +437,9 @@ vent_slots  = <span class="n">9</span> x <span class="n">45</span> mm
 
   <section class="wrap block" id="tools" aria-labelledby="tools-title">
     <div class="s-head top">
-      <h2 id="tools-title">Tools I build to work faster</h2>
+      <h2 id="tools-title">I build my own tools</h2>
       <div class="s-side">
-        <p>When a task at my desk can be automated, I write a small tool for it. They're free to download.</p>
+        <p>When something slows my work down, I build the tool myself instead of waiting on anyone. Desktop apps, websites and scripts, built fast with AI-assisted coding.</p>
         <div class="code-card" aria-hidden="true">
           <div class="code-bar"><i></i><i></i><i></i><span>tidy.py</span></div>
           <pre class="code" data-type="view"><code><span class="c"># tidy.py: move finished exports into dated folders</span>
@@ -427,6 +455,12 @@ inbox = Path(<span class="s">"D:/exports"</span>)
     time.<span class="f">sleep</span>(<span class="n">5</span>)</code></pre>
         </div>
       </div>
+    </div>
+    <div class="stack">
+      <div class="st glass"><h3>Desktop apps</h3><p>Python, Electron.js</p></div>
+      <div class="st glass"><h3>Websites and web apps</h3><p>WordPress, Firebase</p></div>
+      <div class="st glass"><h3>Business systems</h3><p>Odoo</p></div>
+      <div class="st glass"><h3>Automation scripts</h3><p>AutoHotkey</p></div>
     </div>
     <div class="tools glass">
       <article class="tool">
@@ -499,7 +533,8 @@ inbox = Path(<span class="s">"D:/exports"</span>)
       });
     }
     mark(".uses", ""); mark(".s-head", "");
-    mark(".skill .pic", "pic", 140); mark(".skill .txt", "", 140);
+    mark(".group .g-media", "pic", 0); mark(".group .g-body", "", 160); mark(".st", "", 0);
+    document.querySelectorAll(".st").forEach(function (el, i) { el.style.setProperty("--d", (i * 90) + "ms"); });
     mark(".tool", "", 0); mark(".contact", "panel"); mark("footer .wrap", "");
     document.querySelectorAll(".tool").forEach(function (el, i) { el.style.setProperty("--d", (i * 90) + "ms"); });
     var els = document.querySelectorAll("[data-rv]");
@@ -644,9 +679,9 @@ inbox = Path(<span class="s">"D:/exports"</span>)
     }
   };
   if (!RM && "IntersectionObserver" in window) {
-    document.querySelectorAll(".skill[data-fx]").forEach(function (card) {
+    document.querySelectorAll(".sub[data-fx]").forEach(function (card) {
       var make = FX[card.getAttribute("data-fx")]; if (!make) return;
-      var box = card.querySelector(".txt"), run = make(Array.prototype.slice.call(box.querySelectorAll(".lede, li")));
+      var box = card, run = make(Array.prototype.slice.call(box.querySelectorAll("li")));
       var o = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { o.disconnect(); run(); } }, { threshold: .35 });
       o.observe(box);
     });
@@ -679,9 +714,24 @@ inbox = Path(<span class="s">"D:/exports"</span>)
     var o = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { t.start(); o.disconnect(); } }, { threshold: .5 });
     o.observe(pre);
   });
-  document.querySelectorAll('pre[data-type="hover"]').forEach(function (pre) {
-    var t = typer(pre), card = pre.closest(".skill");
-    card.addEventListener("mouseenter", t.start); card.addEventListener("focus", t.start);
+  /* skill groups: pick a skill to switch the picture and the code on it */
+  document.querySelectorAll(".group").forEach(function (g) {
+    var subs = g.querySelectorAll(".sub"), imgs = g.querySelectorAll(".pic img"), pres = g.querySelectorAll(".pic-code"), typers = [];
+    pres.forEach(function (p) { typers.push(typer(p)); });
+    function set(k) {
+      [subs, imgs, pres].forEach(function (list) { list.forEach(function (el) { el.classList.toggle("on", el.getAttribute("data-k") === String(k)); }); });
+      typers[k].start();
+    }
+    subs.forEach(function (s) {
+      var k = +s.getAttribute("data-k");
+      s.addEventListener("mouseenter", function () { set(k); });
+      s.addEventListener("focus", function () { set(k); });
+      s.addEventListener("click", function () { set(k); });
+    });
+    if ("IntersectionObserver" in window) {
+      var o = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { typers[0].start(); o.disconnect(); } }, { threshold: .4 });
+      o.observe(g);
+    } else typers[0].start();
   });
 
   /* copy email */
