@@ -247,9 +247,10 @@ pre.code.done code::after { animation: caret 1s steps(1) 3 forwards; }
 .tri { position: absolute; inset: 0; overflow: hidden; background: var(--mask); }
 .s1 { clip-path: polygon(0 0, calc(var(--a) - var(--g)) 0, calc(var(--b) - var(--g)) 100%, 0 100%); }
 .s2 { clip-path: polygon(calc(var(--a) + var(--g)) 0, 100% 0, 100% 100%, calc(var(--b) + var(--g)) 100%); }
-.tri img { position: absolute; left: var(--x, 0%); top: var(--y, 0%); width: var(--w, 120%); height: var(--w, 120%); max-width: none; object-fit: cover; opacity: 0; transition: opacity 2400ms ease-in-out, transform 4000ms cubic-bezier(.3, 0, .2, 1); }
+.tri img { position: absolute; left: var(--x, 0%); top: var(--y, 0%); width: var(--w, 120%); height: var(--w, 120%); max-width: none; object-fit: cover; opacity: 0; filter: blur(2.5px) saturate(.92); transition: opacity 2400ms ease-in-out, transform 4000ms cubic-bezier(.3, 0, .2, 1), filter 2400ms ease-in-out; }
 .tri img.on { opacity: 1; }
-.tri:hover img.on { transform: scale(1.02); }
+.tri:hover img.on { transform: scale(1.02); filter: none; }
+@media (hover: none) { .tri img { filter: blur(1px) saturate(.95); } }
 .tri::after { content: ""; position: absolute; inset: 0; pointer-events: none; }
 .s1::after { background: linear-gradient(135deg, rgba(5, 5, 6, .82) 0%, rgba(5, 5, 6, .35) 30%, rgba(5, 5, 6, 0) 52%); }
 .s2::after { background: linear-gradient(315deg, rgba(5, 5, 6, .82) 0%, rgba(5, 5, 6, .35) 30%, rgba(5, 5, 6, 0) 52%); }
