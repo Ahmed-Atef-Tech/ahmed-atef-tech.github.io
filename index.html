@@ -238,6 +238,64 @@ pre.code.done code::after { animation: caret 1s steps(1) 3 forwards; }
 @media (max-width: 520px) { .group .pic .pic-code.on { display: none; } }
 @media (max-width: 900px) { .stack { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 
+/* ---------- diagonal split: S1 and S2 share one block, cut on the diagonal ---------- */
+@property --a { syntax: "<percentage>"; inherits: true; initial-value: 100%; }
+@property --b { syntax: "<percentage>"; inherits: true; initial-value: 0%; }
+.split { position: relative; --a: 100%; --b: 0%; --g: 6px; aspect-ratio: 16 / 9.5; min-height: 560px; max-height: 760px; border-radius: 28px; overflow: hidden; box-shadow: 0 0 0 1px var(--glass-line), 0 30px 80px rgba(0, 0, 0, .4); transition: --a 1100ms var(--ease), --b 1100ms var(--ease); }
+.split:has(.s1:hover) { --b: 18%; }
+.split:has(.s2:hover) { --a: 82%; }
+.tri { position: absolute; inset: 0; overflow: hidden; background: var(--mask); }
+.s1 { clip-path: polygon(0 0, calc(var(--a) - var(--g)) 0, calc(var(--b) - var(--g)) 100%, 0 100%); }
+.s2 { clip-path: polygon(calc(var(--a) + var(--g)) 0, 100% 0, 100% 100%, calc(var(--b) + var(--g)) 100%); }
+.tri img { position: absolute; width: 120%; height: 120%; max-width: none; object-fit: cover; opacity: 0; transition: opacity 1000ms var(--ease), transform 1400ms var(--ease); }
+.s1 img { left: -24%; top: -4%; }
+.s2 img { left: 4%; top: -16%; }
+.tri img.on { opacity: 1; }
+.tri:hover img.on { transform: scale(1.05); }
+.tri::after { content: ""; position: absolute; inset: 0; pointer-events: none; }
+.s1::after { background: linear-gradient(135deg, rgba(5, 5, 6, .82) 0%, rgba(5, 5, 6, .35) 30%, rgba(5, 5, 6, 0) 52%); }
+.s2::after { background: linear-gradient(315deg, rgba(5, 5, 6, .82) 0%, rgba(5, 5, 6, .35) 30%, rgba(5, 5, 6, 0) 52%); }
+.tx { position: absolute; z-index: 2; width: min(440px, 42%); color: var(--light); }
+.s1 .tx { left: clamp(22px, 3.4vw, 46px); top: clamp(22px, 3.4vw, 46px); }
+.s2 .tx { right: clamp(22px, 3.4vw, 46px); bottom: clamp(22px, 3.4vw, 46px); text-align: right; }
+.tx h3 { margin: 0 0 12px; font: 700 clamp(2rem, 4vw, 3.4rem)/.94 var(--display); letter-spacing: -.045em; }
+.tx p { margin: 0 0 18px; color: rgba(243, 244, 241, .82); max-width: 34ch; }
+.s2 .tx p { margin-left: auto; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.s2 .tags { justify-content: flex-end; }
+.tag { font: 500 .86rem var(--body); padding: 7px 12px; border-radius: 8px; cursor: pointer; color: rgba(243, 244, 241, .8); background: rgba(8, 8, 9, .32); border: 1px solid rgba(255, 255, 255, .16); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); transition: color 300ms, background-color 300ms, border-color 300ms; }
+.tag:hover { border-color: rgba(255, 255, 255, .4); }
+.tag.on { color: #170F09; background: var(--copper); border-color: var(--copper); }
+.js .split[data-rv] { opacity: 1; transform: none; }
+.js .split[data-rv]:not(.in) { --a: 50%; --b: 50%; }
+.js .split[data-rv] .tx { opacity: 0; transform: translateY(20px); transition: opacity 900ms var(--ease) 600ms, transform 1000ms var(--ease) 600ms; }
+.js .split[data-rv].in .tx { opacity: 1; transform: none; }
+@media (max-width: 760px) {
+  .split { aspect-ratio: auto; min-height: 0; max-height: none; display: grid; overflow: visible; box-shadow: none; border-radius: 0; }
+  .tri { position: relative; inset: auto; min-height: 430px; border-radius: 24px; }
+  .s1 { clip-path: polygon(0 0, 100% 0, 100% calc(100% - 46px), 0 100%); }
+  .s2 { margin-top: -38px; clip-path: polygon(0 46px, 100% 8px, 100% 100%, 0 100%); }
+  .tri img { width: 100%; height: 100%; left: 0; top: 0; }
+  .tx { width: auto; left: 22px !important; right: 22px !important; }
+  .s1 .tx { top: 22px; }
+  .s2 .tx { bottom: 22px; }
+}
+
+/* ---------- S3: tools ---------- */
+.s3 { margin-top: 18px; border-radius: 28px; padding: clamp(22px, 3.4vw, 46px); display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(22px, 4vw, 48px); align-items: start; }
+.s3 h3 { margin: 0 0 14px; font: 700 clamp(2rem, 4vw, 3.4rem)/.94 var(--display); letter-spacing: -.045em; }
+.s3-text > p { color: var(--ink-2); max-width: 48ch; margin: 0 0 22px; }
+.s3 .code-card { margin-top: 0; }
+.tl { border-top: 1px solid var(--line); margin-bottom: 18px; }
+.tl li { display: grid; grid-template-columns: minmax(0, 150px) minmax(0, 1fr) auto; gap: 4px 16px; align-items: baseline; padding: 12px 0; border-bottom: 1px solid var(--line); }
+.tl b { font: 600 1rem var(--display); letter-spacing: -.01em; }
+.tl span { color: var(--ink-2); font-size: .95rem; }
+.tl a { color: var(--ink); font-size: .92rem; font-weight: 500; border-bottom: 1px solid var(--copper); transition: color 250ms; }
+.tl a:hover { color: var(--copper); }
+.s3 .built { margin: 0; color: var(--copper); font-size: .92rem; }
+@media (max-width: 900px) { .s3 { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 460px) { .tl li { grid-template-columns: minmax(0, 1fr) auto; } .tl span { grid-column: 1 / -1; grid-row: 2; } }
+
 /* ---------- scroll entrances ---------- */
 .js [data-rv] { opacity: 0; transform: translateY(38px); transition: opacity 900ms var(--ease), transform 1100ms var(--ease); transition-delay: var(--d, 0ms); }
 .js [data-rv].in { opacity: 1; transform: none; }
@@ -363,83 +421,30 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; a
   <section class="wrap" id="skills" aria-labelledby="skills-title">
     <div class="s-head">
       <h2 id="skills-title">What I work on</h2>
-      <p>Two sides of the same product: the electronics, and the enclosure and machine around them. Point at a skill to see it.</p>
+      <p>The electronics, the enclosure and machine around them, and the tools I build along the way.</p>
     </div>
-    <div class="groups">
-      <article class="group glass">
-        <div class="g-media">
-          <div class="pic"><img data-k="0" class="on" src="assets/blur/pcb.jpg" alt="" loading="lazy" width="800" height="500"><img data-k="1" src="assets/blur/sim.jpg" alt="" loading="lazy" width="800" height="500"><img data-k="2" src="assets/blur/embedded.jpg" alt="" loading="lazy" width="800" height="500"><pre class="pic-code on" data-k="0" aria-hidden="true"><code><span class="c">;; rules for the mains side</span>
-(<span class="k">net</span> <span class="s">"VBUS"</span> (<span class="f">node</span> U1 <span class="n">4</span>) (<span class="f">node</span> C7 <span class="n">1</span>))
-(<span class="k">rule</span> <span class="s">"power"</span> (<span class="f">track_width</span> (<span class="k">min</span> <span class="n">0.5mm</span>)))
-(<span class="k">rule</span> <span class="s">"mains"</span> (<span class="f">clearance</span> (<span class="k">min</span> <span class="n">6mm</span>)))
-<span class="c">;; drc: 0 errors, 0 warnings</span></code></pre><pre class="pic-code" data-k="1" aria-hidden="true"><code><span class="c"># usb 2.0 pair, check before layout sign-off</span>
-diff_impedance = <span class="n">90</span> ohm  <span class="c"># target</span>
-eye_height     = <span class="n">142</span> mV  <span class="k">PASS</span>
-pdn_ripple_3v3 = <span class="n">21</span> mV   <span class="k">PASS</span>
-ir_drop_3v3    = <span class="n">18</span> mV   <span class="k">PASS</span></code></pre><pre class="pic-code" data-k="2" aria-hidden="true"><code><span class="c">// read the board temperature, switch the fan</span>
-<span class="k">void</span> <span class="f">loop</span>(<span class="k">void</span>) {
-  <span class="k">float</span> t = <span class="f">ntc_read_celsius</span>(ADC_CH1);
-  <span class="f">relay_set</span>(FAN, t &gt; <span class="n">45.0f</span>);
-  <span class="f">HAL_Delay</span>(<span class="n">100</span>);
-}</code></pre><div class="chip"><h3>Electronics design</h3><span>PCB, simulation, embedded</span></div><span class="ref" aria-hidden="true">U1</span><span class="fid" aria-hidden="true"></span></div>
-        </div>
-        <div class="g-body">
-          <p class="lede">From the circuit to a working board. I design it, check it in simulation, and write the firmware that runs it.</p>
-        <div class="sub on" data-k="0" data-fx="electric" tabindex="0">
-          <h4>PCB design</h4>
-          <ul><li>Schematic capture and part selection</li><li>2-layer and 4-layer layout</li><li>Power stages, isolated 220 V switching and motor drivers</li><li>Design for manufacturing and bring-up on the bench</li></ul>
-        </div>
-        <div class="sub" data-k="1" data-fx="scope" tabindex="0">
-          <h4>Simulation and integrity</h4>
-          <ul><li>Circuit simulation before anything gets built</li><li>Signal integrity on high-speed traces</li><li>Power integrity: supply ripple and voltage drop</li><li>Electromagnetic simulation of boards and enclosures</li></ul>
-        </div>
-        <div class="sub" data-k="2" data-fx="type" tabindex="0">
-          <h4>Embedded systems</h4>
-          <ul><li>STM32 and ESP32 based boards</li><li>Firmware in C and C++</li><li>Arduino for quick prototypes</li></ul>
-        </div>
-        </div>
+    <div class="split">
+      <article class="tri s1">
+        <img class="on" src="assets/blur/pcb.jpg" alt="" loading="lazy" width="800" height="500"><img src="assets/blur/sim.jpg" alt="" loading="lazy" width="800" height="500"><img src="assets/blur/embedded.jpg" alt="" loading="lazy" width="800" height="500">
+        <div class="tx"><h3>Electronics design</h3><p>I design the board, check it in simulation and write the firmware that runs it.</p><div class="tags"><button class="tag on" type="button" aria-pressed="true">PCB design</button><button class="tag" type="button" aria-pressed="false">Simulation</button><button class="tag" type="button" aria-pressed="false">Embedded</button></div></div>
       </article>
-      <article class="group glass">
-        <div class="g-media">
-          <div class="pic"><img data-k="0" class="on" src="assets/blur/print.jpg" alt="" loading="lazy" width="800" height="500"><img data-k="1" src="assets/blur/sheet.jpg" alt="" loading="lazy" width="800" height="500"><img data-k="2" src="assets/blur/pneumatics.jpg" alt="" loading="lazy" width="800" height="500"><pre class="pic-code on" data-k="0" aria-hidden="true"><code><span class="c">; layer 42, z = 8.40</span>
-<span class="k">G1</span> Z<span class="n">8.40</span> F<span class="n">600</span>
-<span class="k">G1</span> X<span class="n">112.3</span> Y<span class="n">98.1</span> E<span class="n">3.214</span> F<span class="n">1800</span>
-<span class="k">G1</span> X<span class="n">118.9</span> Y<span class="n">98.4</span> E<span class="n">3.268</span>
-<span class="k">M106</span> S<span class="n">255</span>   <span class="c">; part fan on</span></code></pre><pre class="pic-code" data-k="1" aria-hidden="true"><code><span class="c">// enclosure_front.sldprt</span>
-thickness   = <span class="n">1.5</span> mm   <span class="c">// aluminum 5052</span>
-bend_radius = <span class="n">1.5</span> mm
-k_factor    = <span class="n">0.44</span>
-vent_slots  = <span class="n">9</span> x <span class="n">45</span> mm
-<span class="f">flat_pattern</span>() <span class="k">-&gt;</span> <span class="s">"front.dxf"</span></code></pre><pre class="pic-code" data-k="2" aria-hidden="true"><code><span class="c">// station sequence: A+ B+ B- A-</span>
-<span class="k">IF</span> start <span class="k">AND</span> home <span class="k">THEN</span>
-  valve_A := <span class="k">TRUE</span>;   <span class="c">// extend A</span>
-<span class="k">END_IF</span>;
-<span class="k">IF</span> a_out <span class="k">THEN</span> valve_B := <span class="k">TRUE</span>; <span class="k">END_IF</span>;</code></pre><div class="chip"><h3>Enclosures and machines</h3><span>3D printing, sheet metal, pneumatics</span></div><span class="ref" aria-hidden="true">M1</span><span class="fid" aria-hidden="true"></span></div>
-        </div>
-        <div class="g-body">
-          <p class="lede">The physical side: the enclosure that protects the board, and the machine it controls.</p>
-        <div class="sub on" data-k="0" data-fx="print" tabindex="0">
-          <h4>3D-printed enclosures</h4>
-          <ul><li>Enclosures and parts designed for FDM printing</li><li>Fit checks between the board and its case</li><li>Jigs and fixtures for production</li></ul>
-        </div>
-        <div class="sub" data-k="1" data-fx="fold" tabindex="0">
-          <h4>Sheet-metal enclosures and frames</h4>
-          <ul><li>Sheet-metal enclosures, brackets and panels</li><li>Bends and tolerances a workshop can make</li><li>Machine frames and mounts</li></ul>
-        </div>
-        <div class="sub" data-k="2" data-fx="pneumatic" tabindex="0">
-          <h4>Machines and pneumatics</h4>
-          <ul><li>Building FDM 3D printers and CNC machines</li><li>Motion systems: belts, lead screws and linear rails</li><li>Pneumatic stations with cylinders, valves and sequencing</li></ul>
-        </div>
-        </div>
+      <article class="tri s2">
+        <img class="on" src="assets/blur/print.jpg" alt="" loading="lazy" width="800" height="500"><img src="assets/blur/sheet.jpg" alt="" loading="lazy" width="800" height="500"><img src="assets/blur/pneumatics.jpg" alt="" loading="lazy" width="800" height="500">
+        <div class="tx"><h3>Enclosures and machines</h3><p>The enclosure that protects the board, and the machine it controls.</p><div class="tags"><button class="tag on" type="button" aria-pressed="true">3D-printed enclosures</button><button class="tag" type="button" aria-pressed="false">Sheet metal</button><button class="tag" type="button" aria-pressed="false">Machines and pneumatics</button></div></div>
       </article>
     </div>
-  </section>
 
-  <section class="wrap block" id="tools" aria-labelledby="tools-title">
-    <div class="s-head top">
-      <h2 id="tools-title">I build my own tools</h2>
-      <div class="s-side">
-        <p>When something slows my work down, I build the tool myself instead of waiting on anyone. Desktop apps, websites and scripts, built fast with AI-assisted coding.</p>
+    <article class="s3 glass" id="tools" aria-labelledby="tools-title">
+      <div class="s3-text">
+        <h3 id="tools-title">I build my own tools</h3>
+        <p>When a problem gets in the way, I solve it, even when it's outside my field. If the work needs an app, a website or a script, I build it myself.</p>
+        <ul class="tl">
+          <li><b>Multi Researcher</b><span>Searches many sources at once</span><a href="https://github.com/Ahmed-Atef-Tech/multi-researcher/releases/latest/download/MultiResearcher.exe">Download</a></li>
+          <li><b>Shutdown Timer</b><span>Turns the PC off after a long task</span><a href="https://github.com/Ahmed-Atef-Tech/shutdown-timer/releases/latest/download/ShutdownTimer.exe">Download</a></li>
+          <li><b>AI Files Filter</b><span>Sorts photos with AI on your own computer</span><a href="https://github.com/Ahmed-Atef-Tech/AI-Files-Filter" target="_blank" rel="noopener">Source</a></li>
+        </ul>
+        <p class="built">Python, Electron.js, WordPress, Firebase and AutoHotkey, with AI-assisted coding.</p>
+      </div>
         <div class="code-card" aria-hidden="true">
           <div class="code-bar"><i></i><i></i><i></i><span>tidy.py</span></div>
           <pre class="code" data-type="view"><code><span class="c"># tidy.py: move finished exports into dated folders</span>
@@ -454,38 +459,9 @@ inbox = Path(<span class="s">"D:/exports"</span>)
         shutil.<span class="f">move</span>(f, day / f.name)
     time.<span class="f">sleep</span>(<span class="n">5</span>)</code></pre>
         </div>
-      </div>
-    </div>
-    <div class="stack">
-      <div class="st glass"><h3>Desktop apps</h3><p>Python, Electron.js</p></div>
-      <div class="st glass"><h3>Websites and web apps</h3><p>WordPress, Firebase</p></div>
-      <div class="st glass"><h3>Business systems</h3><p>Odoo</p></div>
-      <div class="st glass"><h3>Automation scripts</h3><p>AutoHotkey</p></div>
-    </div>
-    <div class="tools glass">
-      <article class="tool">
-        <h3>Multi Researcher</h3>
-        <div class="desc"><p>Searches several sources at once and collects the results in one window, instead of jumping between tabs.</p>
-          <div class="acts"><a href="https://github.com/Ahmed-Atef-Tech/multi-researcher/releases/latest/download/MultiResearcher.exe">Download for Windows</a><a href="https://github.com/Ahmed-Atef-Tech/multi-researcher" target="_blank" rel="noopener">Source code</a></div></div>
-        <div class="thumb"><img src="assets/multi-researcher-preview.png" alt="Multi Researcher app window" loading="lazy"></div>
-      </article>
-      <article class="tool">
-        <h3>Shutdown Timer</h3>
-        <div class="desc"><p>Schedules a Windows shutdown with a countdown in the system tray, so the PC turns itself off after a long task.</p>
-          <div class="acts"><a href="https://github.com/Ahmed-Atef-Tech/shutdown-timer/releases/latest/download/ShutdownTimer.exe">Download for Windows</a><a href="https://github.com/Ahmed-Atef-Tech/shutdown-timer" target="_blank" rel="noopener">Source code</a></div></div>
-        <div class="thumb"><img src="assets/shutdown-timer-preview.png" alt="Shutdown Timer app window" loading="lazy"></div>
-      </article>
-      <article class="tool short">
-        <h3>AI Files Filter</h3>
-        <div class="desc"><p>Sorts images into folders using AI models that run on your own computer.</p>
-          <div class="acts"><a href="https://github.com/Ahmed-Atef-Tech/AI-Files-Filter" target="_blank" rel="noopener">Source code</a></div></div>
-      </article>
-      <article class="tool short">
-        <h3>AutoHotkey scripts</h3>
-        <div class="desc"><p>Small automations for repetitive Windows work.</p></div>
-      </article>
-    </div>
+    </article>
   </section>
+
 
   <section class="panel contact" id="contact" aria-labelledby="contact-title">
     <div class="panel-bg" aria-hidden="true"><img src="assets/photo/contact.jpg" alt="" loading="lazy" width="2200" height="1228"></div>
@@ -533,7 +509,7 @@ inbox = Path(<span class="s">"D:/exports"</span>)
       });
     }
     mark(".uses", ""); mark(".s-head", "");
-    mark(".group .g-media", "pic", 0); mark(".group .g-body", "", 160); mark(".st", "", 0);
+    mark(".split", "split"); mark(".s3", "");
     document.querySelectorAll(".st").forEach(function (el, i) { el.style.setProperty("--d", (i * 90) + "ms"); });
     mark(".tool", "", 0); mark(".contact", "panel"); mark("footer .wrap", "");
     document.querySelectorAll(".tool").forEach(function (el, i) { el.style.setProperty("--d", (i * 90) + "ms"); });
@@ -732,6 +708,23 @@ inbox = Path(<span class="s">"D:/exports"</span>)
       var o = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { typers[0].start(); o.disconnect(); } }, { threshold: .4 });
       o.observe(g);
     } else typers[0].start();
+  });
+
+  /* S1 and S2: each triangle cycles through its skills; pointing at a tag picks one */
+  document.querySelectorAll(".tri").forEach(function (t, ti) {
+    var imgs = t.querySelectorAll("img"), tags = t.querySelectorAll(".tag"), k = 0, hold = false;
+    function set(n) {
+      k = n;
+      imgs.forEach(function (im, i) { im.classList.toggle("on", i === n); });
+      tags.forEach(function (b, i) { b.classList.toggle("on", i === n); b.setAttribute("aria-pressed", i === n ? "true" : "false"); });
+    }
+    tags.forEach(function (b, i) {
+      b.addEventListener("mouseenter", function () { hold = true; set(i); });
+      b.addEventListener("focus", function () { hold = true; set(i); });
+      b.addEventListener("click", function () { hold = true; set(i); });
+    });
+    t.addEventListener("mouseleave", function () { hold = false; });
+    if (!RM) setInterval(function () { if (!hold && !document.hidden) set((k + 1) % imgs.length); }, 3600 + ti * 500);
   });
 
   /* copy email */
