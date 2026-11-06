@@ -247,9 +247,7 @@ pre.code.done code::after { animation: caret 1s steps(1) 3 forwards; }
 .tri { position: absolute; inset: 0; overflow: hidden; background: var(--mask); }
 .s1 { clip-path: polygon(0 0, calc(var(--a) - var(--g)) 0, calc(var(--b) - var(--g)) 100%, 0 100%); }
 .s2 { clip-path: polygon(calc(var(--a) + var(--g)) 0, 100% 0, 100% 100%, calc(var(--b) + var(--g)) 100%); }
-.tri img { position: absolute; width: 120%; height: 120%; max-width: none; object-fit: cover; opacity: 0; transition: opacity 2400ms ease-in-out, transform 4000ms cubic-bezier(.3, 0, .2, 1); }
-.s1 img { left: -24%; top: -4%; }
-.s2 img { left: 4%; top: -16%; }
+.tri img { position: absolute; left: var(--x, 0%); top: var(--y, 0%); width: var(--w, 120%); height: var(--w, 120%); max-width: none; object-fit: cover; opacity: 0; transition: opacity 2400ms ease-in-out, transform 4000ms cubic-bezier(.3, 0, .2, 1); }
 .tri img.on { opacity: 1; }
 .tri:hover img.on { transform: scale(1.02); }
 .tri::after { content: ""; position: absolute; inset: 0; pointer-events: none; }
@@ -425,11 +423,11 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; a
     </div>
     <div class="split">
       <article class="tri s1">
-        <img class="on" src="assets/blur/pcb.jpg" alt="" loading="lazy" width="800" height="500"><img src="assets/blur/sim.jpg" alt="" loading="lazy" width="800" height="500"><img src="assets/blur/embedded.jpg" alt="" loading="lazy" width="800" height="500">
+        <img class="on" style="--x:-50%;--y:-35%;--w:150%" src="assets/blur/pcb.jpg" alt="" loading="lazy" width="800" height="500"><img style="--x:-50%;--y:-10%;--w:150%" src="assets/blur/sim.jpg" alt="" loading="lazy" width="800" height="500"><img style="--x:-50%;--y:-35%;--w:150%" src="assets/blur/embedded.jpg" alt="" loading="lazy" width="800" height="500">
         <div class="tx"><h3>Electronics design</h3><p>I design the board, check it in simulation and write the firmware that runs it.</p><div class="tags"><button class="tag on" type="button" aria-pressed="true">PCB design</button><button class="tag" type="button" aria-pressed="false">Simulation</button><button class="tag" type="button" aria-pressed="false">Embedded</button></div></div>
       </article>
       <article class="tri s2">
-        <img class="on" src="assets/blur/print.jpg" alt="" loading="lazy" width="800" height="500"><img src="assets/blur/sheet.jpg" alt="" loading="lazy" width="800" height="500"><img src="assets/blur/pneumatics.jpg" alt="" loading="lazy" width="800" height="500">
+        <img class="on" style="--x:0%;--y:-30%;--w:140%" src="assets/blur/print.jpg" alt="" loading="lazy" width="800" height="500"><img style="--x:0%;--y:-45%;--w:145%" src="assets/blur/sheet.jpg" alt="" loading="lazy" width="800" height="500"><img style="--x:0%;--y:-45%;--w:145%" src="assets/blur/pneumatics.jpg" alt="" loading="lazy" width="800" height="500">
         <div class="tx"><h3>Enclosures and machines</h3><p>The enclosure that protects the board, and the machine it controls.</p><div class="tags"><button class="tag on" type="button" aria-pressed="true">3D-printed enclosures</button><button class="tag" type="button" aria-pressed="false">Sheet metal</button><button class="tag" type="button" aria-pressed="false">Machines and pneumatics</button></div></div>
       </article>
     </div>
