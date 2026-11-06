@@ -242,14 +242,20 @@ pre.code.done code::after { animation: caret 1s steps(1) 3 forwards; }
 @property --a { syntax: "<percentage>"; inherits: true; initial-value: 100%; }
 @property --b { syntax: "<percentage>"; inherits: true; initial-value: 0%; }
 .split { position: relative; --a: 100%; --b: 0%; --g: 6px; aspect-ratio: 16 / 9.5; min-height: 560px; max-height: 760px; border-radius: 28px; overflow: hidden; box-shadow: 0 0 0 1px var(--glass-line), 0 30px 80px rgba(0, 0, 0, .4); transition: --a 2400ms cubic-bezier(.45, 0, .2, 1), --b 2400ms cubic-bezier(.45, 0, .2, 1); }
-.split:has(.s1:hover) { --b: 7%; }
-.split:has(.s2:hover) { --a: 93%; }
+/* hover: the side you point at comes into focus, the other side settles back */
+.split::before { content: ""; position: absolute; inset: 0; clip-path: polygon(calc(var(--a) - var(--g)) 0, calc(var(--a) + var(--g)) 0, calc(var(--b) + var(--g)) 100%, calc(var(--b) - var(--g)) 100%); background: linear-gradient(180deg, rgba(232, 161, 91, .05), rgba(232, 161, 91, .55) 50%, rgba(232, 161, 91, .05)); opacity: .35; transition: opacity 2400ms ease-in-out; }
+.tx > * { transition: opacity 1600ms ease-in-out; }
+@media (hover: hover) {
+  .split:has(.tri:hover)::before { opacity: 1; }
+  .split:has(.s1:hover) .s2 img.on, .split:has(.s2:hover) .s1 img.on { filter: blur(5px) brightness(.5) saturate(.6); }
+  .split:has(.s1:hover) .s2 .tx > *, .split:has(.s2:hover) .s1 .tx > * { opacity: .35; }
+}
 .tri { position: absolute; inset: 0; overflow: hidden; background: var(--mask); }
 .s1 { clip-path: polygon(0 0, calc(var(--a) - var(--g)) 0, calc(var(--b) - var(--g)) 100%, 0 100%); }
 .s2 { clip-path: polygon(calc(var(--a) + var(--g)) 0, 100% 0, 100% 100%, calc(var(--b) + var(--g)) 100%); }
 .tri img { position: absolute; left: var(--x, 0%); top: var(--y, 0%); width: var(--w, 120%); height: var(--w, 120%); max-width: none; object-fit: cover; opacity: 0; filter: blur(2.5px) saturate(.92); transition: opacity 2400ms ease-in-out, transform 4000ms cubic-bezier(.3, 0, .2, 1), filter 2400ms ease-in-out; }
 .tri img.on { opacity: 1; }
-.tri:hover img.on { transform: scale(1.02); filter: none; }
+.tri:hover img.on { transform: scale(1.035); filter: none; }
 @media (hover: none) { .tri img { filter: blur(1px) saturate(.95); } }
 .tri::after { content: ""; position: absolute; inset: 0; pointer-events: none; }
 .s1::after { background: linear-gradient(135deg, rgba(5, 5, 6, .82) 0%, rgba(5, 5, 6, .35) 30%, rgba(5, 5, 6, 0) 52%); }
