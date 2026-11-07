@@ -49,6 +49,13 @@ h1, h2, h3 { font-family: var(--display); text-wrap: balance; }
 .bg::before { content: ""; position: absolute; inset: 0; background: radial-gradient(120% 80% at 50% 120%, rgba(11,10,12,.7), rgba(11,10,12,0) 60%), linear-gradient(180deg, rgba(11,10,12,.1), rgba(11,10,12,.3)); }
 .bg::after { content: ""; position: absolute; inset: 0; opacity: .5; mix-blend-mode: overlay; background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='180' height='180' filter='url(%23n)' opacity='.5'/></svg>"); }
 .glass { background: var(--glass); border: 1px solid var(--glass-line); backdrop-filter: blur(18px) saturate(1.2); -webkit-backdrop-filter: blur(18px) saturate(1.2); }
+.nw { white-space: nowrap; }
+/* phones: live blur behind big panels costs a lot while scrolling, and the page behind is already blurred */
+@media (max-width: 760px) {
+  .glass { background: rgba(22, 20, 24, .74); backdrop-filter: none; -webkit-backdrop-filter: none; }
+  .code-card { background: rgba(6, 5, 7, .7); backdrop-filter: none; -webkit-backdrop-filter: none; }
+  .status { font-size: .84rem; }
+}
 :focus-visible { outline: 2px solid var(--copper); outline-offset: 3px; border-radius: 4px; }
 .wrap { max-width: 1240px; margin: 0 auto; padding-left: max(var(--gutter), env(safe-area-inset-left, 0px)); padding-right: max(var(--gutter), env(safe-area-inset-right, 0px)); }
 
@@ -95,6 +102,7 @@ html.calm .lo-halo { display: block; position: absolute; left: 50%; top: 50%; wi
 .nav ul a { display: block; padding: 7px 12px; border-radius: 6px; font-size: .9rem; color: rgba(243, 244, 241, .72); transition: color 250ms, background-color 250ms; }
 .nav ul a:hover { color: var(--light); background: rgba(243, 244, 241, .08); }
 .nav .btn { height: 36px; padding: 0 14px; font-size: .88rem; }
+@media (max-width: 760px) { .nav .btn { height: 42px; padding: 0 16px; } .mark { padding: 9px 4px; } }
 @media (max-width: 600px) { .nav ul { display: none; } }
 
 /* ---------- dark panels ---------- */
@@ -177,6 +185,7 @@ section.block { padding-top: clamp(100px, 13vw, 170px); }
 /* ---------- contact ---------- */
 .contact { margin-top: clamp(100px, 13vw, 170px); padding: clamp(40px, 7vw, 96px) clamp(20px, 5vw, 72px); min-height: 560px; display: flex; flex-direction: column; justify-content: flex-end; gap: 30px; }
 .contact .panel-bg img { object-position: 62% 25%; }
+@media (max-width: 760px) { .contact .panel-bg img { object-position: 50% 22%; } .hero .panel-bg img { object-position: 50% 30% !important; } }
 .contact h2 { font-weight: 700; font-size: clamp(2.4rem, 6.8vw, 6.2rem); line-height: .92; letter-spacing: -.055em; max-width: 13ch; }
 .contact .sub { color: rgba(243, 244, 241, .8); max-width: 48ch; }
 .mail { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
@@ -191,6 +200,7 @@ section.block { padding-top: clamp(100px, 13vw, 170px); }
 .code-bar span { margin-left: 6px; }
 pre.code { margin: 0; padding: 14px 16px 16px; font: 400 .82rem/1.7 var(--code); white-space: pre; overflow-x: auto; min-height: 12.5em; }
 pre.code code { font: inherit; }
+@media (max-width: 760px) { pre.code { white-space: pre-wrap; overflow-wrap: anywhere; font-size: .76rem; } }
 pre.code code::after { content: ""; display: inline-block; width: .55em; height: 1.1em; margin-left: 1px; vertical-align: -.2em; background: #E39A5C; animation: caret 1s steps(1) infinite; }
 pre.code.done code::after { animation: caret 1s steps(1) 3 forwards; }
 @keyframes caret { 50% { opacity: 0; } 100% { opacity: 0; } }
@@ -285,16 +295,25 @@ pre.code.done code::after { animation: caret 1s steps(1) 3 forwards; }
 .js .split[data-rv] .tx { opacity: 0; transform: translateY(20px); transition: opacity 900ms var(--ease) 600ms, transform 1000ms var(--ease) 600ms; }
 .js .split[data-rv].in .tx { opacity: 1; transform: none; }
 @media (max-width: 760px) {
+  /* phones: each card is a photo on top and the words below, the cut stays between them */
   .split { aspect-ratio: auto; min-height: 0; max-height: none; display: grid; overflow: visible; box-shadow: none; border-radius: 0; }
-  .tri { position: relative; inset: auto; min-height: 540px; border-radius: 24px; }
-  .s1 { clip-path: polygon(0 0, 100% 0, 100% calc(100% - 46px), 0 100%); }
-  .s2 { margin-top: -38px; clip-path: polygon(0 46px, 100% 8px, 100% 100%, 0 100%); }
-  .tri img { width: 100%; height: 100%; left: 0; top: 0; }
-  .tx { width: auto; left: 22px !important; right: 22px !important; }
-  .s1 .tx { top: 22px; }
-  .s2 .tx { bottom: 22px; }
-  .tc { font-size: .68rem; padding: 10px 12px; }
+  .split::before { display: none; }
+  .tri { position: relative; inset: auto; min-height: 0; padding-top: 66vw; border-radius: 22px; background: #0D1210; }
+  .s1 { clip-path: polygon(0 0, 100% 0, 100% calc(100% - 40px), 0 100%); }
+  .s2 { margin-top: -32px; clip-path: polygon(0 40px, 100% 0, 100% 100%, 0 100%); }
+  .tri img { width: 100%; height: 66vw; left: 0; top: 0; object-position: var(--op, 50% 50%); filter: none; }
+  .tri:hover img.on { transform: none; }
+  .s1::after, .s2::after { background: linear-gradient(180deg, rgba(13, 18, 16, 0) 0, rgba(13, 18, 16, 0) calc(66vw - 130px), #0D1210 66vw); }
+  .s2::after { background: linear-gradient(180deg, rgba(13, 18, 16, .35) 0, rgba(13, 18, 16, 0) 90px, rgba(13, 18, 16, 0) calc(66vw - 130px), #0D1210 66vw); }
+  .tx { position: relative; inset: auto !important; width: auto; margin-top: -34px; padding: 0 20px 26px; text-align: left !important; }
+  .s1 .tx { padding-bottom: 66px; }
+  .tx h3 { font-size: clamp(2rem, 9vw, 2.5rem); margin-bottom: 10px; }
+  .tx p, .s2 .tx p { max-width: none; margin: 0 0 16px; }
+  .s2 .tags { justify-content: flex-start; }
+  .tag { min-height: 42px; padding: 9px 14px; font-size: .9rem; background: rgba(255, 255, 255, .05); backdrop-filter: none; -webkit-backdrop-filter: none; }
+  .tc, .s2 .tc { width: 100%; margin-left: 0; font-size: .7rem; padding: 11px 13px; background: rgba(0, 0, 0, .32); backdrop-filter: none; -webkit-backdrop-filter: none; }
 }
+@media (max-width: 380px) { .tc, .s2 .tc { font-size: .64rem; padding: 10px 11px; } }
 
 /* ---------- S3: tools ---------- */
 .s3 { margin-top: 18px; border-radius: 28px; padding: clamp(22px, 3.4vw, 46px); display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(22px, 4vw, 48px); align-items: start; }
@@ -307,6 +326,8 @@ pre.code.done code::after { animation: caret 1s steps(1) 3 forwards; }
 .tl span { color: var(--ink-2); font-size: .95rem; }
 .tl a { color: var(--ink); font-size: .92rem; font-weight: 500; border-bottom: 1px solid var(--copper); transition: color 250ms; }
 .tl a:hover { color: var(--copper); }
+.tl a { position: relative; }
+.tl a::before { content: ""; position: absolute; inset: -12px -12px; }
 .s3 .built { margin: 0; color: var(--copper); font-size: .92rem; }
 @media (max-width: 900px) { .s3 { grid-template-columns: minmax(0, 1fr); } }
 @media (max-width: 460px) { .tl li { grid-template-columns: minmax(0, 1fr) auto; } .tl span { grid-column: 1 / -1; grid-row: 2; } }
@@ -410,8 +431,8 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; a
 <main id="top">
   <svg class="route" id="route" aria-hidden="true"><path class="bed" id="route-bed"/><path class="cu" id="route-cu"/><g id="route-vias"></g></svg>
   <section class="panel hero" id="hero" aria-labelledby="hero-title">
-    <div class="panel-bg" aria-hidden="true"><img src="assets/photo/hero.jpg" alt="" width="1672" height="941" fetchpriority="high"></div>
-    <p class="status"><i aria-hidden="true"></i>Hardware Design Engineer @ GoSmart Solutions</p>
+    <div class="panel-bg" aria-hidden="true"><picture><source media="(max-width: 760px)" srcset="assets/m/hero.jpg"><img src="assets/photo/hero.jpg" alt="" width="1672" height="941" fetchpriority="high"></picture></div>
+    <p class="status"><i aria-hidden="true"></i><span>Hardware Design Engineer <span class="nw">@ GoSmart Solutions</span></span></p>
       <h1 id="hero-title">
         <span><b style="--i:0">Ahmed Atef.</b></span>
         <span><b style="--i:1">Circuit boards,</b></span>
@@ -437,7 +458,7 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; a
     </div>
     <div class="split">
       <article class="tri s1">
-        <img class="on" style="--x:-50%;--y:-35%;--w:150%" src="assets/blur/pcb.jpg" alt="" loading="lazy" width="800" height="500"><img style="--x:-50%;--y:-4%;--w:150%" src="assets/blur/sim.jpg" alt="" loading="lazy" width="800" height="500"><img style="--x:-50%;--y:-35%;--w:150%" src="assets/blur/embedded.jpg" alt="" loading="lazy" width="800" height="500">
+        <picture><source media="(max-width: 760px)" srcset="assets/m/pcb.jpg"><img class="on" style="--x:-50%;--y:-35%;--w:150%;--op:50% 62%" src="assets/blur/pcb.jpg" alt="" loading="lazy" width="800" height="500"></picture><picture><source media="(max-width: 760px)" srcset="assets/m/sim.jpg"><img style="--x:-50%;--y:-4%;--w:150%;--op:62% 40%" src="assets/blur/sim.jpg" alt="" loading="lazy" width="800" height="500"></picture><picture><source media="(max-width: 760px)" srcset="assets/m/embedded.jpg"><img style="--x:-50%;--y:-35%;--w:150%;--op:55% 60%" src="assets/blur/embedded.jpg" alt="" loading="lazy" width="800" height="500"></picture>
         <div class="tx"><h3>Electronics design</h3><p>I design the board, check it in simulation and write the firmware that runs it.</p><div class="tags"><button class="tag on" type="button" aria-pressed="true">PCB design</button><button class="tag" type="button" aria-pressed="false">Simulation</button><button class="tag" type="button" aria-pressed="false">Embedded</button></div><pre class="tc on" aria-hidden="true"><code><span class="c">;; pcb/rules: the mains side</span>
 (<span class="k">rule</span> <span class="s">"power"</span> (<span class="f">track_width</span> <span class="n">0.5mm</span>))
 (<span class="k">rule</span> <span class="s">"mains"</span> (<span class="f">clearance</span> <span class="n">6mm</span>))
@@ -453,7 +474,7 @@ ir_drop_3v3    = <span class="n">18</span> mV   <span class="k">PASS</span></cod
 }</code></pre></div>
       </article>
       <article class="tri s2">
-        <img class="on" style="--x:0%;--y:-30%;--w:140%" src="assets/blur/print.jpg" alt="" loading="lazy" width="800" height="500"><img style="--x:0%;--y:-45%;--w:145%" src="assets/blur/sheet.jpg" alt="" loading="lazy" width="800" height="500"><img style="--x:0%;--y:-45%;--w:145%" src="assets/blur/pneumatics.jpg" alt="" loading="lazy" width="800" height="500">
+        <picture><source media="(max-width: 760px)" srcset="assets/m/print.jpg"><img class="on" style="--x:0%;--y:-30%;--w:140%;--op:48% 45%" src="assets/blur/print.jpg" alt="" loading="lazy" width="800" height="500"></picture><picture><source media="(max-width: 760px)" srcset="assets/m/sheet.jpg"><img style="--x:0%;--y:-45%;--w:145%;--op:48% 60%" src="assets/blur/sheet.jpg" alt="" loading="lazy" width="800" height="500"></picture><picture><source media="(max-width: 760px)" srcset="assets/m/pneumatics.jpg"><img style="--x:0%;--y:-45%;--w:145%;--op:45% 60%" src="assets/blur/pneumatics.jpg" alt="" loading="lazy" width="800" height="500"></picture>
         <div class="tx"><h3>Enclosures and machines</h3><p>I design printed and sheet-metal enclosures, and build machines from scratch: 3D printers, CNC machines and pneumatics for small production lines.</p><div class="tags"><button class="tag on" type="button" aria-pressed="true">3D-printed enclosures</button><button class="tag" type="button" aria-pressed="false">Sheet metal</button><button class="tag" type="button" aria-pressed="false">Machines and pneumatics</button></div><pre class="tc on" aria-hidden="true"><code><span class="c">; layer 42, z = 8.40</span>
 <span class="k">G1</span> Z<span class="n">8.40</span> F<span class="n">600</span>
 <span class="k">G1</span> X<span class="n">112.3</span> Y<span class="n">98.1</span> E<span class="n">3.214</span>
@@ -500,7 +521,7 @@ inbox = Path(<span class="s">"D:/exports"</span>)
 
 
   <section class="panel contact" id="contact" aria-labelledby="contact-title">
-    <div class="panel-bg" aria-hidden="true"><img src="assets/photo/contact.jpg" alt="" loading="lazy" width="2200" height="1228"></div>
+    <div class="panel-bg" aria-hidden="true"><picture><source media="(max-width: 760px)" srcset="assets/m/contact.jpg"><img src="assets/photo/contact.jpg" alt="" loading="lazy" width="2200" height="1228"></picture></div>
     <h2 id="contact-title">Have a board or a machine in mind?</h2>
     <p class="sub">I'm open to full-time roles and freelance hardware work. Tell me what you want to build.</p>
     <div class="mail"><code id="mail">ahmed.atef.tech@gmail.com</code><button class="btn btn-light" id="copy" type="button">Copy email</button></div>
@@ -570,7 +591,8 @@ inbox = Path(<span class="s">"D:/exports"</span>)
     var n = Math.round(Math.max(0, Math.min(1, p)) * spans.length);
     for (var i = 0; i < spans.length; i++) spans[i].classList.toggle("lit", RM || i < n);
   }
-  window.addEventListener("scroll", fill, { passive: true }); window.addEventListener("resize", fill); fill();
+  var fq = 0; function fillSoon() { if (!fq) fq = requestAnimationFrame(function () { fq = 0; fill(); }); }
+  window.addEventListener("scroll", fillSoon, { passive: true }); window.addEventListener("resize", fillSoon); fill();
 
   /* copper trace that routes down the page as you scroll */
   (function () {
@@ -783,9 +805,12 @@ inbox = Path(<span class="s">"D:/exports"</span>)
     tags.forEach(function (b, i) {
       b.addEventListener("mouseenter", function () { hold = true; set(i); });
       b.addEventListener("focus", function () { hold = true; set(i); });
-      b.addEventListener("click", function () { hold = true; set(i); });
+      b.addEventListener("click", function () { hold = true; set(i); clearTimeout(t._rel); t._rel = setTimeout(function () { hold = false; }, 14000); });
     });
-    t.addEventListener("mouseleave", function () { hold = false; });
+    /* a tap also fires mouseleave on phones; there the 14s timer lets it go instead */
+    var touched = 0;
+    t.addEventListener("touchstart", function () { touched = Date.now(); }, { passive: true });
+    t.addEventListener("mouseleave", function () { if (Date.now() - touched > 1500) hold = false; });
     function go() { if (!live) { live = true; typers[k].play(); } }
     if ("IntersectionObserver" in window) {
       var io = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { setTimeout(go, 1200); io.disconnect(); } }, { threshold: .35 });
