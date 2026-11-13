@@ -619,6 +619,8 @@ inbox = Path(<span class="s">"D:/exports"</span>)
       var mr = main.getBoundingClientRect(), wrap = document.querySelector("#skills").getBoundingClientRect();
       var cs = getComputedStyle(document.querySelector("#skills")), left = wrap.left - mr.left + parseFloat(cs.paddingLeft);
       var x = left - 46, alt = x - 26, pts = [], v = [];
+      /* measure with the trace at zero height: it is inside main, so an old, taller trace would keep the page long */
+      svg.setAttribute("height", 0);
       svg.setAttribute("width", mr.width); svg.setAttribute("height", main.scrollHeight);
       anchors.forEach(function (a, i) {
         var r = a.getBoundingClientRect(), y = (i === 3 ? r.top - 40 : r.top + Math.min(r.height / 2, 40)) - mr.top;
@@ -647,6 +649,8 @@ inbox = Path(<span class="s">"D:/exports"</span>)
     var t; window.addEventListener("resize", function () { clearTimeout(t); t = setTimeout(build, 150); });
     window.addEventListener("scroll", draw, { passive: true });
     window.addEventListener("load", build); if (document.fonts && document.fonts.ready) document.fonts.ready.then(build); build();
+    /* rebuild when the page height changes (fonts, images, the code blocks), never leaving space at the bottom */
+    if ("ResizeObserver" in window) { var rq = 0; new ResizeObserver(function () { clearTimeout(rq); rq = setTimeout(build, 120); }).observe(main); }
   })();
 
   /* hacker touch: headings decode from glyphs the first time they appear */
