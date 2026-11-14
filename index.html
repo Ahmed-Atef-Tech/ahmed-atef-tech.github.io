@@ -118,11 +118,19 @@ html.calm .lo-halo { display: block; position: absolute; left: 50%; top: 50%; wi
 .status { grid-area: status; align-self: start; justify-self: start; display: inline-flex; align-items: center; gap: 10px; padding: 9px 14px; border-radius: 10px; font-size: .9rem; background: rgba(243, 244, 241, .1); border: 1px solid rgba(243, 244, 241, .16); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
 .status i { width: 8px; height: 8px; border-radius: 50%; background: #7BE0A4; box-shadow: 0 0 0 4px rgba(123, 224, 164, .18); }
 .hero h1 { grid-area: title; font-weight: 700; font-size: clamp(2.7rem, 7vw, 7.2rem); line-height: .9; letter-spacing: -.055em; max-width: 14ch; }
-.hero h1 span { display: block; overflow: hidden; padding-bottom: .2em; margin-bottom: -.14em; }
-.hero h1 span b { display: block; font-weight: inherit; transform: translateY(105%); transition: transform 1200ms var(--ease); transition-delay: calc(300ms + var(--i) * 110ms); }
-.hero.on h1 span b { transform: none; }
-.hero h1 span:nth-child(2) { color: rgba(243, 244, 241, .6); }
-.hero h1 span:nth-child(3) { color: rgba(243, 244, 241, .34); }
+.hero h1 > span { display: block; overflow: hidden; padding-bottom: .2em; margin-bottom: -.14em; }
+.hero h1 > span b { display: block; font-weight: inherit; }
+/* headline types itself in, each new letter sparking as a wrong character first (the code sits over the real letter, so nothing moves) */
+.hero h1 .hw { white-space: nowrap; }
+.hero h1 .hc { position: relative; }
+.hero h1 .hc.off { visibility: hidden; }
+.hero h1 .hc.raw { color: transparent; }
+.hero h1 .hc.raw::after { content: attr(data-g); position: absolute; left: 0; right: 0; top: 0; text-align: center; color: var(--copper); transform: scaleX(.8); }
+.hero h1 b.zap { text-shadow: -.04em 0 rgba(95, 211, 230, .75), .04em 0 rgba(232, 161, 91, .8); }
+.hero h1 .caret { display: inline-block; width: .42em; height: .74em; margin-left: .05em; vertical-align: -.02em; background: var(--copper); }
+.hero h1 .caret.blink { animation: caret 1s steps(1) infinite; }
+.hero h1 > span:nth-child(2) { color: rgba(243, 244, 241, .6); }
+.hero h1 > span:nth-child(3) { color: rgba(243, 244, 241, .34); }
 .dock { grid-area: dock; justify-self: center; display: flex; align-items: center; gap: 4px; padding: 5px 5px 5px 16px; border-radius: 12px; background: rgba(11, 17, 14, .55); border: 1px solid rgba(243, 244, 241, .12); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); opacity: 0; transform: translateY(14px); transition: opacity 1000ms var(--ease) 1100ms, transform 1100ms var(--ease) 1100ms; }
 .hero.on .dock { opacity: 1; transform: none; }
 .dock-l { margin-right: 8px; font: 400 .74rem var(--code); letter-spacing: .04em; color: rgba(243, 244, 241, .5); }
@@ -413,7 +421,7 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; a
   html.js [data-rv] img { scale: 1 !important; }
   html.js .s-head::after { transform: none !important; }
   .hero .panel-bg img { transform: none; filter: none; }
-  .hero h1 span b { transform: none; }
+  .hero h1 > span b { transform: none; }
   .dock { opacity: 1; transform: none; }
   .statement .w { color: var(--ink); }
 }
@@ -558,7 +566,40 @@ inbox = Path(<span class="s">"D:/exports"</span>)
 
   /* hero: image comes into focus, headline rises */
   var hero = document.getElementById("hero"), img = hero.querySelector(".panel-bg img"), root = document.documentElement, intro = document.getElementById("intro");
-  function go() { hero.classList.add("on"); }
+  /* headline: glitch typing. Split the words into letters now (hidden), type them once the hero is on */
+  var h1 = document.getElementById("hero-title"), typeHero = function () {};
+  if (!RM && h1) (function () {
+    var GL = "01<>/{}[]#%&$@*+=?ABCDEFXYZ", rnd = function () { return GL.charAt(Math.floor(Math.random() * GL.length)); };
+    var lines = [].map.call(h1.querySelectorAll("span > b"), function (b) {
+      var text = b.textContent, chars = [];
+      b.textContent = "";
+      text.split(/(\s+)/).forEach(function (part) {
+        if (!part) return;
+        if (/^\s+$/.test(part)) { b.appendChild(document.createTextNode(" ")); return; }
+        var w = document.createElement("span"); w.className = "hw";
+        Array.prototype.forEach.call(part, function (ch) { var c = document.createElement("span"); c.className = "hc off"; c.textContent = ch; w.appendChild(c); chars.push(c); });
+        b.appendChild(w);
+      });
+      return { b: b, chars: chars };
+    });
+    h1.setAttribute("aria-label", lines.map(function (l) { return l.b.textContent; }).join(" "));
+    [].forEach.call(h1.children, function (s) { s.setAttribute("aria-hidden", "true"); });
+    var caret = document.createElement("span"); caret.className = "caret";
+    typeHero = function () {
+      var li = 0, ci = 0;
+      (function next() {
+        var l = lines[li];
+        if (!l) { caret.classList.add("blink"); return; }
+        var c = l.chars[ci++];
+        if (!c) { li++; ci = 0; setTimeout(next, 240); return; }
+        c.classList.remove("off"); c.classList.add("raw"); c.setAttribute("data-g", rnd()); c.after(caret);
+        setTimeout(function () { c.classList.remove("raw"); }, 70);
+        if (Math.random() < .07) { l.b.classList.add("zap"); setTimeout(function () { l.b.classList.remove("zap"); }, 90); }
+        setTimeout(next, 40 + Math.random() * 40);
+      })();
+    };
+  })();
+  function go() { if (hero.classList.contains("on")) return; hero.classList.add("on"); setTimeout(typeHero, 350); }
   function startHero() {
     if (RM) go();
     else if (img.complete) requestAnimationFrame(function () { requestAnimationFrame(go); });
